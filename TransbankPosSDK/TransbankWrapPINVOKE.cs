@@ -8,9 +8,9 @@
 // the SWIG interface file instead.
 //------------------------------------------------------------------------------
 
-namespace Transbank.pos {
+namespace Transbank.POS {
 
-class transbankPINVOKE {
+class TransbankWrapPINVOKE {
 
   protected class SWIGExceptionHelper {
 
@@ -33,8 +33,8 @@ class transbankPINVOKE {
     static ExceptionArgumentDelegate argumentNullDelegate = new ExceptionArgumentDelegate(SetPendingArgumentNullException);
     static ExceptionArgumentDelegate argumentOutOfRangeDelegate = new ExceptionArgumentDelegate(SetPendingArgumentOutOfRangeException);
 
-    [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="SWIGRegisterExceptionCallbacks_transbank")]
-    public static extern void SWIGRegisterExceptionCallbacks_transbank(
+    [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="SWIGRegisterExceptionCallbacks_TransbankWrap")]
+    public static extern void SWIGRegisterExceptionCallbacks_TransbankWrap(
                                 ExceptionDelegate applicationDelegate,
                                 ExceptionDelegate arithmeticDelegate,
                                 ExceptionDelegate divideByZeroDelegate, 
@@ -47,8 +47,8 @@ class transbankPINVOKE {
                                 ExceptionDelegate overflowDelegate, 
                                 ExceptionDelegate systemExceptionDelegate);
 
-    [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="SWIGRegisterExceptionArgumentCallbacks_transbank")]
-    public static extern void SWIGRegisterExceptionCallbacksArgument_transbank(
+    [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="SWIGRegisterExceptionArgumentCallbacks_TransbankWrap")]
+    public static extern void SWIGRegisterExceptionCallbacksArgument_TransbankWrap(
                                 ExceptionArgumentDelegate argumentDelegate,
                                 ExceptionArgumentDelegate argumentNullDelegate,
                                 ExceptionArgumentDelegate argumentOutOfRangeDelegate);
@@ -102,7 +102,7 @@ class transbankPINVOKE {
     }
 
     static SWIGExceptionHelper() {
-      SWIGRegisterExceptionCallbacks_transbank(
+      SWIGRegisterExceptionCallbacks_TransbankWrap(
                                 applicationDelegate,
                                 arithmeticDelegate,
                                 divideByZeroDelegate,
@@ -115,7 +115,7 @@ class transbankPINVOKE {
                                 overflowDelegate,
                                 systemDelegate);
 
-      SWIGRegisterExceptionCallbacksArgument_transbank(
+      SWIGRegisterExceptionCallbacksArgument_TransbankWrap(
                                 argumentDelegate,
                                 argumentNullDelegate,
                                 argumentOutOfRangeDelegate);
@@ -143,7 +143,7 @@ class transbankPINVOKE {
       if (pendingException != null)
         throw new global::System.ApplicationException("FATAL: An earlier pending exception from unmanaged code was missed and thus not thrown (" + pendingException.ToString() + ")", e);
       pendingException = e;
-      lock(typeof(transbankPINVOKE)) {
+      lock(typeof(TransbankWrapPINVOKE)) {
         numExceptionsPending++;
       }
     }
@@ -154,7 +154,7 @@ class transbankPINVOKE {
         if (pendingException != null) {
           e = pendingException;
           pendingException = null;
-          lock(typeof(transbankPINVOKE)) {
+          lock(typeof(TransbankWrapPINVOKE)) {
             numExceptionsPending--;
           }
         }
@@ -169,62 +169,62 @@ class transbankPINVOKE {
     public delegate string SWIGStringDelegate(string message);
     static SWIGStringDelegate stringDelegate = new SWIGStringDelegate(CreateString);
 
-    [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="SWIGRegisterStringCallback_transbank")]
-    public static extern void SWIGRegisterStringCallback_transbank(SWIGStringDelegate stringDelegate);
+    [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="SWIGRegisterStringCallback_TransbankWrap")]
+    public static extern void SWIGRegisterStringCallback_TransbankWrap(SWIGStringDelegate stringDelegate);
 
     static string CreateString(string cString) {
       return cString;
     }
 
     static SWIGStringHelper() {
-      SWIGRegisterStringCallback_transbank(stringDelegate);
+      SWIGRegisterStringCallback_TransbankWrap(stringDelegate);
     }
   }
 
   static protected SWIGStringHelper swigStringHelper = new SWIGStringHelper();
 
 
-  static transbankPINVOKE() {
+  static TransbankWrapPINVOKE() {
   }
 
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_TBK_OK_get___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_TBK_OK_get___")]
   public static extern int TBK_OK_get();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_TBK_NOK_get___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_TBK_NOK_get___")]
   public static extern int TBK_NOK_get();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_print_ports___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_print_ports___")]
   public static extern void print_ports();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_list_ports___")]
-  public static extern global::System.IntPtr list_ports();
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_list_ports___")]
+  public static extern string list_ports();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_get_configured_port_name___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_get_configured_port_name___")]
   public static extern string get_configured_port_name();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_open_configured_port___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_open_configured_port___")]
   public static extern int open_configured_port();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_select_port___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_select_port___")]
   public static extern int select_port(string jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_configure_port___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_configure_port___")]
   public static extern int configure_port();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_get_totals___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_get_totals___")]
   public static extern int get_totals();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_load_keys___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_load_keys___")]
   public static extern int load_keys();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_polling___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_polling___")]
   public static extern int polling();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_set_normal_mode___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_set_normal_mode___")]
   public static extern int set_normal_mode();
 
-  [global::System.Runtime.InteropServices.DllImport("transbank", EntryPoint="CSharp_Transbankfpos_close_port___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOS_close_port___")]
   public static extern int close_port();
 }
 

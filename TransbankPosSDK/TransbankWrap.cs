@@ -8,75 +8,74 @@
 // the SWIG interface file instead.
 //------------------------------------------------------------------------------
 
-namespace Transbank.pos {
+namespace Transbank.POS {
 
-public class transbank {
+public class TransbankWrap {
   public static int TBK_OK {
     get {
-      int ret = transbankPINVOKE.TBK_OK_get();
+      int ret = TransbankWrapPINVOKE.TBK_OK_get();
       return ret;
     } 
   }
 
   public static int TBK_NOK {
     get {
-      int ret = transbankPINVOKE.TBK_NOK_get();
+      int ret = TransbankWrapPINVOKE.TBK_NOK_get();
       return ret;
     } 
   }
 
   public static void print_ports() {
-    transbankPINVOKE.print_ports();
+    TransbankWrapPINVOKE.print_ports();
   }
 
-  public static SWIGTYPE_p_p_char list_ports() {
-    global::System.IntPtr cPtr = transbankPINVOKE.list_ports();
-    SWIGTYPE_p_p_char ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_p_char(cPtr, false);
+  public static string list_ports() {
+    string ret = TransbankWrapPINVOKE.list_ports();
     return ret;
   }
 
   public static string get_configured_port_name() {
-    string ret = transbankPINVOKE.get_configured_port_name();
+    string ret = TransbankWrapPINVOKE.get_configured_port_name();
     return ret;
   }
 
   public static int open_configured_port() {
-    int ret = transbankPINVOKE.open_configured_port();
+    int ret = TransbankWrapPINVOKE.open_configured_port();
     return ret;
   }
 
   public static int select_port(string portName) {
-    int ret = transbankPINVOKE.select_port(portName);
+    int ret = TransbankWrapPINVOKE.select_port(portName);
     return ret;
   }
 
   public static int configure_port() {
-    int ret = transbankPINVOKE.configure_port();
+    int ret = TransbankWrapPINVOKE.configure_port();
     return ret;
   }
 
   public static int get_totals() {
-    int ret = transbankPINVOKE.get_totals();
+    int ret = TransbankWrapPINVOKE.get_totals();
     return ret;
   }
 
   public static int load_keys() {
-    int ret = transbankPINVOKE.load_keys();
+    int ret = TransbankWrapPINVOKE.load_keys();
     return ret;
   }
 
   public static int polling() {
-    int ret = transbankPINVOKE.polling();
+    int ret = TransbankWrapPINVOKE.polling();
     return ret;
   }
 
   public static int set_normal_mode() {
-    int ret = transbankPINVOKE.set_normal_mode();
+    int ret = TransbankWrapPINVOKE.set_normal_mode();
     return ret;
   }
 
   public static int close_port() {
-    int ret = transbankPINVOKE.close_port();
+    int ret = TransbankWrapPINVOKE.close_port();
     return ret;
   }
 
