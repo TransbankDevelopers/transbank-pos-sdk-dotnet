@@ -8,23 +8,9 @@
 // the SWIG interface file instead.
 //------------------------------------------------------------------------------
 
-namespace Transbank.POS {
+namespace Transbank.POS.Wrapper {
 
 public class TransbankWrap {
-  public static int TBK_OK {
-    get {
-      int ret = TransbankWrapPINVOKE.TBK_OK_get();
-      return ret;
-    } 
-  }
-
-  public static int TBK_NOK {
-    get {
-      int ret = TransbankWrapPINVOKE.TBK_NOK_get();
-      return ret;
-    } 
-  }
-
   public static void print_ports() {
     TransbankWrapPINVOKE.print_ports();
   }
@@ -39,18 +25,18 @@ public class TransbankWrap {
     return ret;
   }
 
-  public static int open_configured_port() {
-    int ret = TransbankWrapPINVOKE.open_configured_port();
+  public static tbk_return open_configured_port() {
+    tbk_return ret = (tbk_return)TransbankWrapPINVOKE.open_configured_port();
     return ret;
   }
 
-  public static int select_port(string portName) {
-    int ret = TransbankWrapPINVOKE.select_port(portName);
+  public static tbk_return select_port(string portName) {
+    tbk_return ret = (tbk_return)TransbankWrapPINVOKE.select_port(portName);
     return ret;
   }
 
-  public static int configure_port() {
-    int ret = TransbankWrapPINVOKE.configure_port();
+  public static tbk_return configure_port(int baud_rate) {
+    tbk_return ret = (tbk_return)TransbankWrapPINVOKE.configure_port(baud_rate);
     return ret;
   }
 
@@ -64,8 +50,8 @@ public class TransbankWrap {
     return ret;
   }
 
-  public static int polling() {
-    int ret = TransbankWrapPINVOKE.polling();
+  public static tbk_return polling() {
+    tbk_return ret = (tbk_return)TransbankWrapPINVOKE.polling();
     return ret;
   }
 
