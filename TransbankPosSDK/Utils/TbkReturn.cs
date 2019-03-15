@@ -8,15 +8,11 @@
 // the SWIG interface file instead.
 //------------------------------------------------------------------------------
 
-namespace Transbank.POS.Wrapper {
+namespace Transbank.POS.Utils {
 
-public enum tbk_baudrate {
-  TBK_1200 = 1200,
-  TBK_2400 = 2400,
-  TBK_4800 = 4800,
-  TBK_9600 = 9600,
-  TBK_19200 = 19200,
-  TBK_115200 = 115200
+public enum TbkReturn {
+  TBK_OK = 0,
+  TBK_NOK = -1
 }
 
 }

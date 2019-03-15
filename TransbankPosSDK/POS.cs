@@ -1,4 +1,4 @@
-﻿using Transbank.POS.Wrapper;
+﻿using Transbank.POS.Utils;
 using Transbank.POS.Exceptions;
 using System;
 
@@ -57,7 +57,7 @@ namespace Transbank.POS
             if (_configured)
                 try
                 {
-                    return TransbankWrap.polling() == tbk_return.TBK_OK;
+                    return TransbankWrap.polling() == TbkReturn.TBK_OK;
                 }
                 catch (Exception e)
                 {
