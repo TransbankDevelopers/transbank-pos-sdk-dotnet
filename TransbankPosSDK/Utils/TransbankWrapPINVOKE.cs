@@ -8,7 +8,7 @@
 // the SWIG interface file instead.
 //------------------------------------------------------------------------------
 
-namespace Transbank.POS.Wrapper {
+namespace Transbank.POS.Utils {
 
 class TransbankWrapPINVOKE {
 
@@ -188,38 +188,35 @@ class TransbankWrapPINVOKE {
   }
 
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_print_ports___")]
-  public static extern void print_ports();
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_open_port___")]
+  public static extern int open_port(string jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_list_ports___")]
-  public static extern string list_ports();
-
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_get_configured_port_name___")]
-  public static extern string get_configured_port_name();
-
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_open_configured_port___")]
-  public static extern int open_configured_port();
-
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_select_port___")]
-  public static extern int select_port(string jarg1);
-
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_configure_port___")]
-  public static extern int configure_port(int jarg1);
-
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_get_totals___")]
-  public static extern int get_totals();
-
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_load_keys___")]
-  public static extern int load_keys();
-
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_polling___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_polling___")]
   public static extern int polling();
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_set_normal_mode___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_set_normal_mode___")]
   public static extern int set_normal_mode();
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfWrapper_close_port___")]
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_close_port___")]
   public static extern int close_port();
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_list_ports___")]
+  public static extern string list_ports();
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_get_port_name___")]
+  public static extern string get_port_name(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_read_bytes___")]
+  public static extern int read_bytes(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_read_ack___")]
+  public static extern int read_ack(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_reply_ack___")]
+  public static extern int reply_ack(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_write_message___")]
+  public static extern int write_message(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 }
 
 }
