@@ -32,8 +32,8 @@ public class TransbankWrap {
     return ret;
   }
 
-  public static int reply_ack(SWIGTYPE_p_sp_port port) {
-    int ret = TransbankWrapPINVOKE.reply_ack(SWIGTYPE_p_sp_port.getCPtr(port));
+  public static int reply_ack(SWIGTYPE_p_sp_port port, string message, int length) {
+    int ret = TransbankWrapPINVOKE.reply_ack(SWIGTYPE_p_sp_port.getCPtr(port), message, length);
     return ret;
   }
 

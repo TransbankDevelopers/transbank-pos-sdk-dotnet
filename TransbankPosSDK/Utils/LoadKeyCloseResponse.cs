@@ -80,6 +80,16 @@ public class LoadKeyCloseResponse : global::System.IDisposable {
     } 
   }
 
+  public int initilized {
+    set {
+      TransbankWrapPINVOKE.LoadKeyCloseResponse_initilized_set(swigCPtr, value);
+    } 
+    get {
+      int ret = TransbankWrapPINVOKE.LoadKeyCloseResponse_initilized_get(swigCPtr);
+      return ret;
+    } 
+  }
+
   public LoadKeyCloseResponse() : this(TransbankWrapPINVOKE.new_LoadKeyCloseResponse(), true) {
   }
 

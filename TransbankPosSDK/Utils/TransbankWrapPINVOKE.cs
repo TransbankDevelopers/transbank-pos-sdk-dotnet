@@ -230,6 +230,12 @@ class TransbankWrapPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_terminalId_get___")]
   public static extern int LoadKeyCloseResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_initilized_set___")]
+  public static extern void LoadKeyCloseResponse_initilized_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_initilized_get___")]
+  public static extern int LoadKeyCloseResponse_initilized_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_new_LoadKeyCloseResponse___")]
   public static extern global::System.IntPtr new_LoadKeyCloseResponse();
 
@@ -249,7 +255,7 @@ class TransbankWrapPINVOKE {
   public static extern int read_ack(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_reply_ack___")]
-  public static extern int reply_ack(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern int reply_ack(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2, int jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_write_message___")]
   public static extern int write_message(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
