@@ -42,6 +42,31 @@ namespace Transbank.POS
             }
         }
 
+        public RegisterCloseResponse RegisterClose()
+        {
+            if (_configured)
+                try
+                {
+                    RegisterCloseResponse response = new RegisterCloseResponse(TransbankWrap.register_close());
+                    if (response.Sucess)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        throw new TransbankRegisterCloseException("Register Close retured an error: " + response.Result, response);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to execute register close in pos", e);
+                }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
+
         public LoadKeysResponse LoadKeys()
         {
             if (_configured)

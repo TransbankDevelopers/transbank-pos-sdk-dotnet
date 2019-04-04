@@ -48,6 +48,11 @@ public class TransbankWrap {
     return ret;
   }
 
+  public static LoadKeyCloseResponse register_close() {
+    LoadKeyCloseResponse ret = new LoadKeyCloseResponse(TransbankWrapPINVOKE.register_close(), true);
+    return ret;
+  }
+
   public static LoadKeyCloseResponse load_keys() {
     LoadKeyCloseResponse ret = new LoadKeyCloseResponse(TransbankWrapPINVOKE.load_keys(), true);
     return ret;
