@@ -7,8 +7,22 @@ namespace Transbank.POS
 {
     public class POS
     {
-        public string Port { get; set; }
+        private static readonly POS _instance = new POS();
         private bool _configured = false;
+
+        public string Port { get; set; }
+
+        private POS()
+        {
+        }
+
+        public static POS Instance
+        {
+            get
+            {
+                return _instance;
+            }
+        }
 
         public void OpenPort(string portName, TbkBaudrate baudrate)
         {
@@ -25,9 +39,29 @@ namespace Transbank.POS
             }
         }
 
+        public bool SetNormalMode()
+        {
+            if (_configured)
+            {
+                try
+                {
+                    return TransbankWrap.set_normal_mode() == TbkReturn.TBK_OK;
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to set normal mode", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
+
         public bool Polling()
         {
             if (_configured)
+            {
                 try
                 {
                     return TransbankWrap.polling() == TbkReturn.TBK_OK;
@@ -36,6 +70,34 @@ namespace Transbank.POS
                 {
                     throw new TransbankException("Unable to locate POS", e);
                 }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
+
+        public RegisterCloseResponse RegisterClose()
+        {
+            if (_configured)
+            {
+                try
+                {
+                    RegisterCloseResponse response = new RegisterCloseResponse(TransbankWrap.register_close());
+                    if (response.Sucess)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        throw new TransbankRegisterCloseException("Register Close retured an error: " + response.Result, response);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to execute register close in pos", e);
+                }
+            }
             else
             {
                 throw new TransbankException("Port not Configured");
@@ -45,6 +107,7 @@ namespace Transbank.POS
         public LoadKeysResponse LoadKeys()
         {
             if (_configured)
+            {
                 try
                 {
                     LoadKeysResponse response = new LoadKeysResponse(TransbankWrap.load_keys());
@@ -61,6 +124,7 @@ namespace Transbank.POS
                 {
                     throw new TransbankException("Unable to load Keys in pos", e);
                 }
+            }
             else
             {
                 throw new TransbankException("Port not Configured");
@@ -69,17 +133,25 @@ namespace Transbank.POS
 
         public bool ClosePort()
         {
-            try
+            if (_configured)
             {
-                if (TransbankWrap.close_port() == TbkReturn.TBK_OK)
+                try
                 {
-                    return true;
+                    if (TransbankWrap.close_port() == TbkReturn.TBK_OK)
+                    {
+                        _configured = false;
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to close port: " + Port, e);
+                }
             }
-            catch (Exception e)
+            else
             {
-                throw new TransbankException("Unable to close port: " + Port, e);
+                return true;
             }
         }
     }

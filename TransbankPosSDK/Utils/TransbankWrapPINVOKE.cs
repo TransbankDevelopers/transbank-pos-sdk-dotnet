@@ -263,6 +263,9 @@ class TransbankWrapPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_open_port___")]
   public static extern int open_port(string jarg1, int jarg2);
 
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_register_close___")]
+  public static extern global::System.IntPtr register_close();
+
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_load_keys___")]
   public static extern global::System.IntPtr load_keys();
 
