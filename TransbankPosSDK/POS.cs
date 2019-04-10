@@ -7,8 +7,22 @@ namespace Transbank.POS
 {
     public class POS
     {
-        public string Port { get; set; }
+        private static readonly POS _instance = new POS();
         private bool _configured = false;
+
+        public string Port { get; set; }
+
+        private POS()
+        {
+        }
+
+        public static POS Instance
+        {
+            get
+            {
+                return _instance;
+            }
+        }
 
         public void OpenPort(string portName, TbkBaudrate baudrate)
         {
