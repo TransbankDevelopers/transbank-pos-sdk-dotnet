@@ -39,9 +39,29 @@ namespace Transbank.POS
             }
         }
 
+        public bool SetNormalMode()
+        {
+            if (_configured)
+            {
+                try
+                {
+                    return TransbankWrap.set_normal_mode() == TbkReturn.TBK_OK;
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to set normal mode", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
+
         public bool Polling()
         {
             if (_configured)
+            {
                 try
                 {
                     return TransbankWrap.polling() == TbkReturn.TBK_OK;
@@ -50,6 +70,7 @@ namespace Transbank.POS
                 {
                     throw new TransbankException("Unable to locate POS", e);
                 }
+            }
             else
             {
                 throw new TransbankException("Port not Configured");
@@ -59,6 +80,7 @@ namespace Transbank.POS
         public RegisterCloseResponse RegisterClose()
         {
             if (_configured)
+            {
                 try
                 {
                     RegisterCloseResponse response = new RegisterCloseResponse(TransbankWrap.register_close());
@@ -75,6 +97,7 @@ namespace Transbank.POS
                 {
                     throw new TransbankException("Unable to execute register close in pos", e);
                 }
+            }
             else
             {
                 throw new TransbankException("Port not Configured");
@@ -84,6 +107,7 @@ namespace Transbank.POS
         public LoadKeysResponse LoadKeys()
         {
             if (_configured)
+            {
                 try
                 {
                     LoadKeysResponse response = new LoadKeysResponse(TransbankWrap.load_keys());
@@ -100,6 +124,7 @@ namespace Transbank.POS
                 {
                     throw new TransbankException("Unable to load Keys in pos", e);
                 }
+            }
             else
             {
                 throw new TransbankException("Port not Configured");
