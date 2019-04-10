@@ -133,17 +133,24 @@ namespace Transbank.POS
 
         public bool ClosePort()
         {
-            try
+            if (_configured)
             {
-                if (TransbankWrap.close_port() == TbkReturn.TBK_OK)
+                try
                 {
-                    return true;
+                    if (TransbankWrap.close_port() == TbkReturn.TBK_OK)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to close port: " + Port, e);
+                }
             }
-            catch (Exception e)
+            else
             {
-                throw new TransbankException("Unable to close port: " + Port, e);
+                throw new TransbankException("Port not Configured");
             }
         }
     }
