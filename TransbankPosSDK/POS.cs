@@ -139,6 +139,7 @@ namespace Transbank.POS
                 {
                     if (TransbankWrap.close_port() == TbkReturn.TBK_OK)
                     {
+                        _configured = false;
                         return true;
                     }
                     return false;
@@ -150,7 +151,7 @@ namespace Transbank.POS
             }
             else
             {
-                throw new TransbankException("Port not Configured");
+                return true;
             }
         }
     }
