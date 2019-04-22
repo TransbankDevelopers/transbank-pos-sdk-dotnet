@@ -39,6 +39,11 @@ namespace Transbank.POS
             }
         }
 
+        public SaleResponse Sale(int amount, int ticket)
+        {
+            return new SaleResponse(TransbankWrap.sale(amount, ticket, false));
+        }
+
         public bool SetNormalMode()
         {
             if (_configured)
@@ -90,7 +95,7 @@ namespace Transbank.POS
                     }
                     else
                     {
-                        throw new TransbankRegisterCloseException("Register Close retured an error: " + response.Result, response);
+                        throw new TransbankRegisterCloseException("Register Close retured an error: " + response.ResponseMessage, response);
                     }
                 }
                 catch (Exception e)
@@ -117,7 +122,7 @@ namespace Transbank.POS
                     }
                     else
                     {
-                        throw new TransbankLoadKeysException("Load Keys retured an error: " + response.Result, response);
+                        throw new TransbankLoadKeysException("Load Keys retured an error: " + response.ResponseMessage, response);
                     }
                 }
                 catch (Exception e)

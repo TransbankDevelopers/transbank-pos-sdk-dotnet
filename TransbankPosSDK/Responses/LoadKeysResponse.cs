@@ -7,8 +7,8 @@ namespace Transbank.POS.Responses
         public LoadKeyCloseResponse Response {get;}
 
         public int FunctionCode => Response.function;
-        public string Result => ResponseCodes.Map[Response.responseCode];
-        public bool Sucess => ResponseCodes.Map[0].Equals(Result);
+        public string ResponseMessage => ResponseCodes.Map[Response.responseCode];
+        public bool Sucess => ResponseCodes.Map[0].Equals(ResponseMessage);
         public long CommerceCode => Response.commerceCode;
         public int TerminalId => Response.terminalId;
 
