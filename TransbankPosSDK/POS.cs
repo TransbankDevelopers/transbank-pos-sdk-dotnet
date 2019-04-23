@@ -41,7 +41,29 @@ namespace Transbank.POS
 
         public SaleResponse Sale(int amount, int ticket)
         {
-            return new SaleResponse(TransbankWrap.sale(amount, ticket, false));
+            if (_configured)
+            {
+                try
+                {
+                    SaleResponse response = new SaleResponse(TransbankWrap.sale(amount, ticket, false));
+                    if (response.Success)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        throw new TransbankSaleException("Register Close retured an error: " + response.ResponseMessage, response);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to execute Sale on pos", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
         }
 
         public bool SetNormalMode()
@@ -89,7 +111,7 @@ namespace Transbank.POS
                 try
                 {
                     RegisterCloseResponse response = new RegisterCloseResponse(TransbankWrap.register_close());
-                    if (response.Sucess)
+                    if (response.Success)
                     {
                         return response;
                     }
@@ -116,7 +138,7 @@ namespace Transbank.POS
                 try
                 {
                     LoadKeysResponse response = new LoadKeysResponse(TransbankWrap.load_keys());
-                    if (response.Sucess)
+                    if (response.Success)
                     {
                         return response;
                     }
