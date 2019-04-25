@@ -102,9 +102,9 @@ namespace Transbank.POS.Responses
                    "Tip: " + Tip;
         }
 
-        private static LoadKeyCloseResponse CreateBase(string cresponse)
+        private static BaseResponse CreateBase(string cresponse)
         {
-            return new LoadKeyCloseResponse
+            return new BaseResponse
             {
                 function = int.Parse(cresponse.Substring(1, 4)),
                 responseCode = int.Parse(cresponse.Substring(6, 2)),

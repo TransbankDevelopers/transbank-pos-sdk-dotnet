@@ -4,6 +4,6 @@ namespace Transbank.POS.Responses
 {
     public class RegisterCloseResponse : LoadKeysResponse
     {
-        public RegisterCloseResponse(LoadKeyCloseResponse cresponse) : base(cresponse) {}
+        public RegisterCloseResponse(BaseResponse cresponse) : base(cresponse) {}
     }
 }

@@ -58,13 +58,13 @@ public class TransbankWrap {
     return ret;
   }
 
-  public static LoadKeyCloseResponse register_close() {
-    LoadKeyCloseResponse ret = new LoadKeyCloseResponse(TransbankWrapPINVOKE.register_close(), true);
+  public static BaseResponse register_close() {
+    BaseResponse ret = new BaseResponse(TransbankWrapPINVOKE.register_close(), true);
     return ret;
   }
 
-  public static LoadKeyCloseResponse load_keys() {
-    LoadKeyCloseResponse ret = new LoadKeyCloseResponse(TransbankWrapPINVOKE.load_keys(), true);
+  public static BaseResponse load_keys() {
+    BaseResponse ret = new BaseResponse(TransbankWrapPINVOKE.load_keys(), true);
     return ret;
   }
 
