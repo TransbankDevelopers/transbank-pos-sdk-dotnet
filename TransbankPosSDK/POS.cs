@@ -9,7 +9,7 @@ namespace Transbank.POS
     {
         private static readonly POS _instance = new POS();
         private bool _configured = false;
-
+        
         public string Port { get; set; }
 
         private POS()
@@ -36,6 +36,33 @@ namespace Transbank.POS
             catch (Exception e)
             {
                 throw new TransbankException("Unable to Open selected port: " + portName, e);
+            }
+        }
+
+        public SaleResponse Sale(int amount, int ticket)
+        {
+            if (_configured)
+            {
+                try
+                {
+                    SaleResponse response = new SaleResponse(TransbankWrap.sale(amount, ticket, false));
+                    if (response.Success)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        throw new TransbankSaleException("Register Close returned an error: " + response.ResponseMessage, response);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to execute Sale on pos", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
             }
         }
 
@@ -84,13 +111,13 @@ namespace Transbank.POS
                 try
                 {
                     RegisterCloseResponse response = new RegisterCloseResponse(TransbankWrap.register_close());
-                    if (response.Sucess)
+                    if (response.Success)
                     {
                         return response;
                     }
                     else
                     {
-                        throw new TransbankRegisterCloseException("Register Close retured an error: " + response.Result, response);
+                        throw new TransbankRegisterCloseException("Register Close retured an error: " + response.ResponseMessage, response);
                     }
                 }
                 catch (Exception e)
@@ -111,13 +138,13 @@ namespace Transbank.POS
                 try
                 {
                     LoadKeysResponse response = new LoadKeysResponse(TransbankWrap.load_keys());
-                    if (response.Sucess)
+                    if (response.Success)
                     {
                         return response;
                     }
                     else
                     {
-                        throw new TransbankLoadKeysException("Load Keys retured an error: " + response.Result, response);
+                        throw new TransbankLoadKeysException("Load Keys retured an error: " + response.ResponseMessage, response);
                     }
                 }
                 catch (Exception e)

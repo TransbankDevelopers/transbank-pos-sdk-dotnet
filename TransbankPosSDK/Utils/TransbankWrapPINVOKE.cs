@@ -254,6 +254,9 @@ class TransbankWrapPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_read_ack___")]
   public static extern int read_ack(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_calculate_lrc___")]
+  public static extern byte calculate_lrc(string jarg1, int jarg2);
+
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_reply_ack___")]
   public static extern int reply_ack(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2, int jarg3);
 
@@ -262,6 +265,9 @@ class TransbankWrapPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_open_port___")]
   public static extern int open_port(string jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_sale___")]
+  public static extern string sale(int jarg1, int jarg2, bool jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_register_close___")]
   public static extern global::System.IntPtr register_close();

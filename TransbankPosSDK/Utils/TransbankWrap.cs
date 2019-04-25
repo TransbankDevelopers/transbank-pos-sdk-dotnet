@@ -32,6 +32,11 @@ public class TransbankWrap {
     return ret;
   }
 
+  public static byte calculate_lrc(string message, int length) {
+    byte ret = TransbankWrapPINVOKE.calculate_lrc(message, length);
+    return ret;
+  }
+
   public static int reply_ack(SWIGTYPE_p_sp_port port, string message, int length) {
     int ret = TransbankWrapPINVOKE.reply_ack(SWIGTYPE_p_sp_port.getCPtr(port), message, length);
     return ret;
@@ -45,6 +50,11 @@ public class TransbankWrap {
 
   public static TbkReturn open_port(string portName, int baudrate) {
     TbkReturn ret = (TbkReturn)TransbankWrapPINVOKE.open_port(portName, baudrate);
+    return ret;
+  }
+
+  public static string sale(int amount, int ticket, bool send_messages) {
+    string ret = TransbankWrapPINVOKE.sale(amount, ticket, send_messages);
     return ret;
   }
 
