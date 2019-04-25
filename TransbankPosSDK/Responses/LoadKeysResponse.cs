@@ -22,7 +22,7 @@ namespace Transbank.POS.Responses
         {
             return "Function: " + FunctionCode + "\n" +
                     "Response: " + ResponseMessage + "\n" +
-                    "Sucess?: " + Success + "\n" +
+                    "Success?: " + Success + "\n" +
                     "Commerce Code: " + CommerceCode + "\n" +
                     "Terminal Id: " + TerminalId;
         }

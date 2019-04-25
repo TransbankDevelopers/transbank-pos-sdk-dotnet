@@ -9,7 +9,7 @@ namespace Transbank.POS
     {
         private static readonly POS _instance = new POS();
         private bool _configured = false;
-
+        
         public string Port { get; set; }
 
         private POS()
@@ -52,7 +52,7 @@ namespace Transbank.POS
                     }
                     else
                     {
-                        throw new TransbankSaleException("Register Close retured an error: " + response.ResponseMessage, response);
+                        throw new TransbankSaleException("Register Close returned an error: " + response.ResponseMessage, response);
                     }
                 }
                 catch (Exception e)
