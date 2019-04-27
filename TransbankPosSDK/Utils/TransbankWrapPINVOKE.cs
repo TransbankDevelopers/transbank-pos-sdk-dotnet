@@ -206,41 +206,41 @@ class TransbankWrapPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_ParamInfo___")]
   public static extern void delete_ParamInfo(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_function_set___")]
-  public static extern void LoadKeyCloseResponse_function_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_function_set___")]
+  public static extern void BaseResponse_function_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_function_get___")]
-  public static extern int LoadKeyCloseResponse_function_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_function_get___")]
+  public static extern int BaseResponse_function_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_responseCode_set___")]
-  public static extern void LoadKeyCloseResponse_responseCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_responseCode_set___")]
+  public static extern void BaseResponse_responseCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_responseCode_get___")]
-  public static extern int LoadKeyCloseResponse_responseCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_responseCode_get___")]
+  public static extern int BaseResponse_responseCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_commerceCode_set___")]
-  public static extern void LoadKeyCloseResponse_commerceCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, long jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_commerceCode_set___")]
+  public static extern void BaseResponse_commerceCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, long jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_commerceCode_get___")]
-  public static extern long LoadKeyCloseResponse_commerceCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_commerceCode_get___")]
+  public static extern long BaseResponse_commerceCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_terminalId_set___")]
-  public static extern void LoadKeyCloseResponse_terminalId_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_terminalId_set___")]
+  public static extern void BaseResponse_terminalId_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_terminalId_get___")]
-  public static extern int LoadKeyCloseResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_terminalId_get___")]
+  public static extern int BaseResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_initilized_set___")]
-  public static extern void LoadKeyCloseResponse_initilized_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_initilized_set___")]
+  public static extern void BaseResponse_initilized_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_LoadKeyCloseResponse_initilized_get___")]
-  public static extern int LoadKeyCloseResponse_initilized_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_initilized_get___")]
+  public static extern int BaseResponse_initilized_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_new_LoadKeyCloseResponse___")]
-  public static extern global::System.IntPtr new_LoadKeyCloseResponse();
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_new_BaseResponse___")]
+  public static extern global::System.IntPtr new_BaseResponse();
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_LoadKeyCloseResponse___")]
-  public static extern void delete_LoadKeyCloseResponse(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_BaseResponse___")]
+  public static extern void delete_BaseResponse(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_list_ports___")]
   public static extern string list_ports();

@@ -4,7 +4,7 @@ namespace Transbank.POS.Responses
 {
     public class LoadKeysResponse
     {
-        public LoadKeyCloseResponse Response {get;}
+        public BaseResponse Response {get;}
 
         public int FunctionCode => Response.function;
         public string ResponseMessage => ResponseCodes.Map[Response.responseCode];
@@ -13,7 +13,7 @@ namespace Transbank.POS.Responses
         public long CommerceCode => Response.commerceCode;
         public int TerminalId => Response.terminalId;
 
-        public LoadKeysResponse(LoadKeyCloseResponse cresponse)
+        public LoadKeysResponse(BaseResponse cresponse)
         {
             Response = cresponse;
         }

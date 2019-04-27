@@ -10,20 +10,20 @@
 
 namespace Transbank.POS.Utils {
 
-public class LoadKeyCloseResponse : global::System.IDisposable {
+public class BaseResponse : global::System.IDisposable {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
   protected bool swigCMemOwn;
 
-  internal LoadKeyCloseResponse(global::System.IntPtr cPtr, bool cMemoryOwn) {
+  internal BaseResponse(global::System.IntPtr cPtr, bool cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
-  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(LoadKeyCloseResponse obj) {
+  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(BaseResponse obj) {
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 
-  ~LoadKeyCloseResponse() {
+  ~BaseResponse() {
     Dispose();
   }
 
@@ -32,7 +32,7 @@ public class LoadKeyCloseResponse : global::System.IDisposable {
       if (swigCPtr.Handle != global::System.IntPtr.Zero) {
         if (swigCMemOwn) {
           swigCMemOwn = false;
-          TransbankWrapPINVOKE.delete_LoadKeyCloseResponse(swigCPtr);
+          TransbankWrapPINVOKE.delete_BaseResponse(swigCPtr);
         }
         swigCPtr = new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero);
       }
@@ -42,55 +42,55 @@ public class LoadKeyCloseResponse : global::System.IDisposable {
 
   public int function {
     set {
-      TransbankWrapPINVOKE.LoadKeyCloseResponse_function_set(swigCPtr, value);
+      TransbankWrapPINVOKE.BaseResponse_function_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.LoadKeyCloseResponse_function_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.BaseResponse_function_get(swigCPtr);
       return ret;
     } 
   }
 
   public int responseCode {
     set {
-      TransbankWrapPINVOKE.LoadKeyCloseResponse_responseCode_set(swigCPtr, value);
+      TransbankWrapPINVOKE.BaseResponse_responseCode_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.LoadKeyCloseResponse_responseCode_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.BaseResponse_responseCode_get(swigCPtr);
       return ret;
     } 
   }
 
   public long commerceCode {
     set {
-      TransbankWrapPINVOKE.LoadKeyCloseResponse_commerceCode_set(swigCPtr, value);
+      TransbankWrapPINVOKE.BaseResponse_commerceCode_set(swigCPtr, value);
     } 
     get {
-      long ret = TransbankWrapPINVOKE.LoadKeyCloseResponse_commerceCode_get(swigCPtr);
+      long ret = TransbankWrapPINVOKE.BaseResponse_commerceCode_get(swigCPtr);
       return ret;
     } 
   }
 
   public int terminalId {
     set {
-      TransbankWrapPINVOKE.LoadKeyCloseResponse_terminalId_set(swigCPtr, value);
+      TransbankWrapPINVOKE.BaseResponse_terminalId_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.LoadKeyCloseResponse_terminalId_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.BaseResponse_terminalId_get(swigCPtr);
       return ret;
     } 
   }
 
   public int initilized {
     set {
-      TransbankWrapPINVOKE.LoadKeyCloseResponse_initilized_set(swigCPtr, value);
+      TransbankWrapPINVOKE.BaseResponse_initilized_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.LoadKeyCloseResponse_initilized_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.BaseResponse_initilized_get(swigCPtr);
       return ret;
     } 
   }
 
-  public LoadKeyCloseResponse() : this(TransbankWrapPINVOKE.new_LoadKeyCloseResponse(), true) {
+  public BaseResponse() : this(TransbankWrapPINVOKE.new_BaseResponse(), true) {
   }
 
 }
