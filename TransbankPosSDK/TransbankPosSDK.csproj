@@ -1,17 +1,34 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU</Platforms>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
+    <Win32Resource />
+    <RootNamespace>Transbank.POS</RootNamespace>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/TransbankDevelopers/transbank-pos-sdk-dotnet/master/LICENSE.md</PackageLicenseUrl>
+    <Description>This is the .Net SDK for Transbank's Verifone VX520 and VX520c POS Integration.</Description>
+    <PackageProjectUrl>http://www.transbankdevelopers.cl/</PackageProjectUrl>
+    <PackageTags>payments, cl, chile, transbank, POS, Verifone, vx520, vx520c, integrated payment,</PackageTags>
+    <PackageIconUrl>https://www.transbankdevelopers.cl//favicon.ico</PackageIconUrl>
+    <Copyright>2019 - Transbank</Copyright>
+    <RepositoryUrl>https://github.com/TransbankDevelopers/transbank-pos-sdk-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionSuffix>pre-alpha</VersionSuffix>
+    <Company>Transbank</Company>
+    <Authors>Transbank</Authors>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PlatformTarget>x64</PlatformTarget>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
