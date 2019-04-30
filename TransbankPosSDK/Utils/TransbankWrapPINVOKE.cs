@@ -37,14 +37,14 @@ class TransbankWrapPINVOKE {
     public static extern void SWIGRegisterExceptionCallbacks_TransbankWrap(
                                 ExceptionDelegate applicationDelegate,
                                 ExceptionDelegate arithmeticDelegate,
-                                ExceptionDelegate divideByZeroDelegate, 
-                                ExceptionDelegate indexOutOfRangeDelegate, 
+                                ExceptionDelegate divideByZeroDelegate,
+                                ExceptionDelegate indexOutOfRangeDelegate,
                                 ExceptionDelegate invalidCastDelegate,
                                 ExceptionDelegate invalidOperationDelegate,
                                 ExceptionDelegate ioDelegate,
                                 ExceptionDelegate nullReferenceDelegate,
-                                ExceptionDelegate outOfMemoryDelegate, 
-                                ExceptionDelegate overflowDelegate, 
+                                ExceptionDelegate outOfMemoryDelegate,
+                                ExceptionDelegate overflowDelegate,
                                 ExceptionDelegate systemExceptionDelegate);
 
     [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="SWIGRegisterExceptionArgumentCallbacks_TransbankWrap")]
@@ -136,7 +136,7 @@ class TransbankWrapPINVOKE {
           if (pendingException != null)
             pending = true;
         return pending;
-      } 
+      }
     }
 
     public static void Set(global::System.Exception e) {

@@ -43,51 +43,51 @@ public class BaseResponse : global::System.IDisposable {
   public int function {
     set {
       TransbankWrapPINVOKE.BaseResponse_function_set(swigCPtr, value);
-    } 
+    }
     get {
       int ret = TransbankWrapPINVOKE.BaseResponse_function_get(swigCPtr);
       return ret;
-    } 
+    }
   }
 
   public int responseCode {
     set {
       TransbankWrapPINVOKE.BaseResponse_responseCode_set(swigCPtr, value);
-    } 
+    }
     get {
       int ret = TransbankWrapPINVOKE.BaseResponse_responseCode_get(swigCPtr);
       return ret;
-    } 
+    }
   }
 
   public long commerceCode {
     set {
       TransbankWrapPINVOKE.BaseResponse_commerceCode_set(swigCPtr, value);
-    } 
+    }
     get {
       long ret = TransbankWrapPINVOKE.BaseResponse_commerceCode_get(swigCPtr);
       return ret;
-    } 
+    }
   }
 
   public int terminalId {
     set {
       TransbankWrapPINVOKE.BaseResponse_terminalId_set(swigCPtr, value);
-    } 
+    }
     get {
       int ret = TransbankWrapPINVOKE.BaseResponse_terminalId_get(swigCPtr);
       return ret;
-    } 
+    }
   }
 
   public int initilized {
     set {
       TransbankWrapPINVOKE.BaseResponse_initilized_set(swigCPtr, value);
-    } 
+    }
     get {
       int ret = TransbankWrapPINVOKE.BaseResponse_initilized_get(swigCPtr);
       return ret;
-    } 
+    }
   }
 
   public BaseResponse() : this(TransbankWrapPINVOKE.new_BaseResponse(), true) {
