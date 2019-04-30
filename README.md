@@ -1,10 +1,121 @@
-# SDK para conectarse a los POS Verifone vx520 y vx520c
+# Transbank POS .Net SDK
 
-## Requerimientos
+SDK Oficial de Transbank para comunicarse con POS Verifone vx520 y vx520c
 
-Se debe compilar la libreria en C y crear el Wraper con SWIG de acuerdo a lo descrito en ese proyecto.
+## Requisitos
 
-### Requisitos
 - Visual Studio 2017+
 - .NetFramework 4.6.1+
 - .NetCore 2.0.3+
+
+## Dependencias
+
+- [libSerialPort](https://sigrok.org/wiki/Libserialport)
+  - Puedes encontrar más información en [TransbankDevelopers](https://transbankdevelopers.cl/documentacion/posintegrado#libserialport)
+- [TransbankWrap](https://github.com/TransbankDevelopers/transbank-pos-sdk-c)
+  - Es un Wrapper de la librería en C para comunicarse con los POS.
+
+## Instalación
+
+### Desde una línea de comandos
+
+#### Instalar con NuGet
+
+```bash
+nuget install TransbankPosSDK -PreRelease
+```
+
+#### Instalar con Package Manager
+
+```bash
+PM> Install-Package TransbankPosSDK –IncludePrerelease
+```
+
+#### Instalar con .Net CLI
+
+```bash
+dotnet add package TransbankSDK -v 0.0.1-pre-alpha
+```
+
+### Desde Visual Studio
+
+1. Abrir el explorador de soluciones.
+2. Clic derecho en un proyecto dentro de tu solución.
+3. Clic en Administrar paquetes NuGet.
+4. Clic en la pestaña Examinar y marca el recuadro `Incluir PreReleases`
+5. Buscar el paquete `TransbankPosSDK`.
+6. Selecciona la versión que deseas utilizar y finalmente selecciona instalar.
+
+## Documentación
+
+Puedes encontrar toda la documentación de cómo usar este SDK en el sitio <https://www.transbankdevelopers.cl>.
+
+La documentación relevante para usar este SDK es:
+
+- Documentación general sobre el producto: [PosIntegrado](https://transbankdevelopers.cl/producto/posintegrado).
+- [Primeros pasos](https://transbankdevelopers.cl/documentacion/posintegrado).
+- [Referencia detallada](https://transbankdevelopers.cl/referencia/posintegrado).
+
+## Información para contribuir y desarrollar este SDK
+
+### Estándares
+
+- Para los commits respetamos las siguientes normas: <https://chris.beams.io/posts/git-commit/>
+- Usamos ingles, para los mensajes de commit.
+- Se pueden usar tokens como WIP, en el subject de un commit, separando el token con `:`, por ejemplo: `WIP: This is a useful commit message`
+- Para los nombres de ramas también usamos ingles.
+- Se asume, que una rama de feature no mezclada, es un feature no terminado.
+- El nombre de las ramas va en minúsculas.
+- Las palabras se separan con `-`.
+- Las ramas comienzan con alguno de los short lead tokens definidos, por ejemplo: `feat/tokens-configuration`
+
+#### Short lead tokens
+
+##### Commits
+
+- WIP = Trabajo en progreso.
+
+##### Ramas
+
+- feat = Nuevos features
+- chore = Tareas, que no son visibles al usuario.
+- bug = Resolución de bugs.
+
+### Todas las mezclas a master se hacen mediante Pull Request
+
+### Construir el proyecto localmente
+
+1. Si estas usando VisualStudio: (**F6**) o :
+    - Click derecho sobre la solución en el explorador de soluciones.
+    - Compilar.
+2. Si estas usando tu propio editor:
+
+    ```bash
+    dotnet build
+    ```
+
+### Generar una nueva versión
+
+Para generar una nueva versión, se debe incrementar el numero de esta en las propiedades del proyecto.
+Siguiendo la Guía de [SemVer](https://semver.org/) y empaquetar el artefacto NuGet.
+
+- Cambiar la configuración de la solución a Release.
+- Click derecho sobre el proyecto.
+- Empaquetar.
+
+Los pasos anteriores generaran un nuevo artefacto NuGet correspondiente a la versión modificada en la configuración.
+Luego de generar esta nueva version, es necesario la publicación manual en NugGet.
+
+Web de [Nuget.org](https://www.nuget.org):
+
+- Login en [Nuget.org](https://www.nuget.org)
+- Upload
+- Subir el artefacto NuGet generado anteriormente.
+
+Linea de Comandos:
+
+- Contar con ApiKey para poder subir el artefacto:
+
+    ```bash
+    dotnet.exe nuget push TransbankPosSDK/bin/Release/TransbankPosSDK.<version>-pre-alpha.nupkg -k <APIKEY> -s https://api.nuget.org/v3/index.json
+    ```
