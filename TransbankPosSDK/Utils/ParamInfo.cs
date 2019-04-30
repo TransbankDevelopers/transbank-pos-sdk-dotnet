@@ -43,21 +43,21 @@ public class ParamInfo : global::System.IDisposable {
   public int index {
     set {
       TransbankWrapPINVOKE.ParamInfo_index_set(swigCPtr, value);
-    } 
+    }
     get {
       int ret = TransbankWrapPINVOKE.ParamInfo_index_get(swigCPtr);
       return ret;
-    } 
+    }
   }
 
   public int length {
     set {
       TransbankWrapPINVOKE.ParamInfo_length_set(swigCPtr, value);
-    } 
+    }
     get {
       int ret = TransbankWrapPINVOKE.ParamInfo_length_get(swigCPtr);
       return ret;
-    } 
+    }
   }
 
   public ParamInfo() : this(TransbankWrapPINVOKE.new_ParamInfo(), true) {

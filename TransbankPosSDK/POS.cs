@@ -9,7 +9,7 @@ namespace Transbank.POS
     {
         private static readonly POS _instance = new POS();
         private bool _configured = false;
-        
+
         public string Port { get; set; }
 
         private POS()

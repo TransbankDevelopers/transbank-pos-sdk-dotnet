@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using Transbank.POS.Utils;
 
-
 namespace Transbank.POS.Responses
 {
     public class SaleResponse : LoadKeysResponse
@@ -73,7 +72,7 @@ namespace Transbank.POS.Responses
             {
                 RealDate = DateTime.ParseExact(date + hour, "ddMMyyyyHHmmss", DateTimeFormatInfo.InvariantInfo);
             }
-              
+
             EmployeeId = fields[ParameterMap["EmployeeId"]].Trim() == "" ? int.Parse(fields[ParameterMap["EmployeeId"]]) : 0;
             Tip = fields[ParameterMap["Tip"]].Trim() != "" ? int.Parse(fields[ParameterMap["Tip"]]) : 0;
         }
@@ -110,7 +109,7 @@ namespace Transbank.POS.Responses
                 responseCode = int.Parse(cresponse.Substring(6, 2)),
                 commerceCode = long.Parse(cresponse.Substring(9, 12)),
                 terminalId = int.Parse(cresponse.Substring(22, 8))
-            }; 
+            };
         }
     }
 }
