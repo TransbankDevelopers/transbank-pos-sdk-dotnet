@@ -8,7 +8,7 @@
     <StartupObject />
     <Win32Resource />
     <RootNamespace>Transbank.POS</RootNamespace>
-    <PackageLicenseUrl></PackageLicenseUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/TransbankDevelopers/transbank-pos-sdk-dotnet/master/LICENSE.md</PackageLicenseUrl>
     <Description>This is the .Net SDK for Transbank's Verifone VX520 and VX520c POS Integration.</Description>
     <PackageProjectUrl>http://www.transbankdevelopers.cl/</PackageProjectUrl>
     <PackageTags>payments, cl, chile, transbank, POS, Verifone, vx520, vx520c, integrated payment,</PackageTags>
@@ -20,7 +20,7 @@
     <VersionSuffix>pre-alpha</VersionSuffix>
     <Company>Transbank</Company>
     <Authors>Transbank</Authors>
-    <Version>0.0.2-pre-alpha</Version>
+    <Version>0.0.3-pre-alpha</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
