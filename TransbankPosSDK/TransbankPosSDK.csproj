@@ -20,6 +20,7 @@
     <VersionSuffix>pre-alpha</VersionSuffix>
     <Company>Transbank</Company>
     <Authors>Transbank</Authors>
+    <Version>0.0.3-pre-alpha</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
