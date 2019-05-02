@@ -33,9 +33,13 @@ namespace Transbank.POS
                 else
                     throw new TransbankException("Unable to Open selected port: " + portName);
             }
+            catch (TransbankException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
-                throw new TransbankException("Unable to Open selected port: " + portName, e);
+                throw new Exception("Unable to Open selected port: " + portName, e);
             }
         }
 
@@ -52,8 +56,12 @@ namespace Transbank.POS
                     }
                     else
                     {
-                        throw new TransbankSaleException("Register Close returned an error: " + response.ResponseMessage, response);
+                        throw new TransbankSaleException("Sale returned an error: " + response.ResponseMessage, response);
                     }
+                }
+                catch (TransbankSaleException)
+                {
+                    throw;
                 }
                 catch (Exception e)
                 {
@@ -120,6 +128,10 @@ namespace Transbank.POS
                         throw new TransbankRegisterCloseException("Register Close retured an error: " + response.ResponseMessage, response);
                     }
                 }
+                catch (TransbankRegisterCloseException)
+                {
+                    throw;
+                }
                 catch (Exception e)
                 {
                     throw new TransbankException("Unable to execute register close in pos", e);
@@ -146,6 +158,10 @@ namespace Transbank.POS
                     {
                         throw new TransbankLoadKeysException("Load Keys retured an error: " + response.ResponseMessage, response);
                     }
+                }
+                catch (TransbankLoadKeysException)
+                {
+                    throw;
                 }
                 catch (Exception e)
                 {
