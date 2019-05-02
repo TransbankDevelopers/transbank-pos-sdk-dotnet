@@ -68,8 +68,8 @@ public class TransbankWrap {
     return ret;
   }
 
-  public static TbkReturn polling() {
-    TbkReturn ret = (TbkReturn)TransbankWrapPINVOKE.polling();
+  public static TbkReturn poll() {
+    TbkReturn ret = (TbkReturn)TransbankWrapPINVOKE.poll();
     return ret;
   }
 
