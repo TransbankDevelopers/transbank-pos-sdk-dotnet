@@ -93,13 +93,13 @@ namespace Transbank.POS
             }
         }
 
-        public bool Polling()
+        public bool Poll()
         {
             if (_configured)
             {
                 try
                 {
-                    return TransbankWrap.polling() == TbkReturn.TBK_OK;
+                    return TransbankWrap.poll() == TbkReturn.TBK_OK;
                 }
                 catch (Exception e)
                 {
