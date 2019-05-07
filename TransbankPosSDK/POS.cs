@@ -9,6 +9,7 @@ namespace Transbank.POS
     {
         private static readonly POS _instance = new POS();
         private bool _configured = false;
+        private TbkBaudrate _defaultBaudrate = TbkBaudrate.TBK_115200;
 
         public string Port { get; set; }
 
@@ -23,6 +24,8 @@ namespace Transbank.POS
                 return _instance;
             }
         }
+
+        public void OpenPort(string portName) => OpenPort(portName, _defaultBaudrate);
 
         public void OpenPort(string portName, TbkBaudrate baudrate)
         {
