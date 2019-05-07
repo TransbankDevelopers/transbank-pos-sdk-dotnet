@@ -58,8 +58,8 @@ public class TransbankWrap {
     return ret;
   }
 
-  public static BaseResponse register_close() {
-    BaseResponse ret = new BaseResponse(TransbankWrapPINVOKE.register_close(), true);
+  public static BaseResponse close() {
+    BaseResponse ret = new BaseResponse(TransbankWrapPINVOKE.close(), true);
     return ret;
   }
 
@@ -68,8 +68,8 @@ public class TransbankWrap {
     return ret;
   }
 
-  public static TbkReturn polling() {
-    TbkReturn ret = (TbkReturn)TransbankWrapPINVOKE.polling();
+  public static TbkReturn poll() {
+    TbkReturn ret = (TbkReturn)TransbankWrapPINVOKE.poll();
     return ret;
   }
 

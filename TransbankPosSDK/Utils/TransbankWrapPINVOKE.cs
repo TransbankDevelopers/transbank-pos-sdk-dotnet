@@ -269,14 +269,14 @@ class TransbankWrapPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_sale___")]
   public static extern string sale(int jarg1, int jarg2, bool jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_register_close___")]
-  public static extern global::System.IntPtr register_close();
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_close___")]
+  public static extern global::System.IntPtr close();
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_load_keys___")]
   public static extern global::System.IntPtr load_keys();
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_polling___")]
-  public static extern int polling();
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_poll___")]
+  public static extern int poll();
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_set_normal_mode___")]
   public static extern int set_normal_mode();

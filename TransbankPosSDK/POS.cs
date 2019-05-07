@@ -96,13 +96,13 @@ namespace Transbank.POS
             }
         }
 
-        public bool Polling()
+        public bool Poll()
         {
             if (_configured)
             {
                 try
                 {
-                    return TransbankWrap.polling() == TbkReturn.TBK_OK;
+                    return TransbankWrap.poll() == TbkReturn.TBK_OK;
                 }
                 catch (Exception e)
                 {
@@ -115,29 +115,29 @@ namespace Transbank.POS
             }
         }
 
-        public RegisterCloseResponse RegisterClose()
+        public CloseResponse Close()
         {
             if (_configured)
             {
                 try
                 {
-                    RegisterCloseResponse response = new RegisterCloseResponse(TransbankWrap.register_close());
+                    CloseResponse response = new CloseResponse(TransbankWrap.close());
                     if (response.Success)
                     {
                         return response;
                     }
                     else
                     {
-                        throw new TransbankRegisterCloseException("Register Close retured an error: " + response.ResponseMessage, response);
+                        throw new TransbankCloseException("Close retured an error: " + response.ResponseMessage, response);
                     }
                 }
-                catch (TransbankRegisterCloseException)
+                catch (TransbankCloseException)
                 {
                     throw;
                 }
                 catch (Exception e)
                 {
-                    throw new TransbankException("Unable to execute register close in pos", e);
+                    throw new TransbankException("Unable to execute close in pos", e);
                 }
             }
             else
