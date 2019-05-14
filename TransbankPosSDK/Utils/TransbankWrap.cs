@@ -58,6 +58,11 @@ public class TransbankWrap {
     return ret;
   }
 
+  public static string last_sale() {
+    string ret = TransbankWrapPINVOKE.last_sale();
+    return ret;
+  }
+
   public static BaseResponse close() {
     BaseResponse ret = new BaseResponse(TransbankWrapPINVOKE.close(), true);
     return ret;
@@ -65,6 +70,11 @@ public class TransbankWrap {
 
   public static BaseResponse load_keys() {
     BaseResponse ret = new BaseResponse(TransbankWrapPINVOKE.load_keys(), true);
+    return ret;
+  }
+
+  public static TotalsResponse get_totals() {
+    TotalsResponse ret = new TotalsResponse(TransbankWrapPINVOKE.get_totals(), true);
     return ret;
   }
 
