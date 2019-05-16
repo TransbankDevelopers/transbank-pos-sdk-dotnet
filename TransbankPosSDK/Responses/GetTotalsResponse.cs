@@ -23,7 +23,7 @@ namespace Transbank.POS.Responses
         public override string ToString()
         {
             return "Function: " + FunctionCode + "\n" +
-                   "Response: " + ResponseCode + "\n" +
+                   "Response: " + ResponseMessage + "\n" +
                    "TX Count: " + TxCount + "\n" +
                    "TX Total: " + TxTotal;
         }
