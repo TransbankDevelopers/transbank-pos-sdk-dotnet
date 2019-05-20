@@ -200,5 +200,36 @@ namespace Transbank.POS
                 return true;
             }
         }
+
+        public GetTotalsResponse GetTotals()
+        {
+            if (_configured)
+            {
+                try
+                {
+                    GetTotalsResponse response = new GetTotalsResponse(TransbankWrap.get_totals());
+                    if (response.Success)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        throw new TransbankGetTotalsException("Get Totals retured an error: " + response.ResponseMessage, response);
+                    }
+                }
+                catch (TransbankGetTotalsException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to get totals in POS", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
     }
 }
