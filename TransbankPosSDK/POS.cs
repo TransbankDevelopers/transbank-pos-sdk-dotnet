@@ -77,6 +77,37 @@ namespace Transbank.POS
             }
         }
 
+        public LastSaleResponse LastSale()
+        {
+            if (_configured)
+            {
+                try
+                {
+                    LastSaleResponse response = new LastSaleResponse(TransbankWrap.last_sale());
+                    if (response.Success)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        throw new TransbankLastSaleException("LastSale returned an error: " + response.ResponseMessage, response);
+                    }
+                }
+                catch (TransbankLastSaleException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to execute LastSale on pos", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
+
         public bool SetNormalMode()
         {
             if (_configured)
