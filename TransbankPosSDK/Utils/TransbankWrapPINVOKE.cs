@@ -278,6 +278,54 @@ class TransbankWrapPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_TotalsResponse___")]
   public static extern void delete_TotalsResponse(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_function_set___")]
+  public static extern void CancellationResponse_function_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_function_get___")]
+  public static extern int CancellationResponse_function_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_responseCode_set___")]
+  public static extern void CancellationResponse_responseCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_responseCode_get___")]
+  public static extern int CancellationResponse_responseCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_commerceCode_set___")]
+  public static extern void CancellationResponse_commerceCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, long jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_commerceCode_get___")]
+  public static extern long CancellationResponse_commerceCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_terminalId_set___")]
+  public static extern void CancellationResponse_terminalId_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_terminalId_get___")]
+  public static extern int CancellationResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_authorizationCode_set___")]
+  public static extern void CancellationResponse_authorizationCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_authorizationCode_get___")]
+  public static extern int CancellationResponse_authorizationCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_operationID_set___")]
+  public static extern void CancellationResponse_operationID_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_operationID_get___")]
+  public static extern int CancellationResponse_operationID_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_initilized_set___")]
+  public static extern void CancellationResponse_initilized_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_CancellationResponse_initilized_get___")]
+  public static extern int CancellationResponse_initilized_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_new_CancellationResponse___")]
+  public static extern global::System.IntPtr new_CancellationResponse();
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_CancellationResponse___")]
+  public static extern void delete_CancellationResponse(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_list_ports___")]
   public static extern string list_ports();
 
@@ -325,6 +373,9 @@ class TransbankWrapPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_close_port___")]
   public static extern int close_port();
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_cancellation___")]
+  public static extern global::System.IntPtr cancellation(int jarg1);
 }
 
 }

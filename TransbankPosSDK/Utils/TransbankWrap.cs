@@ -93,6 +93,11 @@ public class TransbankWrap {
     return ret;
   }
 
+  public static CancellationResponse cancellation(int transactionID) {
+    CancellationResponse ret = new CancellationResponse(TransbankWrapPINVOKE.cancellation(transactionID), true);
+    return ret;
+  }
+
 }
 
 }
