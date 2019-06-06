@@ -108,6 +108,37 @@ namespace Transbank.POS
             }
         }
 
+        public CancellResponse Cancellation(int operationID)
+        {
+            if (_configured)
+            {
+                try
+                {
+                    CancellResponse response = new CancellResponse(TransbankWrap.cancellation(operationID));
+                    if (response.Success)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        throw new TransbankCancellationException("Cancellation returned an error: " + response.ResponseMessage, response);
+                    }
+                }
+                catch (TransbankCancellationException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to make Cancellation on POS", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
+
         public bool SetNormalMode()
         {
             if (_configured)
