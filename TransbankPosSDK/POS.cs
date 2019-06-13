@@ -108,29 +108,29 @@ namespace Transbank.POS
             }
         }
 
-        public CancellResponse Cancellation(int operationID)
+        public RefundResp Refund(int operationID)
         {
             if (_configured)
             {
                 try
                 {
-                    CancellResponse response = new CancellResponse(TransbankWrap.cancellation(operationID));
+                    Responses.RefundResp response = new Responses.RefundResp(TransbankWrap.refund(operationID));
                     if (response.Success)
                     {
                         return response;
                     }
                     else
                     {
-                        throw new TransbankCancellationException("Cancellation returned an error: " + response.ResponseMessage, response);
+                        throw new TransbankRefundException("Refund returned an error: " + response.ResponseMessage, response);
                     }
                 }
-                catch (TransbankCancellationException)
+                catch (TransbankRefundException)
                 {
                     throw;
                 }
                 catch (Exception e)
                 {
-                    throw new TransbankException("Unable to make Cancellation on POS", e);
+                    throw new TransbankException("Unable to make Refund on POS", e);
                 }
             }
             else
