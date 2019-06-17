@@ -108,6 +108,37 @@ namespace Transbank.POS
             }
         }
 
+        public RefundResp Refund(int operationID)
+        {
+            if (_configured)
+            {
+                try
+                {
+                    Responses.RefundResp response = new Responses.RefundResp(TransbankWrap.refund(operationID));
+                    if (response.Success)
+                    {
+                        return response;
+                    }
+                    else
+                    {
+                        throw new TransbankRefundException("Refund returned an error: " + response.ResponseMessage, response);
+                    }
+                }
+                catch (TransbankRefundException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to make Refund on POS", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
+
         public bool SetNormalMode()
         {
             if (_configured)

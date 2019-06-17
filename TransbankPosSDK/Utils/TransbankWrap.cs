@@ -93,6 +93,11 @@ public class TransbankWrap {
     return ret;
   }
 
+  public static RefundResponse refund(int transactionID) {
+    RefundResponse ret = new RefundResponse(TransbankWrapPINVOKE.refund(transactionID), true);
+    return ret;
+  }
+
 }
 
 }
