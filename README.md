@@ -96,15 +96,16 @@ La documentación relevante para usar este SDK es:
 
 ### Generar una nueva versión
 
-Para generar una nueva versión, se debe incrementar el numero de esta en las propiedades del proyecto.
-Siguiendo la Guía de [SemVer](https://semver.org/) y empaquetar el artefacto NuGet.
+Para generar una nueva versión, se debe abrir un nuevo Pull Request y seguir la Guía de [SemVer](https://semver.org/) y empaquetar el artefacto NuGet:
 
-- Cambiar la configuración de la solución a Release.
-- Click derecho sobre el proyecto.
-- Empaquetar.
+1. Cambiar la configuración de la solución a Release.
+2. Actualizar el numero de version.
+3. Actualizar el Changelog con los cambios de la nueva version.
+4. Click derecho sobre el proyecto.
+5. Empaquetar.
 
 Los pasos anteriores generaran un nuevo artefacto NuGet correspondiente a la versión modificada en la configuración.
-Luego de generar esta nueva version, es necesario la publicación manual en NugGet.
+Luego de generar esta nueva version, y mezclar el Pull Request con los cambios, es necesario la publicación manual en NugGet.
 
 Web de [Nuget.org](https://www.nuget.org):
 
@@ -116,6 +117,6 @@ Linea de Comandos:
 
 - Contar con ApiKey para poder subir el artefacto:
 
-    ```bash
-    dotnet.exe nuget push TransbankPosSDK/bin/Release/TransbankPosSDK.<version>-pre-alpha.nupkg -k <APIKEY> -s https://api.nuget.org/v3/index.json
-    ```
+  ```bash
+  dotnet.exe nuget push TransbankPosSDK/bin/Release/TransbankPosSDK.<version>-pre-alpha.nupkg -k <APIKEY> -s https://api.nuget.org/v3/index.json
+  ```
