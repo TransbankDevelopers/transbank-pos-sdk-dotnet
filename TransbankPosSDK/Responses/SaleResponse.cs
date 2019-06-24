@@ -108,7 +108,7 @@ namespace Transbank.POS.Responses
                 function = int.Parse(cresponse.Substring(1, 4)),
                 responseCode = int.Parse(cresponse.Substring(6, 2)),
                 commerceCode = long.Parse(cresponse.Substring(9, 12)),
-                terminalId = int.Parse(cresponse.Substring(22, 8))
+                terminalId = cresponse.Substring(22, 8)
             };
         }
     }

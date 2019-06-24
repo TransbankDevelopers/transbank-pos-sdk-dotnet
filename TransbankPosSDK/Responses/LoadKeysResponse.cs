@@ -11,7 +11,7 @@ namespace Transbank.POS.Responses
         public int ResponseCode => Response.responseCode;
         public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
         public long CommerceCode => Response.commerceCode;
-        public int TerminalId => Response.terminalId;
+        public string TerminalId => Response.terminalId;
 
         public LoadKeysResponse(BaseResponse cresponse)
         {

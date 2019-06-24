@@ -225,10 +225,10 @@ class TransbankWrapPINVOKE {
   public static extern long BaseResponse_commerceCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_terminalId_set___")]
-  public static extern void BaseResponse_terminalId_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  public static extern void BaseResponse_terminalId_set(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_terminalId_get___")]
-  public static extern int BaseResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern string BaseResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_BaseResponse_initilized_set___")]
   public static extern void BaseResponse_initilized_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
@@ -297,16 +297,16 @@ class TransbankWrapPINVOKE {
   public static extern long RefundResponse_commerceCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_terminalId_set___")]
-  public static extern void RefundResponse_terminalId_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  public static extern void RefundResponse_terminalId_set(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_terminalId_get___")]
-  public static extern int RefundResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern string RefundResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_authorizationCode_set___")]
-  public static extern void RefundResponse_authorizationCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  public static extern void RefundResponse_authorizationCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_authorizationCode_get___")]
-  public static extern int RefundResponse_authorizationCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern string RefundResponse_authorizationCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_operationID_set___")]
   public static extern void RefundResponse_operationID_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
