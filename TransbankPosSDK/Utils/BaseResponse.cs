@@ -70,12 +70,12 @@ public class BaseResponse : global::System.IDisposable {
     } 
   }
 
-  public int terminalId {
+  public string terminalId {
     set {
       TransbankWrapPINVOKE.BaseResponse_terminalId_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.BaseResponse_terminalId_get(swigCPtr);
+      string ret = TransbankWrapPINVOKE.BaseResponse_terminalId_get(swigCPtr);
       return ret;
     } 
   }

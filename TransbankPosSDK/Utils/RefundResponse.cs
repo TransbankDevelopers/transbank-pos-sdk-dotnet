@@ -70,22 +70,22 @@ public class RefundResponse : global::System.IDisposable {
     } 
   }
 
-  public int terminalId {
+  public string terminalId {
     set {
       TransbankWrapPINVOKE.RefundResponse_terminalId_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.RefundResponse_terminalId_get(swigCPtr);
+      string ret = TransbankWrapPINVOKE.RefundResponse_terminalId_get(swigCPtr);
       return ret;
     } 
   }
 
-  public int authorizationCode {
+  public string authorizationCode {
     set {
       TransbankWrapPINVOKE.RefundResponse_authorizationCode_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.RefundResponse_authorizationCode_get(swigCPtr);
+      string ret = TransbankWrapPINVOKE.RefundResponse_authorizationCode_get(swigCPtr);
       return ret;
     } 
   }
