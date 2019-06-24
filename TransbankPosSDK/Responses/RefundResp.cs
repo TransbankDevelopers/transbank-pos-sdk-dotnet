@@ -9,8 +9,8 @@ namespace Transbank.POS.Responses
         public int FunctionCode => Response.function;
         public int ResponseCode => Response.responseCode;
         public long CommerceCode => Response.commerceCode;
-        public int TerminalId => Response.terminalId;
-        public int AuthorizationCode => Response.authorizationCode;
+        public string TerminalId => Response.terminalId;
+        public string AuthorizationCode => Response.authorizationCode;
         public int OperationID => Response.operationID;
         public int Initialized => Response.initilized;
 
