@@ -293,5 +293,37 @@ namespace Transbank.POS
                 throw new TransbankException("Port not Configured");
             }
         }
+
+        public DetailResponse[] Details()
+        {
+            if (_configured)
+            {
+                try
+                {
+                    int size = 0;
+                    string[] lines = TransbankWrap.sales_detail(size).Split("\n");
+                    DetailResponse[] response = new DetailResponse[size];
+
+                    for(int x = 0; x < size; x++)
+                    {
+                        response[x].Parse(lines[x]);
+                    }
+
+                    return response;
+                }
+                catch (TransbankSalesDetailException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to get details in POS", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
     }
 }
