@@ -376,6 +376,9 @@ class TransbankWrapPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_refund___")]
   public static extern global::System.IntPtr refund(int jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_sales_detail___")]
+  public static extern string sales_detail(global::System.Runtime.InteropServices.HandleRef jarg1);
 }
 
 }

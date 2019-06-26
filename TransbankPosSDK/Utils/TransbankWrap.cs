@@ -98,6 +98,11 @@ public class TransbankWrap {
     return ret;
   }
 
+  public static string sales_detail(SWIGTYPE_p_int size) {
+    string ret = TransbankWrapPINVOKE.sales_detail(SWIGTYPE_p_int.getCPtr(size));
+    return ret;
+  }
+
 }
 
 }
