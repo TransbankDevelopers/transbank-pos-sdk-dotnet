@@ -301,7 +301,7 @@ namespace Transbank.POS
                 try
                 {
                     int size = 0;
-                    string[] lines = TransbankWrap.sales_detail(size).Split("\n");
+                    string[] lines = TransbankWrap.sales_detail(new SWIGTYPE_p_int(new IntPtr(size), false)).Split('\n');
                     DetailResponse[] response = new DetailResponse[size];
 
                     for(int x = 0; x < size; x++)
