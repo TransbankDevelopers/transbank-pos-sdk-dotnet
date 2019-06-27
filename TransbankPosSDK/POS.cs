@@ -301,9 +301,14 @@ namespace Transbank.POS
             {
                 try
                 {
-                    string[] lines = TransbankWrap.sales_detail(op).Split('\n');
                     var details = new List<DetailResponse>();
+                    string response = TransbankWrap.sales_detail(op);
+                    if (response == "")
+                    {
+                        return details;
+                    }
 
+                    string[] lines = response.Split('\n');
                     foreach (string line in lines)
                     {
                         details.Add(new DetailResponse(line));
