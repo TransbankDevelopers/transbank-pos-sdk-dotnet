@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Globalization;
 using Transbank.POS.Utils;
 
@@ -14,8 +15,8 @@ namespace Transbank.POS.Responses
             { "CommerceCode", 2 },
             { "TerminalID", 3 },
             { "Ticket", 4 },
-            { "AutorizationCode", 5 },
-            { "Ammount", 6 },
+            { "AuthorizationCode", 5 },
+            { "Amount", 6 },
             { "Last4Digits", 7 },
             { "OperationNumber", 8 },
             { "CardType", 9 },
@@ -26,16 +27,17 @@ namespace Transbank.POS.Responses
             { "RealTime", 14 },
             { "EmployeeId", 15 },
             { "Tip", 16 },
-            { "FeeAmmount", 17 },
+            { "FeeAmount", 17 },
             { "FeeNumber", 18 }
         };
 
         public int Command { set; get; }
         public int ResponseCode { set; get; }
-        public int CommerceCode { set; get; }
-        public int Ticket { set; get; }
-        public int AutorizationCode { set; get; }
-        public int Ammount { set; get; }
+        public long CommerceCode { set; get; }
+        public string TerminalId { set; get; }
+        public string Ticket { set; get; }
+        public string AuthorizationCode { set; get; }
+        public int Amount { set; get; }
         public int Last4Digits { set; get; }
         public int OperationNumber { set; get; }
         public string CardType { set; get; }
@@ -48,21 +50,15 @@ namespace Transbank.POS.Responses
         public int FeeAmount { set; get; }
         public int FeeNumber { set; get; }
 
-        public DetailResponse()
-        {
-
-        }
-
-        public void Parse(string line) {
-            line = line.Substring(1);
+        public DetailResponse(string line) {
             string[] fields = line.Split('|');
 
-            Command = fields[ParameterMap["Command"]].Trim() != "" ? int.Parse(fields[ParameterMap["Command"]]) : 0;
+            Command = fields[ParameterMap["Command"]].Trim() != "" ? int.Parse(Regex.Replace(fields[ParameterMap["Command"]], "[^0-9]", "")) : 0;
             ResponseCode = fields[ParameterMap["ResponseCode"]].Trim() != "" ? int.Parse(fields[ParameterMap["ResponseCode"]]) : -1;
-            CommerceCode = fields[ParameterMap["CommerceCode"]].Trim() != "" ? int.Parse(fields[ParameterMap["CommerceCode"]]) : 0;
-            Ticket = fields[ParameterMap["Ticket"]].Trim() != "" ? int.Parse(fields[ParameterMap["Ticket"]]) : 0;
-            AutorizationCode = fields[ParameterMap["AutorizationCode"]].Trim() != "" ? int.Parse(fields[ParameterMap["AutorizationCode"]]) : 0;
-            Ammount = fields[ParameterMap["Ammount"]].Trim() != "" ? int.Parse(fields[ParameterMap["Ammount"]]) : 0;
+            CommerceCode = fields[ParameterMap["CommerceCode"]].Trim() != "" ? long.Parse(fields[ParameterMap["CommerceCode"]]) : 0;
+            Ticket = fields[ParameterMap["Ticket"]].Trim() != "" ? fields[ParameterMap["Ticket"]] : "";
+            AuthorizationCode = fields[ParameterMap["AuthorizationCode"]].Trim() != "" ? fields[ParameterMap["AuthorizationCode"]] : "";
+            Amount = fields[ParameterMap["Amount"]].Trim() != "" ? int.Parse(fields[ParameterMap["Amount"]]) : 0;
             Last4Digits = fields[ParameterMap["Last4Digits"]].Trim() != "" ? int.Parse(fields[ParameterMap["Last4Digits"]]) : 0;
             OperationNumber = fields[ParameterMap["OperationNumber"]].Trim() != "" ? int.Parse(fields[ParameterMap["OperationNumber"]]) : 0;
             CardType = fields[ParameterMap["CardType"]].Trim();
@@ -71,7 +67,9 @@ namespace Transbank.POS.Responses
             AccountingDate = null;
             if (date != "")
             {
-                AccountingDate = DateTime.ParseExact(date, "ddMMyyyy", DateTimeFormatInfo.InvariantInfo);
+                DateTime parsedDate = new DateTime();
+                DateTime.TryParseExact(date, "ddMMyyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
+                AccountingDate = parsedDate;
             }
 
             AccountNumber = fields[ParameterMap["AccountNumber"]].Trim() != "" ? long.Parse(fields[ParameterMap["AccountNumber"]]) : 0;
@@ -79,11 +77,13 @@ namespace Transbank.POS.Responses
 
             date = fields[ParameterMap["RealDate"]].Trim();
             string hour = fields[ParameterMap["RealTime"]].Trim();
-
             RealDate = null;
+
             if (date + hour != "")
             {
-                RealDate = DateTime.ParseExact(date + hour, "ddMMyyyyHHmmss", DateTimeFormatInfo.InvariantInfo);
+                DateTime parsedDate = new DateTime();
+                DateTime.TryParseExact(date + hour, "ddMMyyyyHHmmss", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
+                RealDate = parsedDate;
             }
 
             EmployeeId = fields[ParameterMap["EmployeeId"]].Trim() != "" ? int.Parse(fields[ParameterMap["EmployeeId"]]) : 0;

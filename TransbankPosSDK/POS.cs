@@ -2,6 +2,7 @@
 using Transbank.POS.Responses;
 using Transbank.POS.Exceptions;
 using System;
+using System.Collections.Generic;
 
 namespace Transbank.POS
 {
@@ -294,22 +295,21 @@ namespace Transbank.POS
             }
         }
 
-        public DetailResponse[] Details()
+        public List<DetailResponse> Details(int op)
         {
             if (_configured)
             {
                 try
                 {
-                    int size = 0;
-                    string[] lines = TransbankWrap.sales_detail(new SWIGTYPE_p_int(new IntPtr(size), false)).Split('\n');
-                    DetailResponse[] response = new DetailResponse[size];
+                    string[] lines = TransbankWrap.sales_detail(op).Split('\n');
+                    var details = new List<DetailResponse>();
 
-                    for(int x = 0; x < size; x++)
+                    foreach (string line in lines)
                     {
-                        response[x].Parse(lines[x]);
+                        details.Add(new DetailResponse(line));
                     }
 
-                    return response;
+                    return details;
                 }
                 catch (TransbankSalesDetailException)
                 {
