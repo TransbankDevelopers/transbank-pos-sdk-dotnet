@@ -5,7 +5,21 @@ Todos los cambios notables a este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.4.0] - 2019-06-19
+## [2.0.0] - 2019-07-01
+
+### Added
+
+- `Sales Detail` method.
+
+### Changed
+
+- `LoadKeys`
+  - `Terminal ID` data type from `int` to `string`.
+- `Refund`
+  - `Terminal ID` data type from `int` to `string`.
+  - `Authorization Code` data type from `int` to `string`.
+
+## [1.4.0] - 2019-06-18
 
 ### Added
 
