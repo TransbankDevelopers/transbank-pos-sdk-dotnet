@@ -73,8 +73,8 @@ public class TransbankWrap {
     return ret;
   }
 
-  public static TotalsResponse get_totals() {
-    TotalsResponse ret = new TotalsResponse(TransbankWrapPINVOKE.get_totals(), true);
+  public static TotalsCResponse get_totals() {
+    TotalsCResponse ret = new TotalsCResponse(TransbankWrapPINVOKE.get_totals(), true);
     return ret;
   }
 
@@ -93,13 +93,13 @@ public class TransbankWrap {
     return ret;
   }
 
-  public static RefundResponse refund(int transactionID) {
-    RefundResponse ret = new RefundResponse(TransbankWrapPINVOKE.refund(transactionID), true);
+  public static RefundCResponse refund(int transactionID) {
+    RefundCResponse ret = new RefundCResponse(TransbankWrapPINVOKE.refund(transactionID), true);
     return ret;
   }
 
-  public static string sales_detail(int op) {
-    string ret = TransbankWrapPINVOKE.sales_detail(op);
+  public static string sales_detail(bool print_on_pos) {
+    string ret = TransbankWrapPINVOKE.sales_detail(print_on_pos);
     return ret;
   }
 

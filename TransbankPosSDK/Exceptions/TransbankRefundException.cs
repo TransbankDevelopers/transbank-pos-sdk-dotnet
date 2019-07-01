@@ -5,9 +5,9 @@ namespace Transbank.POS.Exceptions
 {
     public class TransbankRefundException : TransbankException
     {
-        public RefundResp RefundResp;
+        public RefundResponse RefundResp;
 
-        public TransbankRefundException(string message, RefundResp response) : base(message)
+        public TransbankRefundException(string message, RefundResponse response) : base(message)
         {
             RefundResp = response;
         }

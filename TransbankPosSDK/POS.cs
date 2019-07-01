@@ -109,13 +109,13 @@ namespace Transbank.POS
             }
         }
 
-        public RefundResp Refund(int operationID)
+        public RefundResponse Refund(int operationID)
         {
             if (_configured)
             {
                 try
                 {
-                    Responses.RefundResp response = new Responses.RefundResp(TransbankWrap.refund(operationID));
+                    RefundResponse response = new RefundResponse(TransbankWrap.refund(operationID));
                     if (response.Success)
                     {
                         return response;
@@ -264,13 +264,13 @@ namespace Transbank.POS
             }
         }
 
-        public GetTotalsResponse GetTotals()
+        public TotalsResponse Totals()
         {
             if (_configured)
             {
                 try
                 {
-                    GetTotalsResponse response = new GetTotalsResponse(TransbankWrap.get_totals());
+                    TotalsResponse response = new TotalsResponse(TransbankWrap.get_totals());
                     if (response.Success)
                     {
                         return response;
@@ -295,14 +295,14 @@ namespace Transbank.POS
             }
         }
 
-        public List<DetailResponse> Details(int op)
+        public List<DetailResponse> Details(bool printOnPOS)
         {
             if (_configured)
             {
                 try
                 {
                     var details = new List<DetailResponse>();
-                    string response = TransbankWrap.sales_detail(op);
+                    string response = TransbankWrap.sales_detail(printOnPOS);
                     if (response == "")
                     {
                         return details;
