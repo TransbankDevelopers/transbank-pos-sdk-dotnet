@@ -37,14 +37,14 @@ class TransbankWrapPINVOKE {
     public static extern void SWIGRegisterExceptionCallbacks_TransbankWrap(
                                 ExceptionDelegate applicationDelegate,
                                 ExceptionDelegate arithmeticDelegate,
-                                ExceptionDelegate divideByZeroDelegate, 
-                                ExceptionDelegate indexOutOfRangeDelegate, 
+                                ExceptionDelegate divideByZeroDelegate,
+                                ExceptionDelegate indexOutOfRangeDelegate,
                                 ExceptionDelegate invalidCastDelegate,
                                 ExceptionDelegate invalidOperationDelegate,
                                 ExceptionDelegate ioDelegate,
                                 ExceptionDelegate nullReferenceDelegate,
-                                ExceptionDelegate outOfMemoryDelegate, 
-                                ExceptionDelegate overflowDelegate, 
+                                ExceptionDelegate outOfMemoryDelegate,
+                                ExceptionDelegate overflowDelegate,
                                 ExceptionDelegate systemExceptionDelegate);
 
     [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="SWIGRegisterExceptionArgumentCallbacks_TransbankWrap")]
@@ -136,7 +136,7 @@ class TransbankWrapPINVOKE {
           if (pendingException != null)
             pending = true;
         return pending;
-      } 
+      }
     }
 
     public static void Set(global::System.Exception e) {
@@ -242,89 +242,89 @@ class TransbankWrapPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_BaseResponse___")]
   public static extern void delete_BaseResponse(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_function_set___")]
-  public static extern void TotalsResponse_function_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_function_set___")]
+  public static extern void TotalsCResponse_function_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_function_get___")]
-  public static extern int TotalsResponse_function_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_function_get___")]
+  public static extern int TotalsCResponse_function_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_responseCode_set___")]
-  public static extern void TotalsResponse_responseCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_responseCode_set___")]
+  public static extern void TotalsCResponse_responseCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_responseCode_get___")]
-  public static extern int TotalsResponse_responseCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_responseCode_get___")]
+  public static extern int TotalsCResponse_responseCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_txCount_set___")]
-  public static extern void TotalsResponse_txCount_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_txCount_set___")]
+  public static extern void TotalsCResponse_txCount_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_txCount_get___")]
-  public static extern int TotalsResponse_txCount_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_txCount_get___")]
+  public static extern int TotalsCResponse_txCount_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_txTotal_set___")]
-  public static extern void TotalsResponse_txTotal_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_txTotal_set___")]
+  public static extern void TotalsCResponse_txTotal_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_txTotal_get___")]
-  public static extern int TotalsResponse_txTotal_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_txTotal_get___")]
+  public static extern int TotalsCResponse_txTotal_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_initilized_set___")]
-  public static extern void TotalsResponse_initilized_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_initilized_set___")]
+  public static extern void TotalsCResponse_initilized_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsResponse_initilized_get___")]
-  public static extern int TotalsResponse_initilized_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_TotalsCResponse_initilized_get___")]
+  public static extern int TotalsCResponse_initilized_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_new_TotalsResponse___")]
-  public static extern global::System.IntPtr new_TotalsResponse();
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_new_TotalsCResponse___")]
+  public static extern global::System.IntPtr new_TotalsCResponse();
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_TotalsResponse___")]
-  public static extern void delete_TotalsResponse(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_TotalsCResponse___")]
+  public static extern void delete_TotalsCResponse(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_function_set___")]
-  public static extern void RefundResponse_function_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_function_set___")]
+  public static extern void RefundCResponse_function_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_function_get___")]
-  public static extern int RefundResponse_function_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_function_get___")]
+  public static extern int RefundCResponse_function_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_responseCode_set___")]
-  public static extern void RefundResponse_responseCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_responseCode_set___")]
+  public static extern void RefundCResponse_responseCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_responseCode_get___")]
-  public static extern int RefundResponse_responseCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_responseCode_get___")]
+  public static extern int RefundCResponse_responseCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_commerceCode_set___")]
-  public static extern void RefundResponse_commerceCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, long jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_commerceCode_set___")]
+  public static extern void RefundCResponse_commerceCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, long jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_commerceCode_get___")]
-  public static extern long RefundResponse_commerceCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_commerceCode_get___")]
+  public static extern long RefundCResponse_commerceCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_terminalId_set___")]
-  public static extern void RefundResponse_terminalId_set(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_terminalId_set___")]
+  public static extern void RefundCResponse_terminalId_set(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_terminalId_get___")]
-  public static extern string RefundResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_terminalId_get___")]
+  public static extern string RefundCResponse_terminalId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_authorizationCode_set___")]
-  public static extern void RefundResponse_authorizationCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_authorizationCode_set___")]
+  public static extern void RefundCResponse_authorizationCode_set(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_authorizationCode_get___")]
-  public static extern string RefundResponse_authorizationCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_authorizationCode_get___")]
+  public static extern string RefundCResponse_authorizationCode_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_operationID_set___")]
-  public static extern void RefundResponse_operationID_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_operationID_set___")]
+  public static extern void RefundCResponse_operationID_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_operationID_get___")]
-  public static extern int RefundResponse_operationID_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_operationID_get___")]
+  public static extern int RefundCResponse_operationID_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_initilized_set___")]
-  public static extern void RefundResponse_initilized_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_initilized_set___")]
+  public static extern void RefundCResponse_initilized_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundResponse_initilized_get___")]
-  public static extern int RefundResponse_initilized_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_RefundCResponse_initilized_get___")]
+  public static extern int RefundCResponse_initilized_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_new_RefundResponse___")]
-  public static extern global::System.IntPtr new_RefundResponse();
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_new_RefundCResponse___")]
+  public static extern global::System.IntPtr new_RefundCResponse();
 
-  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_RefundResponse___")]
-  public static extern void delete_RefundResponse(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_delete_RefundCResponse___")]
+  public static extern void delete_RefundCResponse(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_list_ports___")]
   public static extern string list_ports();
@@ -376,6 +376,9 @@ class TransbankWrapPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_refund___")]
   public static extern global::System.IntPtr refund(int jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("TransbankWrap", EntryPoint="CSharp_TransbankfPOSfUtils_sales_detail___")]
+  public static extern string sales_detail(bool jarg1);
 }
 
 }

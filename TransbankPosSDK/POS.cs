@@ -2,6 +2,7 @@
 using Transbank.POS.Responses;
 using Transbank.POS.Exceptions;
 using System;
+using System.Collections.Generic;
 
 namespace Transbank.POS
 {
@@ -108,13 +109,13 @@ namespace Transbank.POS
             }
         }
 
-        public RefundResp Refund(int operationID)
+        public RefundResponse Refund(int operationID)
         {
             if (_configured)
             {
                 try
                 {
-                    Responses.RefundResp response = new Responses.RefundResp(TransbankWrap.refund(operationID));
+                    RefundResponse response = new RefundResponse(TransbankWrap.refund(operationID));
                     if (response.Success)
                     {
                         return response;
@@ -263,13 +264,13 @@ namespace Transbank.POS
             }
         }
 
-        public GetTotalsResponse GetTotals()
+        public TotalsResponse Totals()
         {
             if (_configured)
             {
                 try
                 {
-                    GetTotalsResponse response = new GetTotalsResponse(TransbankWrap.get_totals());
+                    TotalsResponse response = new TotalsResponse(TransbankWrap.get_totals());
                     if (response.Success)
                     {
                         return response;
@@ -286,6 +287,42 @@ namespace Transbank.POS
                 catch (Exception e)
                 {
                     throw new TransbankException("Unable to get totals in POS", e);
+                }
+            }
+            else
+            {
+                throw new TransbankException("Port not Configured");
+            }
+        }
+
+        public List<DetailResponse> Details(bool printOnPOS)
+        {
+            if (_configured)
+            {
+                try
+                {
+                    var details = new List<DetailResponse>();
+                    string response = TransbankWrap.sales_detail(printOnPOS);
+                    if (response == "")
+                    {
+                        return details;
+                    }
+
+                    string[] lines = response.Split('\n');
+                    foreach (string line in lines)
+                    {
+                        details.Add(new DetailResponse(line));
+                    }
+
+                    return details;
+                }
+                catch (TransbankSalesDetailException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    throw new TransbankException("Unable to get details in POS", e);
                 }
             }
             else

@@ -2,22 +2,20 @@
 
 namespace Transbank.POS.Responses
 {
-    public class RefundResp
+    public class TotalsResponse
     {
-        public RefundResponse Response { get; }
+        public TotalsCResponse Response { get; }
 
         public int FunctionCode => Response.function;
         public int ResponseCode => Response.responseCode;
-        public long CommerceCode => Response.commerceCode;
-        public string TerminalId => Response.terminalId;
-        public string AuthorizationCode => Response.authorizationCode;
-        public int OperationID => Response.operationID;
+        public int TxCount => Response.txCount;
+        public int TxTotal => Response.txTotal;
         public int Initialized => Response.initilized;
 
         public string ResponseMessage => ResponseCodes.Map[Response.responseCode];
         public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
 
-        public RefundResp(RefundResponse cresponse)
+        public TotalsResponse(TotalsCResponse cresponse)
         {
             Response = cresponse;
         }
@@ -26,8 +24,8 @@ namespace Transbank.POS.Responses
         {
             return "Function: " + FunctionCode + "\n" +
                    "Response: " + ResponseMessage + "\n" +
-                   "AuthorizationCode: " + AuthorizationCode + "\n" +
-                   "OperationID: " + OperationID;
+                   "TX Count: " + TxCount + "\n" +
+                   "TX Total: " + TxTotal;
         }
     }
 }

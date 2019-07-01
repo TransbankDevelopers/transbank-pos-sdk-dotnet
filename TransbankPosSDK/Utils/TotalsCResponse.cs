@@ -10,20 +10,20 @@
 
 namespace Transbank.POS.Utils {
 
-public class TotalsResponse : global::System.IDisposable {
+public class TotalsCResponse : global::System.IDisposable {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
   protected bool swigCMemOwn;
 
-  internal TotalsResponse(global::System.IntPtr cPtr, bool cMemoryOwn) {
+  internal TotalsCResponse(global::System.IntPtr cPtr, bool cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
-  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(TotalsResponse obj) {
+  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(TotalsCResponse obj) {
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 
-  ~TotalsResponse() {
+  ~TotalsCResponse() {
     Dispose();
   }
 
@@ -32,7 +32,7 @@ public class TotalsResponse : global::System.IDisposable {
       if (swigCPtr.Handle != global::System.IntPtr.Zero) {
         if (swigCMemOwn) {
           swigCMemOwn = false;
-          TransbankWrapPINVOKE.delete_TotalsResponse(swigCPtr);
+          TransbankWrapPINVOKE.delete_TotalsCResponse(swigCPtr);
         }
         swigCPtr = new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero);
       }
@@ -42,55 +42,55 @@ public class TotalsResponse : global::System.IDisposable {
 
   public int function {
     set {
-      TransbankWrapPINVOKE.TotalsResponse_function_set(swigCPtr, value);
+      TransbankWrapPINVOKE.TotalsCResponse_function_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.TotalsResponse_function_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.TotalsCResponse_function_get(swigCPtr);
       return ret;
     } 
   }
 
   public int responseCode {
     set {
-      TransbankWrapPINVOKE.TotalsResponse_responseCode_set(swigCPtr, value);
+      TransbankWrapPINVOKE.TotalsCResponse_responseCode_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.TotalsResponse_responseCode_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.TotalsCResponse_responseCode_get(swigCPtr);
       return ret;
     } 
   }
 
   public int txCount {
     set {
-      TransbankWrapPINVOKE.TotalsResponse_txCount_set(swigCPtr, value);
+      TransbankWrapPINVOKE.TotalsCResponse_txCount_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.TotalsResponse_txCount_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.TotalsCResponse_txCount_get(swigCPtr);
       return ret;
     } 
   }
 
   public int txTotal {
     set {
-      TransbankWrapPINVOKE.TotalsResponse_txTotal_set(swigCPtr, value);
+      TransbankWrapPINVOKE.TotalsCResponse_txTotal_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.TotalsResponse_txTotal_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.TotalsCResponse_txTotal_get(swigCPtr);
       return ret;
     } 
   }
 
   public int initilized {
     set {
-      TransbankWrapPINVOKE.TotalsResponse_initilized_set(swigCPtr, value);
+      TransbankWrapPINVOKE.TotalsCResponse_initilized_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.TotalsResponse_initilized_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.TotalsCResponse_initilized_get(swigCPtr);
       return ret;
     } 
   }
 
-  public TotalsResponse() : this(TransbankWrapPINVOKE.new_TotalsResponse(), true) {
+  public TotalsCResponse() : this(TransbankWrapPINVOKE.new_TotalsCResponse(), true) {
   }
 
 }

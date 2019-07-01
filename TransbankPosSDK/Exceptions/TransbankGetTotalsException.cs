@@ -5,9 +5,9 @@ namespace Transbank.POS.Exceptions
 {
     public class TransbankGetTotalsException : TransbankException
     {
-        public GetTotalsResponse GetTotalsResponse;
+        public TotalsResponse GetTotalsResponse;
 
-        public TransbankGetTotalsException(string message, GetTotalsResponse response) : base(message)
+        public TransbankGetTotalsException(string message, TotalsResponse response) : base(message)
         {
             GetTotalsResponse = response;
         }

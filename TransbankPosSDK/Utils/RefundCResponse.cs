@@ -10,20 +10,20 @@
 
 namespace Transbank.POS.Utils {
 
-public class RefundResponse : global::System.IDisposable {
+public class RefundCResponse : global::System.IDisposable {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
   protected bool swigCMemOwn;
 
-  internal RefundResponse(global::System.IntPtr cPtr, bool cMemoryOwn) {
+  internal RefundCResponse(global::System.IntPtr cPtr, bool cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
-  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(RefundResponse obj) {
+  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(RefundCResponse obj) {
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 
-  ~RefundResponse() {
+  ~RefundCResponse() {
     Dispose();
   }
 
@@ -32,7 +32,7 @@ public class RefundResponse : global::System.IDisposable {
       if (swigCPtr.Handle != global::System.IntPtr.Zero) {
         if (swigCMemOwn) {
           swigCMemOwn = false;
-          TransbankWrapPINVOKE.delete_RefundResponse(swigCPtr);
+          TransbankWrapPINVOKE.delete_RefundCResponse(swigCPtr);
         }
         swigCPtr = new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero);
       }
@@ -42,75 +42,75 @@ public class RefundResponse : global::System.IDisposable {
 
   public int function {
     set {
-      TransbankWrapPINVOKE.RefundResponse_function_set(swigCPtr, value);
+      TransbankWrapPINVOKE.RefundCResponse_function_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.RefundResponse_function_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.RefundCResponse_function_get(swigCPtr);
       return ret;
     } 
   }
 
   public int responseCode {
     set {
-      TransbankWrapPINVOKE.RefundResponse_responseCode_set(swigCPtr, value);
+      TransbankWrapPINVOKE.RefundCResponse_responseCode_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.RefundResponse_responseCode_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.RefundCResponse_responseCode_get(swigCPtr);
       return ret;
     } 
   }
 
   public long commerceCode {
     set {
-      TransbankWrapPINVOKE.RefundResponse_commerceCode_set(swigCPtr, value);
+      TransbankWrapPINVOKE.RefundCResponse_commerceCode_set(swigCPtr, value);
     } 
     get {
-      long ret = TransbankWrapPINVOKE.RefundResponse_commerceCode_get(swigCPtr);
+      long ret = TransbankWrapPINVOKE.RefundCResponse_commerceCode_get(swigCPtr);
       return ret;
     } 
   }
 
   public string terminalId {
     set {
-      TransbankWrapPINVOKE.RefundResponse_terminalId_set(swigCPtr, value);
+      TransbankWrapPINVOKE.RefundCResponse_terminalId_set(swigCPtr, value);
     } 
     get {
-      string ret = TransbankWrapPINVOKE.RefundResponse_terminalId_get(swigCPtr);
+      string ret = TransbankWrapPINVOKE.RefundCResponse_terminalId_get(swigCPtr);
       return ret;
     } 
   }
 
   public string authorizationCode {
     set {
-      TransbankWrapPINVOKE.RefundResponse_authorizationCode_set(swigCPtr, value);
+      TransbankWrapPINVOKE.RefundCResponse_authorizationCode_set(swigCPtr, value);
     } 
     get {
-      string ret = TransbankWrapPINVOKE.RefundResponse_authorizationCode_get(swigCPtr);
+      string ret = TransbankWrapPINVOKE.RefundCResponse_authorizationCode_get(swigCPtr);
       return ret;
     } 
   }
 
   public int operationID {
     set {
-      TransbankWrapPINVOKE.RefundResponse_operationID_set(swigCPtr, value);
+      TransbankWrapPINVOKE.RefundCResponse_operationID_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.RefundResponse_operationID_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.RefundCResponse_operationID_get(swigCPtr);
       return ret;
     } 
   }
 
   public int initilized {
     set {
-      TransbankWrapPINVOKE.RefundResponse_initilized_set(swigCPtr, value);
+      TransbankWrapPINVOKE.RefundCResponse_initilized_set(swigCPtr, value);
     } 
     get {
-      int ret = TransbankWrapPINVOKE.RefundResponse_initilized_get(swigCPtr);
+      int ret = TransbankWrapPINVOKE.RefundCResponse_initilized_get(swigCPtr);
       return ret;
     } 
   }
 
-  public RefundResponse() : this(TransbankWrapPINVOKE.new_RefundResponse(), true) {
+  public RefundCResponse() : this(TransbankWrapPINVOKE.new_RefundCResponse(), true) {
   }
 
 }
