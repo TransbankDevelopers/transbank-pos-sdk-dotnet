@@ -33,9 +33,14 @@ namespace Transbank.POS
             try
             {
                 if (TransbankWrap.open_port(portName, (int)baudrate) == TbkReturn.TBK_OK)
+                {
                     _configured = true;
+                    Port = portName;
+                }
                 else
+                {
                     throw new TransbankException("Unable to Open selected port: " + portName);
+                }
             }
             catch (TransbankException)
             {
@@ -249,6 +254,7 @@ namespace Transbank.POS
                     if (TransbankWrap.close_port() == TbkReturn.TBK_OK)
                     {
                         _configured = false;
+                        Port = "";
                         return true;
                     }
                     return false;
@@ -260,6 +266,7 @@ namespace Transbank.POS
             }
             else
             {
+                Port = "";
                 return true;
             }
         }
