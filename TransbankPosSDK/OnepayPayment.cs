@@ -11,8 +11,8 @@ namespace Transbank.POS
 {
     public class OnepayPayment : IOnepayPayment
     {
-        public event EventHandler OnConnected;
-        public event EventHandler OnDisconnected;
+        public event EventHandler OnConnect;
+        public event EventHandler OnDisconnect;
         public event EventHandler<NewMessageEventArgs> OnNewMessage;
         public event EventHandler<SuccessfulPaymentEventArgs> OnSuccessfulPayment;
         public event EventHandler<NewMessageEventArgs> OnUnsuccessfulPayment;
@@ -40,12 +40,12 @@ namespace Transbank.POS
 
         public void Connected()
         {
-            OnConnected?.Invoke(this, new EventArgs());
+            OnConnect?.Invoke(this, new EventArgs());
         }
 
         public void Disconnected()
         {
-            OnDisconnected?.Invoke(this, new EventArgs());
+            OnDisconnect?.Invoke(this, new EventArgs());
         }
 
         public void NewMessage(string payload)
