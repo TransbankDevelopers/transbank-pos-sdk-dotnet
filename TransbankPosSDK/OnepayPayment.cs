@@ -56,5 +56,10 @@ namespace Transbank.POS
             return new OnepayCreateResponse(response);
         }
 
+        public async Task WatchPayment(OnepayCreateResponse response)
+        {
+            ws = new Websocket();
+            await ws.Connect(this);
+        }
     }
 }
