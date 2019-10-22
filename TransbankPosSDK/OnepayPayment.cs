@@ -11,6 +11,12 @@ namespace Transbank.POS
 {
     public class OnepayPayment : IOnepayPayment
     {
+        public event EventHandler OnConnected;
+        public event EventHandler OnDisconnected;
+        public event EventHandler<NewMessageEventArgs> OnNewMessage;
+        public event EventHandler<SuccessfulPaymentEventArgs> OnSuccessfulPayment;
+        public event EventHandler<NewMessageEventArgs> OnUnsuccessfulPayment;
+
         private ShoppingCart cart;
         private Websocket ws;
 
@@ -34,16 +40,19 @@ namespace Transbank.POS
 
         public void Connected()
         {
+            OnConnected?.Invoke(this, new EventArgs());
         }
 
         public void Disconnected()
         {
+            OnDisconnected?.Invoke(this, new EventArgs());
         }
 
         public void NewMessage(string payload)
         {
             WebsocketMessage message = JsonConvert.DeserializeObject<WebsocketMessage>(payload);
             var eventArgs = new NewMessageEventArgs(message);
+            OnNewMessage?.Invoke(this, eventArgs);
 
             Console.WriteLine("Occ: " + Occ);
 
@@ -53,6 +62,7 @@ namespace Transbank.POS
                     try
                     {
                         var response = Transaction.Commit(Occ, ExternalUniqueNumber);
+                        OnSuccessfulPayment?.Invoke(this, new SuccessfulPaymentEventArgs(response));
                         ws.mqttClient.DisconnectAsync();
                     }
                     catch
@@ -64,6 +74,7 @@ namespace Transbank.POS
 
                 case "REJECTED_BY_USER":
                 case "AUTHORIZATION_ERROR":
+                    OnUnsuccessfulPayment?.Invoke(this, eventArgs);
                     ws.mqttClient.DisconnectAsync();
                     break;
 
