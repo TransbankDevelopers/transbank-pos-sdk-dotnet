@@ -42,6 +42,35 @@ namespace Transbank.POS
 
         public void NewMessage(string payload)
         {
+            WebsocketMessage message = JsonConvert.DeserializeObject<WebsocketMessage>(payload);
+            var eventArgs = new NewMessageEventArgs(message);
+
+            Console.WriteLine("Occ: " + Occ);
+
+            switch (message.status)
+            {
+                case "AUTHORIZED":
+                    try
+                    {
+                        var response = Transaction.Commit(Occ, ExternalUniqueNumber);
+                        ws.mqttClient.DisconnectAsync();
+                    }
+                    catch
+                    {
+                        ws.mqttClient.DisconnectAsync();
+                        throw ;
+                    }
+                    break;
+
+                case "REJECTED_BY_USER":
+                case "AUTHORIZATION_ERROR":
+                    ws.mqttClient.DisconnectAsync();
+                    break;
+
+                default:
+                    Console.WriteLine("Default: " + message.status + "\ndesc: " + message.description);
+                    break;
+            }
         }
 
         public OnepayCreateResponse StarPayment()
