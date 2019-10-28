@@ -46,6 +46,7 @@ namespace Transbank.POS
         public void Disconnected()
         {
             OnDisconnect?.Invoke(this, new EventArgs());
+            ws.mqttClient.DisconnectAsync();
         }
 
         public void NewMessage(string payload)
@@ -59,23 +60,24 @@ namespace Transbank.POS
             switch (message.status)
             {
                 case "AUTHORIZED":
-                    try
+                   if (ws.mqttClient.IsConnected)
                     {
                         var response = Transaction.Commit(Occ, ExternalUniqueNumber);
                         OnSuccessfulPayment?.Invoke(this, new SuccessfulPaymentEventArgs(response));
                         ws.mqttClient.DisconnectAsync();
                     }
-                    catch
+                    else
                     {
-                        ws.mqttClient.DisconnectAsync();
-                        throw ;
+                        Console.WriteLine("############################");
+                        Console.WriteLine("Commit not executed");
+                        Console.WriteLine("############################");
                     }
                     break;
 
                 case "REJECTED_BY_USER":
                 case "AUTHORIZATION_ERROR":
                     OnUnsuccessfulPayment?.Invoke(this, eventArgs);
-                    ws.mqttClient.DisconnectAsync();
+                    _ = ws.mqttClient.DisconnectAsync();
                     break;
 
                 default:
@@ -100,6 +102,11 @@ namespace Transbank.POS
         {
             ws = new Websocket();
             await ws.Connect(this);
+        }
+
+        public void StopPayment()
+        {
+            ws.mqttClient.DisconnectAsync();
         }
     }
 }
