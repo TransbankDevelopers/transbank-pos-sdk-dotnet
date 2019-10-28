@@ -52,8 +52,16 @@ namespace Transbank.POS
             }
         }
 
-        public SaleResponse Sale(int amount, int ticket)
+        public SaleResponse Sale(int amount, string ticket)
         {
+            if (amount <= 0)
+            {
+                throw new TransbankException("Amount must be greater than 0");
+            }
+            if (ticket.Length != 6)
+            {
+                throw new TransbankException("Ticket must be 6 characters.");
+            }                
             if (_configured)
             {
                 try
