@@ -52,6 +52,10 @@ namespace Transbank.POS
             }
         }
 
+        public SaleResponse Sale(int amount, int ticket)
+        {
+           return Sale(amount, ticket.ToString());
+        }
         public SaleResponse Sale(int amount, string ticket)
         {
             if (amount <= 0)
