@@ -31,7 +31,24 @@ namespace Transbank.POS
 
         public OnepayPayment(int ticket, int total, string externalUniqueNumber)
         {
-            Onepay.Onepay.CallbackUrl = "https://www.continuum.cl";
+            var env_type = Environment.GetEnvironmentVariable("TBK_ONEPAY_ENVIRONMENT");
+            if (env_type == "Live")
+            {
+                Onepay.Onepay.IntegrationType = OnepayIntegrationType.Live;
+
+                var env_apikey = Environment.GetEnvironmentVariable("TBK_ONEPAY_APIKEY");
+                if (!string.IsNullOrEmpty(env_apikey))
+                {
+                    Onepay.Onepay.ApiKey = env_apikey;
+                }
+
+                var env_secret = Environment.GetEnvironmentVariable("TBK_ONEPAY_SHAREDSECRET");
+                if (!string.IsNullOrEmpty(env_secret))
+                {
+                    Onepay.Onepay.SharedSecret = env_secret;
+                }
+            }
+
             Ticket = ticket;
             Total = total;
             ExternalUniqueNumber = externalUniqueNumber;
