@@ -5,11 +5,16 @@ namespace Transbank.POS.Model
 {
     public class SuccessfulPaymentEventArgs : EventArgs
     {
-        public SuccessfulPaymentEventArgs(TransactionCommitResponse response)
-        { Transaction = response; }
+        public SuccessfulPaymentEventArgs(TransactionCommitResponse response, string externalUniqueNumber)
+        { 
+            Transaction = response;
+            _externalUniqueNumber = externalUniqueNumber;
+        }
         private readonly TransactionCommitResponse Transaction;
+        private readonly string _externalUniqueNumber;
 
         public long Amount { get => Transaction.Amount; }
+        public string ExternalUniqueNumber { get => _externalUniqueNumber; }
         public string AuthorizationCode { get => Transaction.AuthorizationCode; }
         public string BuyOrder { get => Transaction.BuyOrder; }
         public long InstallmentsAmount { get => Transaction.InstallmentsAmount; }

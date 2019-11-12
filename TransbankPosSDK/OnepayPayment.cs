@@ -62,7 +62,7 @@ namespace Transbank.POS
                    if (ws.mqttClient.IsConnected)
                     {
                         var response = Transaction.Commit(Occ, ExternalUniqueNumber);
-                        OnSuccessfulPayment?.Invoke(this, new SuccessfulPaymentEventArgs(response));
+                        OnSuccessfulPayment?.Invoke(this, new SuccessfulPaymentEventArgs(response, ExternalUniqueNumber));
                         ws.mqttClient.DisconnectAsync();
                     }
                     else
@@ -78,7 +78,6 @@ namespace Transbank.POS
                     OnUnsuccessfulPayment?.Invoke(this, eventArgs);
                     _ = ws.mqttClient.DisconnectAsync();
                     break;
-
                 default:
                     Console.WriteLine("Default: " + message.status + "\ndesc: " + message.description);
                     break;
