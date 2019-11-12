@@ -105,7 +105,7 @@ namespace Transbank.POS
             cart = new ShoppingCart();
             cart.Add(new Item(Ticket.ToString(), 1, Total, "", -1));
 
-            var response = Transaction.Create(cart, ChannelType.Mobile, ExternalUniqueNumber);
+            var response = Transaction.Create(cart, ChannelType.Web, ExternalUniqueNumber);
             Occ = response.Occ;
             Ott = response.Ott.ToString();
 
