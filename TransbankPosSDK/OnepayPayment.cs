@@ -71,8 +71,6 @@ namespace Transbank.POS
             var eventArgs = new NewMessageEventArgs(message);
             OnNewMessage?.Invoke(this, eventArgs);
 
-            Console.WriteLine("Occ: " + Occ);
-
             switch (message.status)
             {
                 case "AUTHORIZED":
@@ -82,21 +80,14 @@ namespace Transbank.POS
                         OnSuccessfulPayment?.Invoke(this, new SuccessfulPaymentEventArgs(response, ExternalUniqueNumber));
                         ws.mqttClient.DisconnectAsync();
                     }
-                    else
-                    {
-                        Console.WriteLine("############################");
-                        Console.WriteLine("Commit not executed");
-                        Console.WriteLine("############################");
-                    }
                     break;
 
                 case "REJECTED_BY_USER":
                 case "AUTHORIZATION_ERROR":
                     OnUnsuccessfulPayment?.Invoke(this, eventArgs);
-                    _ = ws.mqttClient.DisconnectAsync();
+                    ws.mqttClient.DisconnectAsync();
                     break;
                 default:
-                    Console.WriteLine("Default: " + message.status + "\ndesc: " + message.description);
                     break;
             }
         }
