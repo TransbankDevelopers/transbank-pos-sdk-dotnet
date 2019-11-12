@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Transbank.Onepay.Model;
+﻿using Transbank.Onepay.Model;
 
 namespace Transbank.POS.Model
 {

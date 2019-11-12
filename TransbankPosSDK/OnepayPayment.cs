@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using MQTTnet.Client;
 using Newtonsoft.Json;
+using System;
 using Transbank.Onepay;
 using Transbank.Onepay.Enums;
 using Transbank.Onepay.Model;
-using Transbank.Onepay.Exceptions;
 using Transbank.POS.Model;
 
 namespace Transbank.POS
