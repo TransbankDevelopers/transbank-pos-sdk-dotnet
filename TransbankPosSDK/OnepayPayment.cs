@@ -92,6 +92,14 @@ namespace Transbank.POS
             }
         }
 
+        public static OnepayRefundResponse RefundPayment(long amount, 
+            string occ, string externalUniqueNumber, string authorizationCode)
+        {
+            var refund = Refund.Create(amount, occ, externalUniqueNumber, authorizationCode);
+            Console.WriteLine(refund.ReverseCode);
+            return new OnepayRefundResponse(refund);
+        }
+
         public OnepayCreateResponse StarPayment()
         {
             cart = new ShoppingCart();
