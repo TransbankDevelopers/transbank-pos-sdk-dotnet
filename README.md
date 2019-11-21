@@ -22,19 +22,19 @@ SDK Oficial de Transbank para comunicarse con POS Verifone vx520 y vx520c
 #### Instalar con NuGet
 
 ```bash
-nuget install TransbankPosSDK -PreRelease
+nuget install TransbankPosSDK
 ```
 
 #### Instalar con Package Manager
 
 ```bash
-PM> Install-Package TransbankPosSDK –IncludePrerelease
+PM> Install-Package TransbankPosSDK
 ```
 
 #### Instalar con .Net CLI
 
 ```bash
-dotnet add package TransbankSDK -v 0.0.1-pre-alpha
+dotnet add package TransbankSDK -v 2.1.0
 ```
 
 ### Desde Visual Studio
@@ -118,5 +118,5 @@ Linea de Comandos:
 - Contar con ApiKey para poder subir el artefacto:
 
   ```bash
-  dotnet.exe nuget push TransbankPosSDK/bin/Release/TransbankPosSDK.<version>-pre-alpha.nupkg -k <APIKEY> -s https://api.nuget.org/v3/index.json
+  dotnet.exe nuget push TransbankPosSDK/bin/Release/TransbankPosSDK.<version>.nupkg -k <APIKEY> -s https://api.nuget.org/v3/index.json
   ```
