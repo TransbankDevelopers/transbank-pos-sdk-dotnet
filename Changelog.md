@@ -5,19 +5,35 @@ Todos los cambios notables a este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2019-11-21
+
+### Added
+
+- Soporte para la version `v3.0.0` de la DLL en C
+- `Sale`
+    - `ticket` puede ser un `string` ahora.
+    - Verifica si `ticket` tiene 6 caracteres (obligatorio)
+- Clase `OnepayPayment` para comenzar un pago usando Onepay.
+
+### Fix
+
+- Problema al llamar al connect más de una vez.
+- Problema al no seleccionar una opcion en el POS al iniciar la venta.
+
+
 ## [2.0.0] - 2019-07-01
 
 ### Added
 
-- `Sales Detail` method.
+- Metodo `Sales Detail` para obtener el detalle de ventas.
 
 ### Changed
 
 - `LoadKeys`
-  - `Terminal ID` data type from `int` to `string`.
+  - `Terminal ID` tipo de dato de `int` a `string`.
 - `Refund`
-  - `Terminal ID` data type from `int` to `string`.
-  - `Authorization Code` data type from `int` to `string`.
+  - `Terminal ID` tipo de dato de `int` a `string`.
+  - `Authorization Code` tipo de dato de `int` a `string`.
 
 ## [1.4.0] - 2019-06-18
 
