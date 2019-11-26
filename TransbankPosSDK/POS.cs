@@ -65,7 +65,7 @@ namespace Transbank.POS
             if (ticket.Length != 6)
             {
                 throw new TransbankException("Ticket must be 6 characters.");
-            }                
+            }
             if (_configured)
             {
                 try
