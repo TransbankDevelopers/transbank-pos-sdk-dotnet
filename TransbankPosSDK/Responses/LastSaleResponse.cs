@@ -58,10 +58,13 @@ namespace Transbank.POS.Responses
             AccountingDate = null;
             if (date != "")
             {
-                AccountingDate = DateTime.ParseExact(date, "ddMMyyyy", DateTimeFormatInfo.InvariantInfo);
+                DateTime parsedDate = new DateTime();
+                DateTime.TryParseExact(date, "ddMMyyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
+                AccountingDate = parsedDate;
             }
 
-            AccountNumber = fields[ParameterMap["AccountNumber"]].Trim() != "" ? long.Parse(fields[ParameterMap["AccountNumber"]]) : 0;
+            string accountString = fields[ParameterMap["AccountNumber"]].Trim().Replace("*", "");
+            AccountNumber = accountString != "" ? long.Parse(accountString) : 0;
             CardBrand = fields[ParameterMap["CardBrand"]].Trim();
 
             date = fields[ParameterMap["RealDate"]].Trim();
@@ -70,7 +73,9 @@ namespace Transbank.POS.Responses
             RealDate = null;
             if (date + hour != "")
             {
-                RealDate = DateTime.ParseExact(date + hour, "ddMMyyyyHHmmss", DateTimeFormatInfo.InvariantInfo);
+                DateTime parsedDate = new DateTime();
+                DateTime.TryParseExact(date + hour, "ddMMyyyyHHmmss", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
+                RealDate = parsedDate;
             }
 
             EmployeeId = fields[ParameterMap["EmployeeId"]].Trim() != "" ? int.Parse(fields[ParameterMap["EmployeeId"]]) : 0;

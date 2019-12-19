@@ -63,7 +63,8 @@ namespace Transbank.POS.Responses
                 AccountingDate = parsedDate;
             }
 
-            AccountNumber = fields[ParameterMap["AccountNumber"]].Trim() != "" ? long.Parse(fields[ParameterMap["AccountNumber"]]) : 0;
+            string accountString = fields[ParameterMap["AccountNumber"]].Trim().Replace("*", "");
+            AccountNumber = accountString != "" ? long.Parse(accountString) : 0;
             CardBrand = fields[ParameterMap["CardBrand"]].Trim();
 
             date = fields[ParameterMap["RealDate"]].Trim();
