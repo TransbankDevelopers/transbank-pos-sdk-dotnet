@@ -56,8 +56,8 @@ namespace Transbank.POS.Responses
             Command = fields[ParameterMap["Command"]].Trim() != "" ? int.Parse(Regex.Replace(fields[ParameterMap["Command"]], "[^0-9]", "")) : 0;
             ResponseCode = fields[ParameterMap["ResponseCode"]].Trim() != "" ? int.Parse(fields[ParameterMap["ResponseCode"]]) : -1;
             CommerceCode = fields[ParameterMap["CommerceCode"]].Trim() != "" ? long.Parse(fields[ParameterMap["CommerceCode"]]) : 0;
-            Ticket = fields[ParameterMap["Ticket"]].Trim() != "" ? fields[ParameterMap["Ticket"]] : "";
-            AuthorizationCode = fields[ParameterMap["AuthorizationCode"]].Trim() != "" ? fields[ParameterMap["AuthorizationCode"]] : "";
+            Ticket = fields[ParameterMap["Ticket"]].Trim();
+            AuthorizationCode = fields[ParameterMap["AuthorizationCode"]].Trim();
             Amount = fields[ParameterMap["Amount"]].Trim() != "" ? int.Parse(fields[ParameterMap["Amount"]]) : 0;
             Last4Digits = fields[ParameterMap["Last4Digits"]].Trim() != "" ? int.Parse(fields[ParameterMap["Last4Digits"]]) : 0;
             OperationNumber = fields[ParameterMap["OperationNumber"]].Trim() != "" ? int.Parse(fields[ParameterMap["OperationNumber"]]) : 0;
