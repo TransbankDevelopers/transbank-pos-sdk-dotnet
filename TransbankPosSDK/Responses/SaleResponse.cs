@@ -26,7 +26,7 @@ namespace Transbank.POS.Responses
             { "Tip", 18}
         };
 
-        public int Ticket { set; get; }
+        public string Ticket { set; get; }
         public int AutorizationCode { set; get; }
         public int Ammount { set; get; }
         public int SharesNumber { set; get; }
@@ -45,7 +45,7 @@ namespace Transbank.POS.Responses
             cresponse = cresponse.Substring(1);
             string[] fields = cresponse.Split('|');
 
-            Ticket = fields[ParameterMap["Ticket"]].Trim() != "" ? int.Parse(fields[ParameterMap["Ticket"]]) : 0;
+            Ticket = fields[ParameterMap["Ticket"]].Trim();
             AutorizationCode = fields[ParameterMap["AutorizationCode"]].Trim() != "" ? int.Parse(fields[ParameterMap["AutorizationCode"]]) : 0;
             Ammount = fields[ParameterMap["Ammount"]].Trim() != "" ? int.Parse(fields[ParameterMap["Ammount"]]) : 0;
             SharesNumber = fields[ParameterMap["SharesNumber"]].Trim() != "" ? int.Parse(fields[ParameterMap["SharesNumber"]]) : 0;
