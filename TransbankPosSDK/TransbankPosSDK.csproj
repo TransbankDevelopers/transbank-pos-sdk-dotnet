@@ -6,7 +6,6 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <Win32Resource />
     <RootNamespace>Transbank.POS</RootNamespace>
     <PackageLicenseUrl>https://raw.githubusercontent.com/TransbankDevelopers/transbank-pos-sdk-dotnet/master/LICENSE.md</PackageLicenseUrl>
     <Description>This is the .Net SDK for Transbank's Verifone VX520 and VX520c POS Integration.</Description>
@@ -16,11 +15,11 @@
     <Copyright>2019 - Transbank</Copyright>
     <RepositoryUrl>https://github.com/TransbankDevelopers/transbank-pos-sdk-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <VersionPrefix>0.0.1</VersionPrefix>
-    <VersionSuffix>pre-alpha</VersionSuffix>
+    <VersionPrefix>2.1.2</VersionPrefix>
+    <VersionSuffix>${VersionSuffix}</VersionSuffix>
     <Company>Transbank</Company>
+    <Product>TransbankPOSSDK</Product>
     <Authors>Transbank</Authors>
-    <Version>2.1.1</Version>
   </PropertyGroup>
 
   <PropertyGroup>
