@@ -1,3 +1,6 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/y5tmyw3510dngbmh?svg=true)](https://ci.appveyor.com/project/TransbankDevelopers/transbank-pos-sdk-dotnet)
+[![NuGet version](https://badge.fury.io/nu/TransbankPOSSDK.svg)](https://www.nuget.org/packages/TransbankPOSSDK)
+
 # Transbank POS .Net SDK
 
 SDK Oficial de Transbank para comunicarse con POS Verifone vx520 y vx520c
