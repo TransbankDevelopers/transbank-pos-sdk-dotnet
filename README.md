@@ -96,7 +96,7 @@ La documentación relevante para usar este SDK es:
 
 ### Generar una nueva versión
 
-Para generar una nueva versión, se debe abrir un nuevo Pull Request y seguir la Guía de [SemVer](https://semver.org/) y empaquetar el artefacto NuGet:
+Para generar una nueva versión, se debe abrir un nuevo Pull Request, seguir la Guía de [SemVer](https://semver.org/) y empaquetar el artefacto NuGet:
 
 1. Cambiar la configuración de la solución a Release.
 2. Actualizar el numero de version.

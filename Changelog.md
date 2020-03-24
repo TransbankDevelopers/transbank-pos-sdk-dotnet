@@ -5,6 +5,18 @@ Todos los cambios notables a este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] - 2020-03-24
+
+### Fix
+
+- Bug en `DetailResponse`, el número de ticket se estaba parseando incorrectamente cuando contenía letras.
+- Bug en `LastSale`, el número de ticket se estaba parseando incorrectamente cuando contenía letras.
+- Bug en `SaleResponse`, el número de ticket se estaba parseando incorrectamente cuando contenía letras.
+
+### Changed
+
+- `SaleResponse (int, int)` se marca como deprecado en favor de `SaleResponse(int, string)`.
+
 ## [2.1.1] - 2019-12-19
 
 ### Fix
@@ -15,23 +27,22 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ### Added
 
-- Soporte para la version `v3.0.0` de la DLL en C
+- Soporte para la versión `v3.0.0` de la DLL en C
 - `Sale`
-    - `ticket` puede ser un `string` ahora.
-    - Verifica si `ticket` tiene 6 caracteres (obligatorio)
+  - `ticket` puede ser un `string` ahora.
+  - Verifica si `ticket` tiene 6 caracteres (obligatorio)
 - Clase `OnepayPayment` para comenzar un pago usando Onepay.
 
 ### Fix
 
 - Problema al llamar al connect más de una vez.
-- Problema al no seleccionar una opcion en el POS al iniciar la venta.
-
+- Problema al no seleccionar una opción en el POS al iniciar la venta.
 
 ## [2.0.0] - 2019-07-01
 
 ### Added
 
-- Metodo `Sales Detail` para obtener el detalle de ventas.
+- Método `Sales Detail` para obtener el detalle de ventas.
 
 ### Changed
 
