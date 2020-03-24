@@ -1,0 +1,30 @@
+version: 1.0.{build}
+image: Visual Studio 2019
+cache:
+  - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - projectA\libs
+  - node_modules                    # local npm modules
+  - '%LocalAppData%\NuGet\Cache'    # NuGet < v3
+  - '%LocalAppData%\NuGet\v3-cache' # NuGet v3
+before_build:
+- cmd: msbuild -t:restore
+build:
+  verbosity: normal
+platform: x64
+configuration: Release
+before_deploy:
+  - ps: '.\scripts\appveyor-before-deploy.ps1'
+deploy:
+  - provider: NuGet
+    api_key:
+      secure: gig6Cz+gPK+bdR2vEl/c/vgguBuPANzPo6Jx3bmiu9u1EIO5H6rwiC1rX9mrQeJ4
+    on:
+      branch: master
+notifications:
+  - provider: Slack
+    incoming_webhook:
+      secure: FpjGXF6JUredzPLfH9xCxDsNFfC8RFIO5oKnRhVYydsWwQY6CaUaqCwSQJ9ZnANt3R0atO2tUqgl9PbefuU99OKadhPEcVyOV2LNukomOOg=
+    channel: transbank-continuum
+    on_build_success: false
+    on_build_failure: false
+    on_build_status_changed: true
