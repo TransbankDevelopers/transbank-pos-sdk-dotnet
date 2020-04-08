@@ -11,7 +11,7 @@ namespace Transbank.POS.Responses
         {
             { "Ticket", 4},
             { "AutorizationCode", 5},
-            { "Ammount", 6},
+            { "Amount", 6},
             { "SharesNumber", 7},
             { "SharesAmount", 8},
             { "Last4Digits", 9},
@@ -28,7 +28,7 @@ namespace Transbank.POS.Responses
 
         public string Ticket { set; get; }
         public int AutorizationCode { set; get; }
-        public int Ammount { set; get; }
+        public int Amount { set; get; }
         public int SharesNumber { set; get; }
         public int SharesAmount { set; get; }
         public int Last4Digits { set; get; }
@@ -47,7 +47,7 @@ namespace Transbank.POS.Responses
 
             Ticket = fields[ParameterMap["Ticket"]].Trim();
             AutorizationCode = fields[ParameterMap["AutorizationCode"]].Trim() != "" ? int.Parse(fields[ParameterMap["AutorizationCode"]]) : 0;
-            Ammount = fields[ParameterMap["Ammount"]].Trim() != "" ? int.Parse(fields[ParameterMap["Ammount"]]) : 0;
+            Amount = fields[ParameterMap["Amount"]].Trim() != "" ? int.Parse(fields[ParameterMap["Amount"]]) : 0;
             SharesNumber = fields[ParameterMap["SharesNumber"]].Trim() != "" ? int.Parse(fields[ParameterMap["SharesNumber"]]) : 0;
             SharesAmount = fields[ParameterMap["SharesAmount"]].Trim() != "" ? int.Parse(fields[ParameterMap["SharesAmount"]]) : 0;
             Last4Digits = fields[ParameterMap["Last4Digits"]].Trim() != "" ? int.Parse(fields[ParameterMap["Last4Digits"]]) : 0;
@@ -92,7 +92,7 @@ namespace Transbank.POS.Responses
                    "Terminal Id: " + TerminalId + "\n" +
                    "Ticket: " + Ticket + "\n" +
                    "Autorization Code: " + AutorizationCode + "\n" +
-                   "Ammount: " + Ammount + "\n" +
+                   "Amount: " + Amount + "\n" +
                    "Shares Number: " + SharesNumber + "\n" +
                    "Shares Amount: " + SharesAmount + "\n" +
                    "Last 4 Digits: " + Last4Digits + "\n" +
