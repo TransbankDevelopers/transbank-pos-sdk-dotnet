@@ -12,6 +12,7 @@ namespace Transbank.POS.Responses
             { "Ticket", 4},
             { "AutorizationCode", 5},
             { "Amount", 6},
+            { "Ammount", 6},
             { "SharesNumber", 7},
             { "SharesAmount", 8},
             { "Last4Digits", 9},
@@ -29,6 +30,7 @@ namespace Transbank.POS.Responses
         public string Ticket { set; get; }
         public int AutorizationCode { set; get; }
         public int Amount { set; get; }
+        public int Ammount { set; get; }
         public int SharesNumber { set; get; }
         public int SharesAmount { set; get; }
         public int Last4Digits { set; get; }
@@ -93,6 +95,7 @@ namespace Transbank.POS.Responses
                    "Ticket: " + Ticket + "\n" +
                    "Autorization Code: " + AutorizationCode + "\n" +
                    "Amount: " + Amount + "\n" +
+                   "Ammount: " + Amount + "\n" +
                    "Shares Number: " + SharesNumber + "\n" +
                    "Shares Amount: " + SharesAmount + "\n" +
                    "Last 4 Digits: " + Last4Digits + "\n" +
