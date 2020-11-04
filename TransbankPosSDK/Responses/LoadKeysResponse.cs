@@ -1,22 +1,28 @@
-﻿using Transbank.POS.Utils;
+﻿using System.Collections.Generic;
+using Transbank.POS.Utils;
 
 namespace Transbank.POS.Responses
 {
-    public class LoadKeysResponse
+    public class LoadKeysResponse : BasicResponse
     {
-        public BaseResponse Response {get;}
-
-        public int FunctionCode => Response.function;
-        public string ResponseMessage => ResponseCodes.Map[Response.responseCode];
-        public int ResponseCode => Response.responseCode;
-        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
-        public long CommerceCode => Response.commerceCode;
-        public string TerminalId => Response.terminalId;
-
-        public LoadKeysResponse(BaseResponse cresponse)
+        private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
-            Response = cresponse;
+            { "CommerceCode", 2},
+            { "TerminalId", 3}
+        };
+
+        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
+        public long CommerceCode
+        {
+            get
+            {
+                _ = long.TryParse(Response.Split('|')[ParameterMap["CommerceCode"]].Trim(), out long commerceCode);
+                return commerceCode;
+            }
         }
+        public string TerminalId => Response.Split('|')[ParameterMap["TerminalId"]].Trim();
+
+        public LoadKeysResponse(string response) : base(response) { }
 
         public override string ToString()
         {

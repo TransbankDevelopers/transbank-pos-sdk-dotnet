@@ -208,37 +208,6 @@ namespace Transbank.POS
             }
         }
 
-        public LoadKeysResponse LoadKeys()
-        {
-            if (_configured)
-            {
-                try
-                {
-                    LoadKeysResponse response = new LoadKeysResponse(TransbankWrap.load_keys());
-                    if (response.Success)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        throw new TransbankLoadKeysException("Load Keys retured an error: " + response.ResponseMessage, response);
-                    }
-                }
-                catch (TransbankLoadKeysException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    throw new TransbankException("Unable to load Keys in pos", e);
-                }
-            }
-            else
-            {
-                throw new TransbankException("Port not Configured");
-            }
-        }
-
         public TotalsResponse Totals()
         {
             if (_configured)
@@ -305,6 +274,8 @@ namespace Transbank.POS
                 throw new TransbankException("Port not Configured");
             }
         }
+
+
 
         public bool Poll()
         {
