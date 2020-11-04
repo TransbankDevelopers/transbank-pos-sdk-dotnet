@@ -4,14 +4,23 @@ using Transbank.POS.Utils;
 using Transbank.POS.Responses;
 using Transbank.POS.Exceptions;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Transbank.POS
 {
     public class POS
     {
         private static readonly POS _instance = new POS();
-        private bool _configured = false;
-        private TbkBaudrate _defaultBaudrate = TbkBaudrate.TBK_115200;
+        private readonly int _defaultBaudrate = 115200;
+        private string _currentResponse;
+        private string CurrentResponse
+        {
+            get { return _currentResponse; }
+            set
+            {
+                _currentResponse = value;
+            }
+        }
 
         public SerialPort Port { get; set; }
 
@@ -331,6 +340,108 @@ namespace Transbank.POS
             {
                 throw new TransbankException("Port not Configured");
             }
+        }
+
+        private async Task WriteData(string payload, bool intermediateMessages = false, bool saleDetail = false, bool sendMessageToRegister = false)
+        {
+            CurrentResponse = "";
+            if (Instance.CantWrite())
+            {
+                throw new TransbankException($"Unable to send message to {Port.PortName}");
+            }
+            Port.Write(payload);
+            ReadAck();
+            if (intermediateMessages)
+            {
+                await ReadMessage(new CancellationTokenSource(90000).Token);
+                string responseCode = CurrentResponse.Substring(1).Split('|')[1];
+                while (responseCode == "78" || responseCode == "79" ||
+                    responseCode == "80" || responseCode == "81" || responseCode == "82")
+                {
+                    await ReadMessage(new CancellationTokenSource(90000).Token);
+                    responseCode = CurrentResponse.Substring(1).Split('|')[1];
+                }
+            }
+            else
+            {
+                if (saleDetail)
+                {
+                    SaleDetail = new List<string>();
+                    if (sendMessageToRegister)
+                    {
+                        await ReadMessage(new CancellationTokenSource(90000).Token);
+                        string authorizationCode = "";
+                        try
+                        {
+                            authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
+                            if (authorizationCode != "")
+                            {
+                                SaleDetail.Add(string.Copy(CurrentResponse));
+                            }
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                            authorizationCode = null;
+                        }
+
+                        while (authorizationCode != null && authorizationCode != "")
+                        {
+                            await ReadMessage(new CancellationTokenSource(90000).Token);
+                            try
+                            {
+                                authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
+                                if (authorizationCode != "")
+                                {
+                                    SaleDetail.Add(string.Copy(CurrentResponse));
+                                }
+                            }
+                            catch (IndexOutOfRangeException)
+                            {
+                                authorizationCode = null;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    await ReadMessage(new CancellationTokenSource(90000).Token);
+                }
+            }
+        }
+
+        private async Task ReadMessage(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested && Port.BytesToRead <= 0)
+            {
+            }
+            if (token.IsCancellationRequested)
+            {
+                throw new TransbankException($"Read operation Timeout");
+            }
+            CurrentResponse = Instance.Port.ReadExisting();
+            Instance.Port.Write("");
+            Console.WriteLine(CurrentResponse);
+        }
+
+        private bool ReadAck()
+        {
+            int intValue = Port.ReadByte();
+            byte[] result = BitConverter.GetBytes(intValue);
+            Array.Reverse(result);
+            return Encoding.ASCII.GetString(result).Equals("");
+        }
+
+        private bool CantWrite() => Port == null || !Port.IsOpen;
+
+        private string MessageWithLRC(string message)
+        {
+            int lrc = 0;
+            for (int i = 1; i < message.Length; i++)
+            {
+                lrc ^= Encoding.ASCII.GetBytes(message.Substring(i, 1))[0];
+            }
+            Console.WriteLine("LRC Result : " + (char)lrc + " int: " + lrc);
+            return message + (char)lrc;
         }
     }
 }
