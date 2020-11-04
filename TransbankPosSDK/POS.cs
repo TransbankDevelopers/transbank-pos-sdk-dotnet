@@ -5,6 +5,8 @@ using Transbank.POS.Responses;
 using Transbank.POS.Exceptions;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Transbank.POS
 {
@@ -175,25 +177,6 @@ namespace Transbank.POS
             }
         }
 
-        public bool SetNormalMode()
-        {
-            if (_configured)
-            {
-                try
-                {
-                    return TransbankWrap.set_normal_mode() == TbkReturn.TBK_OK;
-                }
-                catch (Exception e)
-                {
-                    throw new TransbankException("Unable to set normal mode", e);
-                }
-            }
-            else
-            {
-                throw new TransbankException("Port not Configured");
-            }
-        }
-
         public bool Poll()
         {
             if (_configured)
@@ -342,6 +325,23 @@ namespace Transbank.POS
             }
         }
 
+        public void SetNormalMode()
+        {
+            if (Instance.CantWrite())
+            {
+                throw new TransbankException($"Unable to Set Normal Mode port {Port.PortName} is closed");
+            }
+            try
+            {
+                Port.Write("0300\0");
+                ClosePort();
+            }
+            catch (Exception e)
+            {
+                throw new TransbankException($"Unable to send Normal Mode command on port {Port.PortName}", e);
+            }
+        }
+
         private async Task WriteData(string payload, bool intermediateMessages = false, bool saleDetail = false, bool sendMessageToRegister = false)
         {
             CurrentResponse = "";
@@ -351,62 +351,7 @@ namespace Transbank.POS
             }
             Port.Write(payload);
             ReadAck();
-            if (intermediateMessages)
-            {
-                await ReadMessage(new CancellationTokenSource(90000).Token);
-                string responseCode = CurrentResponse.Substring(1).Split('|')[1];
-                while (responseCode == "78" || responseCode == "79" ||
-                    responseCode == "80" || responseCode == "81" || responseCode == "82")
-                {
-                    await ReadMessage(new CancellationTokenSource(90000).Token);
-                    responseCode = CurrentResponse.Substring(1).Split('|')[1];
-                }
-            }
-            else
-            {
-                if (saleDetail)
-                {
-                    SaleDetail = new List<string>();
-                    if (sendMessageToRegister)
-                    {
-                        await ReadMessage(new CancellationTokenSource(90000).Token);
-                        string authorizationCode = "";
-                        try
-                        {
-                            authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
-                            if (authorizationCode != "")
-                            {
-                                SaleDetail.Add(string.Copy(CurrentResponse));
-                            }
-                        }
-                        catch (IndexOutOfRangeException)
-                        {
-                            authorizationCode = null;
-                        }
-
-                        while (authorizationCode != null && authorizationCode != "")
-                        {
-                            await ReadMessage(new CancellationTokenSource(90000).Token);
-                            try
-                            {
-                                authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
-                                if (authorizationCode != "")
-                                {
-                                    SaleDetail.Add(string.Copy(CurrentResponse));
-                                }
-                            }
-                            catch (IndexOutOfRangeException)
-                            {
-                                authorizationCode = null;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    await ReadMessage(new CancellationTokenSource(90000).Token);
-                }
-            }
+            await ReadMessage(new CancellationTokenSource(90000).Token);
         }
 
         private async Task ReadMessage(CancellationToken token)
