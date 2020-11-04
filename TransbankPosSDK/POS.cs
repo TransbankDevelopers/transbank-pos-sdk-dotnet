@@ -15,13 +15,23 @@ namespace Transbank.POS
         private static readonly POS _instance = new POS();
         private readonly int _defaultBaudrate = 115200;
         private string _currentResponse;
+        public event EventHandler<IntermediateResponse> IntermediateResponseChange;
         private string CurrentResponse
         {
             get { return _currentResponse; }
             set
             {
                 _currentResponse = value;
+                if (_currentResponse.Length >= 1 && _currentResponse.Substring(1).Split('|')[0] == "0900")
+                {
+                    OnIntermediateMessageReceived(CurrentResponse);
+                }
             }
+        }
+
+        protected virtual void OnIntermediateMessageReceived(string message)
+        {
+            IntermediateResponseChange?.Invoke(this, new IntermediateResponse(message));
         }
 
         public SerialPort Port { get; set; }
@@ -75,44 +85,6 @@ namespace Transbank.POS
         public SaleResponse Sale(int amount, int ticket)
         {
            return Sale(amount, ticket.ToString());
-        }
-        public SaleResponse Sale(int amount, string ticket)
-        {
-            if (amount <= 0)
-            {
-                throw new TransbankException("Amount must be greater than 0");
-            }
-            if (ticket.Length != 6)
-            {
-                throw new TransbankException("Ticket must be 6 characters.");
-            }
-            if (_configured)
-            {
-                try
-                {
-                    SaleResponse response = new SaleResponse(TransbankWrap.sale(amount, ticket, false));
-                    if (response.Success)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        throw new TransbankSaleException("Sale returned an error: " + response.ResponseMessage, response);
-                    }
-                }
-                catch (TransbankSaleException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    throw new TransbankException("Unable to execute Sale on pos", e);
-                }
-            }
-            else
-            {
-                throw new TransbankException("Port not Configured");
-            }
         }
 
         public LastSaleResponse LastSale()
@@ -243,6 +215,28 @@ namespace Transbank.POS
                 throw new TransbankException("Port not Configured");
             }
         }
+        public SaleResponse Sale(int amount, string ticket, bool sendStatus = false)
+        {
+            string message = $"0200|{amount}|{ticket}|||{Convert.ToInt32(sendStatus)}|";
+
+            if (amount <= 0)
+            {
+                throw new TransbankSaleException("Amount must be greater than 0");
+            }
+            if (ticket.Length != 6)
+            {
+                throw new TransbankSaleException("Ticket must be 6 characters.");
+            }
+            try
+            {
+                WriteData(MessageWithLRC(message), intermediateMessages: sendStatus).Wait();
+                return new SaleResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankSaleException($"Unable to execute sale on pos", e);
+            }
+        }
 
         public CloseResponse Close()
         {
@@ -319,7 +313,21 @@ namespace Transbank.POS
             }
             Port.Write(payload);
             ReadAck();
-            await ReadMessage(new CancellationTokenSource(90000).Token);
+            if (intermediateMessages)
+            {
+                await ReadMessage(new CancellationTokenSource(90000).Token);
+                string responseCode = CurrentResponse.Substring(1).Split('|')[1];
+                while (responseCode == "78" || responseCode == "79" ||
+                    responseCode == "80" || responseCode == "81" || responseCode == "82")
+                {
+                    await ReadMessage(new CancellationTokenSource(90000).Token);
+                    responseCode = CurrentResponse.Substring(1).Split('|')[1];
+                }
+            }
+            else
+            {
+                await ReadMessage(new CancellationTokenSource(90000).Token);
+            }
         }
 
         private async Task ReadMessage(CancellationToken token)

@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using Transbank.POS.Utils;
+using System.Collections.Generic;
 
 namespace Transbank.POS.Responses
 {
     public class SaleResponse : LoadKeysResponse
     {
-        private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
+        protected Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
             { "Ticket", 4},
-            { "AutorizationCode", 5},
-            { "Ammount", 6},
+            { "AuthorizationCode", 5},
+            { "Amount", 6},
             { "SharesNumber", 7},
             { "SharesAmount", 8},
             { "Last4Digits", 9},
@@ -26,73 +25,125 @@ namespace Transbank.POS.Responses
             { "Tip", 18}
         };
 
-        public string Ticket { set; get; }
-        public int AutorizationCode { set; get; }
-        public int Ammount { set; get; }
-        public int SharesNumber { set; get; }
-        public int SharesAmount { set; get; }
-        public int Last4Digits { set; get; }
-        public int OperationNumber { set; get; }
-        public string CardType { set; get; }
-        public DateTime? AccountingDate { set; get; }
-        public long AccountNumber { set; get; }
-        public string CardBrand { set; get; }
-        public DateTime? RealDate { set; get; }
-        public int EmployeeId { set; get; }
-        public int Tip { set; get; }
-
-        public SaleResponse(string cresponse) : base(CreateBase(cresponse)) {
-            cresponse = cresponse.Substring(1);
-            string[] fields = cresponse.Split('|');
-
-            Ticket = fields[ParameterMap["Ticket"]].Trim();
-            AutorizationCode = fields[ParameterMap["AutorizationCode"]].Trim() != "" ? int.Parse(fields[ParameterMap["AutorizationCode"]]) : 0;
-            Ammount = fields[ParameterMap["Ammount"]].Trim() != "" ? int.Parse(fields[ParameterMap["Ammount"]]) : 0;
-            SharesNumber = fields[ParameterMap["SharesNumber"]].Trim() != "" ? int.Parse(fields[ParameterMap["SharesNumber"]]) : 0;
-            SharesAmount = fields[ParameterMap["SharesAmount"]].Trim() != "" ? int.Parse(fields[ParameterMap["SharesAmount"]]) : 0;
-            Last4Digits = fields[ParameterMap["Last4Digits"]].Trim() != "" ? int.Parse(fields[ParameterMap["Last4Digits"]]) : 0;
-            OperationNumber = fields[ParameterMap["OperationNumber"]].Trim() != "" ? int.Parse(fields[ParameterMap["OperationNumber"]]) : 0;
-            CardType = fields[ParameterMap["CardType"]].Trim();
-
-            string date = fields[ParameterMap["AccountingDate"]].Trim();
-            AccountingDate = null;
-            if (date != "")
+        public string Ticket => Response.Split('|')[ParameterMap["Ticket"]].Trim();
+        public int AuthorizationCode
+        {
+            get
             {
-                DateTime parsedDate = new DateTime();
-                DateTime.TryParseExact(date, "ddMMyyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
-                AccountingDate = parsedDate;
+                int.TryParse(Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim(), out int authorizationCode);
+                return authorizationCode;
             }
-
-            string accountString = fields[ParameterMap["AccountNumber"]].Trim().Replace("*", "");
-            AccountNumber = accountString != "" ? long.Parse(accountString) : 0;
-            CardBrand = fields[ParameterMap["CardBrand"]].Trim();
-
-            date = fields[ParameterMap["RealDate"]].Trim();
-            string hour = fields[ParameterMap["RealTime"]].Trim();
-
-            RealDate = null;
-            if (date + hour != "")
-            {
-                DateTime parsedDate = new DateTime();
-                DateTime.TryParseExact(date + hour, "ddMMyyyyHHmmss", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
-                RealDate = parsedDate;
-            }
-
-            EmployeeId = fields[ParameterMap["EmployeeId"]].Trim() != "" ? int.Parse(fields[ParameterMap["EmployeeId"]]) : 0;
-            Tip = fields[ParameterMap["Tip"]].Trim() != "" ? int.Parse(fields[ParameterMap["Tip"]]) : 0;
         }
+        public int Amount
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["Amount"]].Trim(), out int amount);
+                return amount;
+            }
+        }
+        public int SharesNumber
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["SharesNumber"]].Trim(), out int SharesNumber);
+                return SharesNumber;
+            }
+        }
+        public int SharesAmount
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["SharesAmount"]].Trim(), out int sharesAmount);
+                return sharesAmount;
+            }
+        }
+        public int Last4Digits
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["Last4Digits"]].Trim(), out int last4Digits);
+                return last4Digits;
+            }
+        }
+        public int OperationNumber
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["OperationNumber"]].Trim(), out int operationNumber);
+                return operationNumber;
+            }
+        }
+        public string CardType => Response.Split('|')[ParameterMap["CardType"]].Trim();
+        public DateTime? AccountingDate
+        {
+            get
+            {
+                string date = Response.Split('|')[ParameterMap["AccountingDate"]].Trim();
+                if (date != "")
+                {
+                    DateTime parsedDate = new DateTime();
+                    DateTime.TryParseExact(date, "ddMMyyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
+                    return parsedDate;
+                }
+                return null;
+            }
+        }
+        public long AccountNumber
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["AccountNumber"]].Trim(), out int accountNumber);
+                return accountNumber;
+            }
+        }
+        public string CardBrand => Response.Split('|')[ParameterMap["CardBrand"]].Trim();
+        public DateTime? RealDate
+        {
+            get
+            {
+                var date = Response.Split('|')[ParameterMap["RealDate"]].Trim();
+                string hour = Response.Split('|')[ParameterMap["RealTime"]].Trim();
+
+                if (date + hour != "")
+                {
+                    DateTime parsedDate = new DateTime();
+                    DateTime.TryParseExact(date + hour, "ddMMyyyyHHmmss", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
+                    return parsedDate;
+                }
+                return null;
+            }
+        }
+        public int EmployeeId
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["EmployeeId"]].Trim(), out int employeeId);
+                return employeeId;
+            }
+        }
+        public int Tip
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["Tip"]].Trim(), out int tip);
+                return tip;
+            }
+        }
+
+        public SaleResponse(string response) : base(response) { }
 
         public override string ToString()
         {
             string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             return "Function: " + FunctionCode + "\n" +
-                   "Response: "+ ResponseMessage + "\n" +
+                   "Response: " + ResponseMessage + "\n" +
                    "Commerce Code: " + CommerceCode + "\n" +
                    "Terminal Id: " + TerminalId + "\n" +
                    "Ticket: " + Ticket + "\n" +
-                   "Autorization Code: " + AutorizationCode + "\n" +
-                   "Ammount: " + Ammount + "\n" +
+                   "AuthorizationCode Code: " + AuthorizationCode + "\n" +
+                   "Amount: " + Amount + "\n" +
                    "Shares Number: " + SharesNumber + "\n" +
                    "Shares Amount: " + SharesAmount + "\n" +
                    "Last 4 Digits: " + Last4Digits + "\n" +
@@ -104,17 +155,6 @@ namespace Transbank.POS.Responses
                    "Real Date: " + formatedRealDate + "\n" +
                    "Employee Id: " + EmployeeId + "\n" +
                    "Tip: " + Tip;
-        }
-
-        private static BaseResponse CreateBase(string cresponse)
-        {
-            return new BaseResponse
-            {
-                function = int.Parse(cresponse.Substring(1, 4)),
-                responseCode = int.Parse(cresponse.Substring(6, 2)),
-                commerceCode = long.Parse(cresponse.Substring(9, 12)),
-                terminalId = cresponse.Substring(22, 8)
-            };
         }
     }
 }
