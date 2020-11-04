@@ -47,9 +47,7 @@ namespace Transbank.POS
             }
         }
 
-        public void OpenPort(string portName) => OpenPort(portName, _defaultBaudrate);
-
-        public void OpenPort(string portName, int baudrate)
+        public void OpenPort(string portName, int baudrate = 115200)
         {
             if (Port != null && Port.IsOpen) ClosePort();
             try
