@@ -11,6 +11,7 @@ namespace Transbank.POS
 {
     public class POS
     {
+        private static readonly int _defaultTimeout = 150000;
         private static readonly POS _instance = new POS();
         private string _currentResponse;
         public event EventHandler<IntermediateResponse> IntermediateResponseChange;
@@ -240,12 +241,12 @@ namespace Transbank.POS
             ReadAck();
             if (intermediateMessages)
             {
-                await ReadMessage(new CancellationTokenSource(90000).Token);
+                await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
                 string responseCode = CurrentResponse.Substring(1).Split('|')[1];
                 while (responseCode == "78" || responseCode == "79" ||
                     responseCode == "80" || responseCode == "81" || responseCode == "82")
                 {
-                    await ReadMessage(new CancellationTokenSource(90000).Token);
+                    await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
                     responseCode = CurrentResponse.Substring(1).Split('|')[1];
                 }
             }
@@ -256,7 +257,7 @@ namespace Transbank.POS
                     SaleDetail = new List<string>();
                     if (sendMessageToRegister)
                     {
-                        await ReadMessage(new CancellationTokenSource(90000).Token);
+                        await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
                         string authorizationCode = "";
                         try
                         {
@@ -273,7 +274,7 @@ namespace Transbank.POS
 
                         while (authorizationCode != null && authorizationCode != "")
                         {
-                            await ReadMessage(new CancellationTokenSource(90000).Token);
+                            await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
                             try
                             {
                                 authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
@@ -291,7 +292,7 @@ namespace Transbank.POS
                 }
                 else
                 {
-                    await ReadMessage(new CancellationTokenSource(90000).Token);
+                    await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
                 }
             }
         }
