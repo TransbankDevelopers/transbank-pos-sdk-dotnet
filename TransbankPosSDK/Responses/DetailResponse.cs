@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-
 namespace Transbank.POS.Responses
 {
     public class DetailResponse : SaleResponse

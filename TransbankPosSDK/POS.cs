@@ -3,9 +3,9 @@ using System.Text;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Transbank.POS.Exceptions;
 using Transbank.POS.Responses;
+using Transbank.POS.Exceptions;
+using System.Collections.Generic;
 
 namespace Transbank.POS
 {

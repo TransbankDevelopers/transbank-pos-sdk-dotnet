@@ -1,5 +1,4 @@
-﻿
-namespace Transbank.POS.Responses
+﻿namespace Transbank.POS.Responses
 {
     public class LastSaleResponse : SaleResponse
     {

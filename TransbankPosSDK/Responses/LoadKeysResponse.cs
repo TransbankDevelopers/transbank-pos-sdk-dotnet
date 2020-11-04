@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Transbank.POS.Utils;
+﻿using Transbank.POS.Utils;
+using System.Collections.Generic;
 
 namespace Transbank.POS.Responses
 {

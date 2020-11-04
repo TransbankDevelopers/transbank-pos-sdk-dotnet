@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO.Ports;
+﻿using System.IO.Ports;
+using System.Collections.Generic;
 
 namespace Transbank.POS.Utils
 {
