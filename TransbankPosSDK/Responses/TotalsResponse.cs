@@ -1,24 +1,34 @@
-﻿using Transbank.POS.Utils;
+﻿using System.Collections.Generic;
+using Transbank.POS.Utils;
 
 namespace Transbank.POS.Responses
 {
-    public class TotalsResponse
+    public class TotalsResponse : BasicResponse
     {
-        public TotalsCResponse Response { get; }
-
-        public int FunctionCode => Response.function;
-        public int ResponseCode => Response.responseCode;
-        public int TxCount => Response.txCount;
-        public int TxTotal => Response.txTotal;
-        public int Initialized => Response.initilized;
-
-        public string ResponseMessage => ResponseCodes.Map[Response.responseCode];
+        private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
+        {
+            { "TxCount", 3},
+            { "TxTotal", 4},
+        };
+        public int TxCount
+        {
+            get
+            {
+                _ = int.TryParse(Response.Split('|')[ParameterMap["TxCount"]].Trim(), out int Count);
+                return Count;
+            }
+        }
+        public int TxTotal
+        {
+            get
+            {
+                _ = int.TryParse(Response.Split('|')[ParameterMap["TxTotal"]].Trim(), out int Total);
+                return Total;
+            }
+        }
         public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
 
-        public TotalsResponse(TotalsCResponse cresponse)
-        {
-            Response = cresponse;
-        }
+        public TotalsResponse(string response) : base(response) { }
 
         public override string ToString()
         {

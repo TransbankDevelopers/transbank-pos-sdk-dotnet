@@ -81,37 +81,6 @@ namespace Transbank.POS
             }
         }
 
-        public TotalsResponse Totals()
-        {
-            if (_configured)
-            {
-                try
-                {
-                    TotalsResponse response = new TotalsResponse(TransbankWrap.get_totals());
-                    if (response.Success)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        throw new TransbankGetTotalsException("Get Totals retured an error: " + response.ResponseMessage, response);
-                    }
-                }
-                catch (TransbankGetTotalsException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    throw new TransbankException("Unable to get totals in POS", e);
-                }
-            }
-            else
-            {
-                throw new TransbankException("Port not Configured");
-            }
-        }
-
         public List<DetailResponse> Details(bool printOnPOS)
         {
             if (_configured)
@@ -195,6 +164,19 @@ namespace Transbank.POS
             catch (Exception e)
             {
                 throw new TransbankRefundException("Unable to make Refund on POS", e);
+            }
+        }
+
+        public TotalsResponse Totals()
+        {
+            try
+            {
+                WriteData("0700||").Wait();
+                return new TotalsResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankTotalsException("Unable to get totals from POS", e);
             }
         }
 
