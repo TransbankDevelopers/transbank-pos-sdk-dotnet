@@ -81,37 +81,6 @@ namespace Transbank.POS
             }
         }
 
-        public RefundResponse Refund(int operationID)
-        {
-            if (_configured)
-            {
-                try
-                {
-                    RefundResponse response = new RefundResponse(TransbankWrap.refund(operationID));
-                    if (response.Success)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        throw new TransbankRefundException("Refund returned an error: " + response.ResponseMessage, response);
-                    }
-                }
-                catch (TransbankRefundException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    throw new TransbankException("Unable to make Refund on POS", e);
-                }
-            }
-            else
-            {
-                throw new TransbankException("Port not Configured");
-            }
-        }
-
         public TotalsResponse Totals()
         {
             if (_configured)
@@ -211,6 +180,21 @@ namespace Transbank.POS
             catch (Exception e)
             {
                 throw new TransbankLastSaleException($"Unable to recover last sale from pos", e);
+            }
+        }
+
+        public RefundResponse Refund(int operationID)
+        {
+            string message = $"1200|{operationID}|";
+
+            try
+            {
+                WriteData(MessageWithLRC(message)).Wait();
+                return new RefundResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankRefundException("Unable to make Refund on POS", e);
             }
         }
 

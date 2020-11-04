@@ -1,26 +1,39 @@
-﻿using Transbank.POS.Utils;
+﻿using System.Collections.Generic;
+using Transbank.POS.Utils;
 
 namespace Transbank.POS.Responses
 {
-    public class RefundResponse
+    public class RefundResponse : BasicResponse
     {
-        public RefundCResponse Response { get; }
+        private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
+        {
+            { "CommerceCode", 2},
+            { "TerminalId", 3},
+            { "AuthorizationCode", 4},
+            { "OperationID", 5 }
+        };
 
-        public int FunctionCode => Response.function;
-        public int ResponseCode => Response.responseCode;
-        public long CommerceCode => Response.commerceCode;
-        public string TerminalId => Response.terminalId;
-        public string AuthorizationCode => Response.authorizationCode;
-        public int OperationID => Response.operationID;
-        public int Initialized => Response.initilized;
-
-        public string ResponseMessage => ResponseCodes.Map[Response.responseCode];
+        public long CommerceCode
+        {
+            get
+            {
+                _ = long.TryParse(Response.Split('|')[ParameterMap["CommerceCode"]].Trim(), out long commerceCode);
+                return commerceCode;
+            }
+        }
+        public string TerminalId => Response.Split('|')[ParameterMap["TerminalId"]].Trim();
+        public string AuthorizationCode => Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
+        public int OperationID
+        {
+            get
+            {
+                _ = int.TryParse(Response.Split('|')[ParameterMap["OperationID"]].Trim(), out int operationID);
+                return operationID;
+            }
+        }
         public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
 
-        public RefundResponse(RefundCResponse cresponse)
-        {
-            Response = cresponse;
-        }
+        public RefundResponse(string response) : base(response) { }
 
         public override string ToString()
         {
