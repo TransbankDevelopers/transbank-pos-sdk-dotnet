@@ -16,7 +16,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageTags>payments, cl, chile, transbank, POS, Verifone, vx520, vx520c, integrated payment,</PackageTags>
     <PackageIconUrl>https://www.transbankdevelopers.cl//favicon.ico</PackageIconUrl>
-    <VersionPrefix>2.1.2</VersionPrefix>
+    <VersionPrefix>3.0.0</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Product>TransbankPOSSDK</Product>
     <Copyright>2019 - Transbank</Copyright>
