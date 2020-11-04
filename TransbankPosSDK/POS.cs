@@ -1,7 +1,8 @@
-﻿using Transbank.POS.Utils;
+﻿using System;
+using System.IO.Ports;
+using Transbank.POS.Utils;
 using Transbank.POS.Responses;
 using Transbank.POS.Exceptions;
-using System;
 using System.Collections.Generic;
 
 namespace Transbank.POS
@@ -12,7 +13,7 @@ namespace Transbank.POS
         private bool _configured = false;
         private TbkBaudrate _defaultBaudrate = TbkBaudrate.TBK_115200;
 
-        public string Port { get; set; }
+        public SerialPort Port { get; set; }
 
         private POS()
         {
@@ -28,27 +29,34 @@ namespace Transbank.POS
 
         public void OpenPort(string portName) => OpenPort(portName, _defaultBaudrate);
 
-        public void OpenPort(string portName, TbkBaudrate baudrate)
+        public void OpenPort(string portName, int baudrate)
         {
+            if (Port != null && Port.IsOpen) ClosePort();
             try
             {
-                if (TransbankWrap.open_port(portName, (int)baudrate) == TbkReturn.TBK_OK)
-                {
-                    _configured = true;
-                    Port = portName;
-                }
-                else
-                {
-                    throw new TransbankException("Unable to Open selected port: " + portName);
-                }
-            }
-            catch (TransbankException)
-            {
-                throw;
+                Port = new SerialPort(portName, baudrate, Parity.None, 8, StopBits.One);
+                Port.Open();
+                Port.DiscardInBuffer();
+                Port.DiscardOutBuffer();
             }
             catch (Exception e)
             {
-                throw new Exception("Unable to Open selected port: " + portName, e);
+                throw new TransbankException("Could not Open Serial Port: " + portName, e);
+            }
+        }
+
+        public void ClosePort()
+        {
+            if (!Port.IsOpen) return;
+            try
+            {
+                Port.DiscardInBuffer();
+                Port.DiscardOutBuffer();
+                Port.Close();
+            }
+            catch (Exception e)
+            {
+                throw new TransbankException("Could not Close Serial Port: " + Port.PortName, e);
             }
         }
 
@@ -255,32 +263,6 @@ namespace Transbank.POS
             else
             {
                 throw new TransbankException("Port not Configured");
-            }
-        }
-
-        public bool ClosePort()
-        {
-            if (_configured)
-            {
-                try
-                {
-                    if (TransbankWrap.close_port() == TbkReturn.TBK_OK)
-                    {
-                        _configured = false;
-                        Port = "";
-                        return true;
-                    }
-                    return false;
-                }
-                catch (Exception e)
-                {
-                    throw new TransbankException("Unable to close port: " + Port, e);
-                }
-            }
-            else
-            {
-                Port = "";
-                return true;
             }
         }
 
