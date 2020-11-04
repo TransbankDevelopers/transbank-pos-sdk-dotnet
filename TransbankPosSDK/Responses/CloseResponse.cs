@@ -1,9 +1,7 @@
-﻿using Transbank.POS.Utils;
-
-namespace Transbank.POS.Responses
+﻿namespace Transbank.POS.Responses
 {
     public class CloseResponse : LoadKeysResponse
     {
-        public CloseResponse(BaseResponse cresponse) : base(cresponse) {}
+        public CloseResponse(string response) : base(response) { }
     }
 }

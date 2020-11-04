@@ -177,37 +177,6 @@ namespace Transbank.POS
             }
         }
 
-        public CloseResponse Close()
-        {
-            if (_configured)
-            {
-                try
-                {
-                    CloseResponse response = new CloseResponse(TransbankWrap.close());
-                    if (response.Success)
-                    {
-                        return response;
-                    }
-                    else
-                    {
-                        throw new TransbankCloseException("Close retured an error: " + response.ResponseMessage, response);
-                    }
-                }
-                catch (TransbankCloseException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    throw new TransbankException("Unable to execute close in pos", e);
-                }
-            }
-            else
-            {
-                throw new TransbankException("Port not Configured");
-            }
-        }
-
         public TotalsResponse Totals()
         {
             if (_configured)
@@ -275,7 +244,31 @@ namespace Transbank.POS
             }
         }
 
+        public CloseResponse Close()
+        {
+            try
+            {
+                WriteData("0500||").Wait();
+                return new CloseResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankCloseException("Unable to execute close in pos", e);
+            }
+        }
 
+        public LoadKeysResponse LoadKeys()
+        {
+            try
+            {
+                WriteData("0800").Wait();
+                return new LoadKeysResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankLoadKeysException("Unable to execute Load Keys in pos", e);
+            }
+        }
 
         public bool Poll()
         {
