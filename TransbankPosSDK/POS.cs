@@ -1,19 +1,17 @@
 ﻿using System;
-using System.IO.Ports;
-using Transbank.POS.Utils;
-using Transbank.POS.Responses;
-using Transbank.POS.Exceptions;
-using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
+using System.IO.Ports;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Transbank.POS.Exceptions;
+using Transbank.POS.Responses;
 
 namespace Transbank.POS
 {
     public class POS
     {
         private static readonly POS _instance = new POS();
-        private readonly int _defaultBaudrate = 115200;
         private string _currentResponse;
         public event EventHandler<IntermediateResponse> IntermediateResponseChange;
         private string CurrentResponse
@@ -28,6 +26,7 @@ namespace Transbank.POS
                 }
             }
         }
+        private List<string> SaleDetail;
 
         protected virtual void OnIntermediateMessageReceived(string message)
         {
@@ -81,41 +80,6 @@ namespace Transbank.POS
             }
         }
 
-        public List<DetailResponse> Details(bool printOnPOS)
-        {
-            if (_configured)
-            {
-                try
-                {
-                    var details = new List<DetailResponse>();
-                    string response = TransbankWrap.sales_detail(printOnPOS);
-                    if (response == "")
-                    {
-                        return details;
-                    }
-
-                    string[] lines = response.Split('\n');
-                    foreach (string line in lines)
-                    {
-                        details.Add(new DetailResponse(line));
-                    }
-
-                    return details;
-                }
-                catch (TransbankSalesDetailException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    throw new TransbankException("Unable to get details in POS", e);
-                }
-            }
-            else
-            {
-                throw new TransbankException("Port not Configured");
-            }
-        }
         public SaleResponse Sale(int amount, string ticket, bool sendStatus = false)
         {
             string message = $"0200|{amount}|{ticket}|||{Convert.ToInt32(sendStatus)}|";
@@ -177,6 +141,27 @@ namespace Transbank.POS
             catch (Exception e)
             {
                 throw new TransbankTotalsException("Unable to get totals from POS", e);
+            }
+        }
+
+        public List<DetailResponse> Details(bool sendMessageToRegister = false)
+        {
+            string message = $"0260|{Convert.ToInt32(sendMessageToRegister)}|";
+            try
+            {
+                var details = new List<DetailResponse>();
+                WriteData(MessageWithLRC(message), sendMessageToRegister: sendMessageToRegister, saleDetail: true).Wait();
+
+                foreach (string sale in SaleDetail)
+                {
+                    details.Add(new DetailResponse(sale));
+                }
+
+                return details;
+            }
+            catch (Exception e)
+            {
+                throw new TransbankSalesDetailException("Unabel to request sale detail on pos", e);
             }
         }
 
@@ -268,7 +253,48 @@ namespace Transbank.POS
             }
             else
             {
-                await ReadMessage(new CancellationTokenSource(90000).Token);
+                if (saleDetail)
+                {
+                    SaleDetail = new List<string>();
+                    if (sendMessageToRegister)
+                    {
+                        await ReadMessage(new CancellationTokenSource(90000).Token);
+                        string authorizationCode = "";
+                        try
+                        {
+                            authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
+                            if (authorizationCode != "")
+                            {
+                                SaleDetail.Add(string.Copy(CurrentResponse));
+                            }
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                            authorizationCode = null;
+                        }
+
+                        while (authorizationCode != null && authorizationCode != "")
+                        {
+                            await ReadMessage(new CancellationTokenSource(90000).Token);
+                            try
+                            {
+                                authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
+                                if (authorizationCode != "")
+                                {
+                                    SaleDetail.Add(string.Copy(CurrentResponse));
+                                }
+                            }
+                            catch (IndexOutOfRangeException)
+                            {
+                                authorizationCode = null;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    await ReadMessage(new CancellationTokenSource(90000).Token);
+                }
             }
         }
 
