@@ -177,25 +177,6 @@ namespace Transbank.POS
             }
         }
 
-        public bool Poll()
-        {
-            if (_configured)
-            {
-                try
-                {
-                    return TransbankWrap.poll() == TbkReturn.TBK_OK;
-                }
-                catch (Exception e)
-                {
-                    throw new TransbankException("Unable to locate POS", e);
-                }
-            }
-            else
-            {
-                throw new TransbankException("Port not Configured");
-            }
-        }
-
         public CloseResponse Close()
         {
             if (_configured)
@@ -322,6 +303,29 @@ namespace Transbank.POS
             else
             {
                 throw new TransbankException("Port not Configured");
+            }
+        }
+
+        public bool Poll()
+        {
+            if (Instance.CantWrite())
+            {
+                throw new TransbankException($"Unable to Poll port {Port.PortName} is closed");
+            }
+            try
+            {
+                Port.Write("0100");
+                Thread.Sleep(500);
+                string response = Port.ReadExisting();
+
+                byte[] ba = Encoding.ASCII.GetBytes(response);
+                var hexString = BitConverter.ToString(ba);
+
+                return response.Equals("");
+            }
+            catch (Exception e)
+            {
+                throw new TransbankException($"Unable to send Poll command on port {Port.PortName}", e);
             }
         }
 
