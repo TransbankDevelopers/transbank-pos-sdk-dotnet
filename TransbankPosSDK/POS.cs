@@ -339,13 +339,18 @@ namespace Transbank.POS
 
         private string MessageWithLRC(string message)
         {
+            return message + Lrc(message);
+        }
+
+        private char Lrc(string message)
+        {
             int lrc = 0;
             for (int i = 1; i < message.Length; i++)
             {
                 lrc ^= Encoding.ASCII.GetBytes(message.Substring(i, 1))[0];
             }
-            Console.WriteLine("LRC Result : " + (char)lrc + " int: " + lrc);
-            return message + (char)lrc;
+            Console.WriteLine($"LRC: {lrc}");
+            return (char)lrc;
         }
     }
 }
