@@ -48,6 +48,7 @@ namespace Transbank.POS
             {
                 Port = new SerialPort(portName, baudrate, Parity.None, 8, StopBits.One);
                 Port.Open();
+                Port.ReadTimeout = 100;
                 Port.DiscardInBuffer();
                 Port.DiscardOutBuffer();
             }
@@ -185,6 +186,9 @@ namespace Transbank.POS
 
         public bool Poll()
         {
+            Port.DiscardInBuffer();
+            Port.DiscardOutBuffer();
+
             if (Instance.CantWrite())
             {
                 throw new TransbankException($"Unable to Poll port {Port.PortName} is closed");
@@ -206,8 +210,11 @@ namespace Transbank.POS
             }
         }
 
-        public void SetNormalMode()
+        public bool SetNormalMode()
         {
+            Port.DiscardInBuffer();
+            Port.DiscardOutBuffer();
+
             if (Instance.CantWrite())
             {
                 throw new TransbankException($"Unable to Set Normal Mode port {Port.PortName} is closed");
@@ -225,13 +232,16 @@ namespace Transbank.POS
 
         private async Task WriteData(string payload, bool intermediateMessages = false, bool saleDetail = false, bool sendMessageToRegister = false)
         {
+            Port.DiscardInBuffer();
+            Port.DiscardOutBuffer();
+
             CurrentResponse = "";
             if (Instance.CantWrite())
             {
                 throw new TransbankException($"Unable to send message to {Port.PortName}");
             }
             Port.Write(payload);
-            ReadAck();
+            _ = ReadAck(new CancellationTokenSource(2000).Token);
             if (intermediateMessages)
             {
                 await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
@@ -251,7 +261,7 @@ namespace Transbank.POS
                     if (sendMessageToRegister)
                     {
                         await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
-                        string authorizationCode = "";
+                        string authorizationCode;
                         try
                         {
                             authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
