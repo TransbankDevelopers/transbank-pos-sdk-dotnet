@@ -218,7 +218,17 @@ namespace Transbank.POS
             try
             {
                 Port.Write("0300\0");
-                ClosePort();
+                //Thread.Sleep(500);
+                string response = ((char)Port.ReadByte()).ToString();
+                if (response.Equals(""))
+                {
+                    ClosePort();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch (Exception e)
             {
