@@ -1,5 +1,6 @@
 ﻿using Transbank.POS.Utils;
 using System.Collections.Generic;
+using System;
 
 namespace Transbank.POS.Responses
 {
@@ -11,7 +12,6 @@ namespace Transbank.POS.Responses
             { "TerminalId", 3}
         };
 
-        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
         public long CommerceCode
         {
             get
@@ -20,7 +20,20 @@ namespace Transbank.POS.Responses
                 return commerceCode;
             }
         }
-        public string TerminalId => Response.Split('|')[ParameterMap["TerminalId"]].Trim();
+        public string TerminalId
+        {
+            get
+            {
+                try
+                {
+                    return Response.Split('|')[ParameterMap["TerminalId"]].Trim();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return "none";
+                }
+            }
+        }
 
         public LoadKeysResponse(string response) : base(response) { }
 

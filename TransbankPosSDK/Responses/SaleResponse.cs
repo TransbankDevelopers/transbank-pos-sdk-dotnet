@@ -25,13 +25,32 @@ namespace Transbank.POS.Responses
             { "Tip", 18}
         };
 
-        public string Ticket => Response.Split('|')[ParameterMap["Ticket"]].Trim();
-        public int AuthorizationCode
+        public string Ticket
         {
             get
             {
-                int.TryParse(Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim(), out int authorizationCode);
-                return authorizationCode;
+                try
+                {
+                    return Response.Split('|')[ParameterMap["Ticket"]].Trim();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return "none";
+                }
+            }
+        }
+        public string AuthorizationCode
+        {
+            get
+            {
+                try
+                {
+                    return Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return "none";
+                }
             }
         }
         public int Amount
@@ -74,12 +93,30 @@ namespace Transbank.POS.Responses
                 return operationNumber;
             }
         }
-        public string CardType => Response.Split('|')[ParameterMap["CardType"]].Trim();
+        public string CardType
+        {
+            get
+            {
+                try
+                {
+                    return Response.Split('|')[ParameterMap["CardType"]].Trim();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return "none";
+                }
+            }
+        }
         public DateTime? AccountingDate
         {
             get
             {
-                string date = Response.Split('|')[ParameterMap["AccountingDate"]].Trim();
+                string date = "";
+                try
+                {
+                    date = Response.Split('|')[ParameterMap["AccountingDate"]].Trim();
+                }
+                catch (IndexOutOfRangeException) { }
                 if (date != "")
                 {
                     DateTime parsedDate = new DateTime();
@@ -89,21 +126,46 @@ namespace Transbank.POS.Responses
                 return null;
             }
         }
-        public long AccountNumber
+        public string AccountNumber
         {
             get
             {
-                int.TryParse(Response.Split('|')[ParameterMap["AccountNumber"]].Trim(), out int accountNumber);
-                return accountNumber;
+                try
+                {
+                    return Response.Split('|')[ParameterMap["AccountNumber"]].Trim();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return "none";
+                }
             }
         }
-        public string CardBrand => Response.Split('|')[ParameterMap["CardBrand"]].Trim();
+        public string CardBrand
+        {
+            get
+            {
+                try
+                {
+                    return Response.Split('|')[ParameterMap["CardBrand"]].Trim();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return "none";
+                }
+            }
+        }
         public DateTime? RealDate
         {
             get
             {
-                var date = Response.Split('|')[ParameterMap["RealDate"]].Trim();
-                string hour = Response.Split('|')[ParameterMap["RealTime"]].Trim();
+                string date = "";
+                string hour = "";
+                try
+                {
+                    date = Response.Split('|')[ParameterMap["RealDate"]].Trim();
+                    hour = Response.Split('|')[ParameterMap["RealTime"]].Trim();
+                }
+                catch (IndexOutOfRangeException) { }
 
                 if (date + hour != "")
                 {

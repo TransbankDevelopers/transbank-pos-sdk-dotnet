@@ -17,19 +17,33 @@ namespace Transbank.POS.Responses
         {
             get
             {
-                int.TryParse(Response.Split('|')[ParameterMap["FunctionCode"]].Trim(), out int functionCode);
+                _ = int.TryParse(Response.Split('|')[ParameterMap["FunctionCode"]].Trim(), out int functionCode);
                 return functionCode;
             }
         }
-        public string ResponseMessage => ResponseCodes.Map[ResponseCode];
+        public string ResponseMessage
+        {
+            get
+            {
+                try
+                {
+                    return ResponseCodes.Map[ResponseCode];
+                }
+                catch (KeyNotFoundException)
+                {
+                    return "none";
+                }
+            }
+        }
         public int ResponseCode
         {
             get
             {
-                int.TryParse(Response.Split('|')[ParameterMap["ResponseCode"]].Trim(), out int responseCode);
+                _ = int.TryParse(Response.Split('|')[ParameterMap["ResponseCode"]].Trim(), out int responseCode);
                 return responseCode;
             }
         }
+        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
 
         public BasicResponse(string response)
         {

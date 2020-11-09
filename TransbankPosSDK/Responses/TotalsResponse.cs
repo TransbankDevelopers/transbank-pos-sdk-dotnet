@@ -26,7 +26,6 @@ namespace Transbank.POS.Responses
                 return Total;
             }
         }
-        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
 
         public TotalsResponse(string response) : base(response) { }
 

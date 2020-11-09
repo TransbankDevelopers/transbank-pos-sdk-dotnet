@@ -1,28 +1,29 @@
-﻿using Transbank.POS.Utils;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Transbank.POS.Responses
 {
-    public class RefundResponse : BasicResponse
+    public class RefundResponse : LoadKeysResponse
     {
         private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
-            { "CommerceCode", 2},
-            { "TerminalId", 3},
             { "AuthorizationCode", 4},
             { "OperationID", 5 }
         };
 
-        public long CommerceCode
+        public string AuthorizationCode
         {
             get
             {
-                _ = long.TryParse(Response.Split('|')[ParameterMap["CommerceCode"]].Trim(), out long commerceCode);
-                return commerceCode;
+                try
+                {
+                    return Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
+                }
+                catch (IndexOutOfRangeException) {
+                    return "none";
+                }
             }
         }
-        public string TerminalId => Response.Split('|')[ParameterMap["TerminalId"]].Trim();
-        public string AuthorizationCode => Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
         public int OperationID
         {
             get
@@ -31,7 +32,6 @@ namespace Transbank.POS.Responses
                 return operationID;
             }
         }
-        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
 
         public RefundResponse(string response) : base(response) { }
 
