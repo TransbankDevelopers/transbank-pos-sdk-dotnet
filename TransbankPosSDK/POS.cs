@@ -196,12 +196,8 @@ namespace Transbank.POS
             try
             {
                 Port.Write("0100");
-                Thread.Sleep(500);
-                string response = Port.ReadExisting();
-
-                byte[] ba = Encoding.ASCII.GetBytes(response);
-                var hexString = BitConverter.ToString(ba);
-
+                //Thread.Sleep(500);
+                string response = ((char)Port.ReadByte()).ToString();
                 return response.Equals("");
             }
             catch (Exception e)
