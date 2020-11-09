@@ -320,8 +320,15 @@ namespace Transbank.POS
             Console.WriteLine(CurrentResponse);
         }
 
-        private bool ReadAck()
+        private bool ReadAck(CancellationToken token)
         {
+            while (!token.IsCancellationRequested && Port.BytesToRead <= 0)
+            {
+            }
+            if (token.IsCancellationRequested)
+            {
+                throw new TransbankException($"Read operation Timeout");
+            }
             int intValue = Port.ReadByte();
             byte[] result = BitConverter.GetBytes(intValue);
             Array.Reverse(result);
