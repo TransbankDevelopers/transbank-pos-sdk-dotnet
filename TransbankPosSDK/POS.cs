@@ -12,7 +12,6 @@ namespace Transbank.POS
     public class POS
     {
         private static readonly int _defaultTimeout = 150000;
-        private static readonly POS _instance = new POS();
         private string _currentResponse;
         public event EventHandler<IntermediateResponse> IntermediateResponseChange;
         private string CurrentResponse
@@ -40,13 +39,7 @@ namespace Transbank.POS
         {
         }
 
-        public static POS Instance
-        {
-            get
-            {
-                return _instance;
-            }
-        }
+        public static POS Instance { get; } = new POS();
 
         public void OpenPort(string portName, int baudrate = 115200)
         {
