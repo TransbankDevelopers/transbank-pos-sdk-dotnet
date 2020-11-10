@@ -48,7 +48,7 @@ namespace Transbank.POS
             {
                 Port = new SerialPort(portName, baudrate, Parity.None, 8, StopBits.One);
                 Port.Open();
-                Port.ReadTimeout = 100;
+                Port.ReadTimeout = 5000;
                 Port.DiscardInBuffer();
                 Port.DiscardOutBuffer();
             }
@@ -247,43 +247,31 @@ namespace Transbank.POS
                 throw new TransbankException($"Unable to send message to {Port.PortName}");
             }
             Port.Write(payload);
-            _ = ReadAck(new CancellationTokenSource(2000).Token);
-            if (intermediateMessages)
+            Task<bool> ack = ReadAck(new CancellationTokenSource(2000).Token);
+            _ = await ack;
+            if (ack.Result)
             {
-                await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
-                string responseCode = CurrentResponse.Substring(1).Split('|')[1];
-                while (responseCode == "78" || responseCode == "79" ||
-                    responseCode == "80" || responseCode == "81" || responseCode == "82")
+                Console.WriteLine("Read ACK OK");
+                if (intermediateMessages)
                 {
                     await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
-                    responseCode = CurrentResponse.Substring(1).Split('|')[1];
-                }
-            }
-            else
-            {
-                if (saleDetail)
-                {
-                    SaleDetail = new List<string>();
-                    if (sendMessageToRegister)
+                    string responseCode = CurrentResponse.Substring(1).Split('|')[1];
+                    while (responseCode == "78" || responseCode == "79" ||
+                        responseCode == "80" || responseCode == "81" || responseCode == "82")
                     {
                         await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
-                        string authorizationCode;
-                        try
-                        {
-                            authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
-                            if (authorizationCode != "")
-                            {
-                                SaleDetail.Add(string.Copy(CurrentResponse));
-                            }
-                        }
-                        catch (IndexOutOfRangeException)
-                        {
-                            authorizationCode = null;
-                        }
-
-                        while (authorizationCode != null && authorizationCode != "")
+                        responseCode = CurrentResponse.Substring(1).Split('|')[1];
+                    }
+                }
+                else
+                {
+                    if (saleDetail)
+                    {
+                        SaleDetail = new List<string>();
+                        if (sendMessageToRegister)
                         {
                             await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
+                            string authorizationCode;
                             try
                             {
                                 authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
@@ -296,13 +284,34 @@ namespace Transbank.POS
                             {
                                 authorizationCode = null;
                             }
+
+                            while (authorizationCode != null && authorizationCode != "")
+                            {
+                                await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
+                                try
+                                {
+                                    authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
+                                    if (authorizationCode != "")
+                                    {
+                                        SaleDetail.Add(string.Copy(CurrentResponse));
+                                    }
+                                }
+                                catch (IndexOutOfRangeException)
+                                {
+                                    authorizationCode = null;
+                                }
+                            }
                         }
                     }
+                    else
+                    {
+                        await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
+                    }
                 }
-                else
-                {
-                    await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
-                }
+            }
+            else
+            {
+                throw new TransbankException($"Unable to send message to {Port.PortName}");
             }
         }
 
@@ -315,12 +324,14 @@ namespace Transbank.POS
             {
                 throw new TransbankException($"Read operation Timeout");
             }
-            CurrentResponse = Instance.Port.ReadExisting();
+
+            Instance.Port.ReadTo("");
+            CurrentResponse = "" + Instance.Port.ReadTo("");
             Instance.Port.Write("");
             Console.WriteLine(CurrentResponse);
         }
 
-        private bool ReadAck(CancellationToken token)
+        private async Task<bool> ReadAck(CancellationToken token)
         {
             while (!token.IsCancellationRequested && Port.BytesToRead <= 0)
             {
@@ -329,9 +340,8 @@ namespace Transbank.POS
             {
                 throw new TransbankException($"Read operation Timeout");
             }
-            int intValue = Port.ReadByte();
-            byte[] result = BitConverter.GetBytes(intValue);
-            Array.Reverse(result);
+            byte[] result = new byte[1];
+            _ = await Instance.Port.BaseStream.ReadAsync(result, 0, 1, token);
             return Encoding.ASCII.GetString(result).Equals("");
         }
 
@@ -349,7 +359,6 @@ namespace Transbank.POS
             {
                 lrc ^= Encoding.ASCII.GetBytes(message.Substring(i, 1))[0];
             }
-            Console.WriteLine($"LRC: {lrc}");
             return (char)lrc;
         }
     }
