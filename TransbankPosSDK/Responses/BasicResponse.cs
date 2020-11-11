@@ -31,7 +31,7 @@ namespace Transbank.POS.Responses
                 }
                 catch (KeyNotFoundException)
                 {
-                    return "none";
+                    return "Mensaje no encontrado";
                 }
             }
         }
