@@ -139,13 +139,13 @@ namespace Transbank.POS
             }
         }
 
-        public List<DetailResponse> Details(bool sendMessageToRegister = false)
+        public List<DetailResponse> Details(bool printOnPOS = true)
         {
-            string message = $"0260|{Convert.ToInt32(sendMessageToRegister)}|";
+            string message = $"0260|{Convert.ToInt32(!printOnPOS)}|";
             try
             {
                 var details = new List<DetailResponse>();
-                WriteData(MessageWithLRC(message), sendMessageToRegister: sendMessageToRegister, saleDetail: true).Wait();
+                WriteData(MessageWithLRC(message), printOnPOS: printOnPOS, saleDetail: true).Wait();
 
                 foreach (string sale in SaleDetail)
                 {
@@ -238,7 +238,7 @@ namespace Transbank.POS
             }
         }
 
-        private async Task WriteData(string payload, bool intermediateMessages = false, bool saleDetail = false, bool sendMessageToRegister = false)
+        private async Task WriteData(string payload, bool intermediateMessages = false, bool saleDetail = false, bool printOnPOS = true)
         {
             Port.DiscardInBuffer();
             Port.DiscardOutBuffer();
@@ -269,15 +269,15 @@ namespace Transbank.POS
                 {
                     if (saleDetail)
                     {
-                        SaleDetail = new List<string>();
-                        if (sendMessageToRegister)
+                        if (!printOnPOS)
                         {
+                            SaleDetail = new List<string>();
                             await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
                             string authorizationCode;
                             try
                             {
                                 authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
-                                if (authorizationCode != "")
+                                if (authorizationCode != "" && authorizationCode != " ")
                                 {
                                     SaleDetail.Add(string.Copy(CurrentResponse));
                                 }
@@ -287,13 +287,13 @@ namespace Transbank.POS
                                 authorizationCode = null;
                             }
 
-                            while (authorizationCode != null && authorizationCode != "")
+                            while (authorizationCode != null && authorizationCode != "" && authorizationCode != " ")
                             {
                                 await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
                                 try
                                 {
                                     authorizationCode = CurrentResponse.Substring(1).Split('|')[5];
-                                    if (authorizationCode != "")
+                                    if (authorizationCode != "" && authorizationCode != " ")
                                     {
                                         SaleDetail.Add(string.Copy(CurrentResponse));
                                     }
