@@ -76,6 +76,12 @@ namespace Transbank.POS
             }
         }
 
+        [ObsoleteAttribute("This method is obsolete. Call SaleResponse(int, string) instead.", false)]
+        public SaleResponse Sale(int amount, int ticket)
+        {
+            return Sale(amount, ticket.ToString());
+        }
+
         public SaleResponse Sale(int amount, string ticket, bool sendStatus = false)
         {
             if (amount <= 0)
