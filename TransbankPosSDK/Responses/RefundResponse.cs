@@ -20,7 +20,7 @@ namespace Transbank.POS.Responses
                     return Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
                 }
                 catch (IndexOutOfRangeException) {
-                    return "none";
+                    return "";
                 }
             }
         }

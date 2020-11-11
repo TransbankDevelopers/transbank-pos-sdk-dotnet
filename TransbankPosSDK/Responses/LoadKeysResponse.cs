@@ -30,7 +30,7 @@ namespace Transbank.POS.Responses
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    return "none";
+                    return "";
                 }
             }
         }
