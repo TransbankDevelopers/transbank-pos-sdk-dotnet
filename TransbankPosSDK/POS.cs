@@ -51,7 +51,7 @@ namespace Transbank.POS
             {
                 Port = new SerialPort(portName, baudrate, Parity.None, 8, StopBits.One);
                 Port.Open();
-                Port.ReadTimeout = 5000;
+                Port.ReadTimeout = 15000;
                 Port.DiscardInBuffer();
                 Port.DiscardOutBuffer();
             }
