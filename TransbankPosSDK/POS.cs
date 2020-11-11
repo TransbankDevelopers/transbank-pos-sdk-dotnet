@@ -33,7 +33,10 @@ namespace Transbank.POS
             IntermediateResponseChange?.Invoke(this, new IntermediateResponse(message));
         }
 
-        public SerialPort Port { get; set; }
+        public bool IsPortOpen => Port.IsOpen;
+
+        public SerialPort Port { get; private set; }
+        
 
         private POS()
         {
