@@ -78,8 +78,6 @@ namespace Transbank.POS
 
         public SaleResponse Sale(int amount, string ticket, bool sendStatus = false)
         {
-            string message = $"0200|{amount}|{ticket}|||{Convert.ToInt32(sendStatus)}|";
-
             if (amount <= 0)
             {
                 throw new TransbankSaleException("Amount must be greater than 0");
@@ -88,6 +86,7 @@ namespace Transbank.POS
             {
                 throw new TransbankSaleException("Ticket must be 6 characters.");
             }
+            string message = $"0200|{amount}|{ticket}|||{Convert.ToInt32(sendStatus)}|";
             try
             {
                 WriteData(MessageWithLRC(message), intermediateMessages: sendStatus).Wait();
