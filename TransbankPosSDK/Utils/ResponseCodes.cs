@@ -33,6 +33,7 @@ namespace Transbank.POS.Utils
             {25, "Fecha invalida"},
             {26, "Debe cargar llaves"},
             {27, "Debe actualizar"},
+            {54, "Rechazado" },
             {60, "Error en número de cuotas"},
             {61, "Error en armado de solicitud"},
             {62, "Problema con el pinpad interno"},
