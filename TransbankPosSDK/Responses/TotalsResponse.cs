@@ -7,8 +7,8 @@ namespace Transbank.POS.Responses
     {
         private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
-            { "TxCount", 3},
-            { "TxTotal", 4},
+            { "TxCount", 2},
+            { "TxTotal", 3},
         };
         public int TxCount
         {
