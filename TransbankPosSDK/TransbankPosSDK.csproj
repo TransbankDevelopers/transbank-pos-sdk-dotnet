@@ -10,7 +10,6 @@
     <PackageId>TransbankPosSDK</PackageId>
     <Description>This is the .Net SDK for Transbank's Verifone VX520, VX520c and Ingenico DESK 3500 POS.</Description>
     <License>LICENSE.md</License>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/TransbankDevelopers/transbank-pos-sdk-dotnet/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>http://www.transbankdevelopers.cl/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TransbankDevelopers/transbank-pos-sdk-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
