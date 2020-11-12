@@ -148,22 +148,22 @@ namespace Transbank.POS
         public List<DetailResponse> Details(bool printOnPOS = true)
         {
             string message = $"0260|{Convert.ToInt32(!printOnPOS)}|";
+            List<DetailResponse> details = new List<DetailResponse>();
             try
             {
-                var details = new List<DetailResponse>();
+               
                 WriteData(MessageWithLRC(message), printOnPOS: printOnPOS, saleDetail: true).Wait();
 
                 foreach (string sale in SaleDetail)
                 {
                     details.Add(new DetailResponse(sale));
                 }
-
-                return details;
             }
             catch (Exception e)
             {
                 throw new TransbankSalesDetailException("Unabel to request sale detail on pos", e);
             }
+            return details;
         }
 
         public CloseResponse Close()
@@ -204,7 +204,6 @@ namespace Transbank.POS
             try
             {
                 Port.Write("0100");
-                //Thread.Sleep(500);
                 string response = ((char)Port.ReadByte()).ToString();
                 return response.Equals("");
             }
@@ -226,7 +225,6 @@ namespace Transbank.POS
             try
             {
                 Port.Write("0300\0");
-                //Thread.Sleep(500);
                 string response = ((char)Port.ReadByte()).ToString();
                 if (response.Equals(""))
                 {
@@ -275,9 +273,9 @@ namespace Transbank.POS
                 {
                     if (saleDetail)
                     {
+                        SaleDetail = new List<string>();
                         if (!printOnPOS)
                         {
-                            SaleDetail = new List<string>();
                             await ReadMessage(new CancellationTokenSource(_defaultTimeout).Token);
                             string authorizationCode;
                             try
