@@ -38,16 +38,20 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
+  
+  <PropertyGroup>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+  </PropertyGroup>
+    
   <ItemGroup>
     <PackageReference Include="System.IO.Ports" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\LICENSE.md" Pack="true" PackagePath="">
-      <Link>LICENSE.md</Link>
-    </None>
     <None Include="..\favicon.png" Pack="true" PackagePath="">
       <Link>favicon.png</Link>
+    </None>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="LICENSE.md">
+      <Link>LICENSE.md</Link>
     </None>
   </ItemGroup>
 </Project>
