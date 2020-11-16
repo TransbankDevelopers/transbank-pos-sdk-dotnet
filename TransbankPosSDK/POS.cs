@@ -104,6 +104,29 @@ namespace Transbank.POS
             }
         }
 
+        public MultiCodeSaleResponse MultiCodeSale(int amount, string ticket, long commerceCode = 0, bool sendStatus = false)
+        {
+            if (amount <= 0)
+            {
+                throw new TransbankSaleException("Amount must be greater than 0");
+            }
+            if (ticket.Length != 6)
+            {
+                throw new TransbankSaleException("Ticket must be 6 characters.");
+            }
+            string code = commerceCode != 0 ? commerceCode.ToString() : "";
+            string message = $"0270|{amount}|{ticket}|| |{Convert.ToInt32(sendStatus)}|{code}|";
+            try
+            {
+                WriteData(MessageWithLRC(message), intermediateMessages: sendStatus).Wait();
+                return new MultiCodeSaleResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankMultiCodeSaleException($"Unable to execute multicode sale on pos", e);
+            }
+        }
+
         public LastSaleResponse LastSale()
         {
             try
