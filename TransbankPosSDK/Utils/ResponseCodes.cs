@@ -14,7 +14,7 @@ namespace Transbank.POS.Utils
             {05, "No existe transacción para anular"},
             {06, "Tarjeta no soportada"},
             {07, "Transacción cancelada desde el POS"},
-            {08, "No puede anular rransacción debito"},
+            {08, "No puede anular transacción debito"},
             {09, "Error lectura tarjeta"},
             {10, "Monto menor al mínimo permitido"},
             {11, "No existe venta"},
