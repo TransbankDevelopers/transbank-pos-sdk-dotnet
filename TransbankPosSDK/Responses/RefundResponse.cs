@@ -37,8 +37,7 @@ namespace Transbank.POS.Responses
 
         public override string ToString()
         {
-            return "Function: " + FunctionCode + "\n" +
-                   "Response: " + ResponseMessage + "\n" +
+            return base.ToString() + "\n" +
                    "AuthorizationCode: " + AuthorizationCode + "\n" +
                    "OperationID: " + OperationID;
         }

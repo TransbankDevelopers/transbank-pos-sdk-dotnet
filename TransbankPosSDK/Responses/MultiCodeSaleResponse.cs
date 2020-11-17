@@ -48,26 +48,7 @@ namespace Transbank.POS.Responses
 
         public override string ToString()
         {
-            string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
-            string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
-            return "Function: " + FunctionCode + "\n" +
-                   "Response: " + ResponseMessage + "\n" +
-                   "Commerce Code: " + CommerceCode + "\n" +
-                   "Terminal Id: " + TerminalId + "\n" +
-                   "Ticket: " + Ticket + "\n" +
-                   "AuthorizationCode Code: " + AuthorizationCode + "\n" +
-                   "Amount: " + Amount + "\n" +
-                   "Shares Number: " + SharesNumber + "\n" +
-                   "Shares Amount: " + SharesAmount + "\n" +
-                   "Last 4 Digits: " + Last4Digits + "\n" +
-                   "Operation Number: " + OperationNumber + "\n" +
-                   "Card Type: " + CardType + "\n" +
-                   "Accounting Date: " + formatedAccountingDate + "\n" +
-                   "Account Number: " + AccountNumber + "\n" +
-                   "Card Brand: " + CardBrand + "\n" +
-                   "Real Date: " + formatedRealDate + "\n" +
-                   "Employee Id: " + EmployeeId + "\n" +
-                   "Tip: " + Tip + "\n" +
+            return base.ToString() + "\n" +
                    "Change: " + Change + "\n" +
                    "Commerce Provider Code: " + CommerceProviderCode;
         }

@@ -199,10 +199,7 @@ namespace Transbank.POS.Responses
         {
             string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
-            return "Function: " + FunctionCode + "\n" +
-                   "Response: " + ResponseMessage + "\n" +
-                   "Commerce Code: " + CommerceCode + "\n" +
-                   "Terminal Id: " + TerminalId + "\n" +
+            return base.ToString() + "\n" +
                    "Ticket: " + Ticket + "\n" +
                    "AuthorizationCode Code: " + AuthorizationCode + "\n" +
                    "Amount: " + Amount + "\n" +
