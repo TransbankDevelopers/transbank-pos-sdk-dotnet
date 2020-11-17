@@ -203,6 +203,26 @@ namespace Transbank.POS
             return details;
         }
 
+        public List<MultiCodeDetailResponse> MultiCodeDetails(bool printOnPOS = true)
+        {
+            string message = $"0260|{Convert.ToInt32(!printOnPOS)}|";
+            List<MultiCodeDetailResponse> details = new List<MultiCodeDetailResponse>();
+            try
+            {
+                WriteData(MessageWithLRC(message), printOnPOS: printOnPOS, saleDetail: true).Wait();
+
+                foreach (string sale in SaleDetail)
+                {
+                    details.Add(new MultiCodeDetailResponse(sale));
+                }
+            }
+            catch (Exception e)
+            {
+                throw new TransbankMultiCodeDetailException("Unabel to request sale detail on pos", e);
+            }
+            return details;
+        }
+
         public CloseResponse Close()
         {
             try
