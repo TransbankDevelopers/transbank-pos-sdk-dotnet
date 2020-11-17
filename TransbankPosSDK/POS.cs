@@ -140,6 +140,21 @@ namespace Transbank.POS
             }
         }
 
+        public MultiCodeLastSaleResponse MultiCodeLastSale(bool getVoucherInfo)
+        {
+            try
+            {
+                string message = $"0280|{Convert.ToInt32(getVoucherInfo)}";
+                WriteData(MessageWithLRC(message)).Wait();
+                return new MultiCodeLastSaleResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankMultiCodeLastSaleException($"Unable to recover last sale from pos", e);
+            }
+        }
+
+
         public RefundResponse Refund(int operationID)
         {
             string message = $"1200|{operationID}|";
@@ -174,7 +189,6 @@ namespace Transbank.POS
             List<DetailResponse> details = new List<DetailResponse>();
             try
             {
-               
                 WriteData(MessageWithLRC(message), printOnPOS: printOnPOS, saleDetail: true).Wait();
 
                 foreach (string sale in SaleDetail)
@@ -276,7 +290,7 @@ namespace Transbank.POS
                 throw new TransbankException($"Unable to send message to {Port.PortName}");
             }
             Port.Write(payload);
-            Task<bool> ack = ReadAck(new CancellationTokenSource(2000).Token);
+            Task<bool> ack = ReadAck(new CancellationTokenSource(_defaultTimeout).Token);
             _ = await ack;
             if (ack.Result)
             {
