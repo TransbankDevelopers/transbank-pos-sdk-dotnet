@@ -139,7 +139,7 @@ Agradecimientos especiales a quienes nos ayudan a mejorar esta libreria.
 <table>
   <tr>
     <td align="center">
-      💻 <br> Codigo
+      💻 <br> Código
     </td>
     <td align="center">
       📖 <br> Documentación
