@@ -126,7 +126,7 @@ Linea de Comandos:
 
 ## Contribuciones ✨
 
-Agradecimientos especiales a quienes nos ayudan a mejorar esta libreria.
+Agradecimientos especiales a quienes nos ayudan a mejorar esta librería.
 
 <table>
   <tr>
