@@ -1,31 +1,43 @@
-﻿using Transbank.POS.Utils;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Transbank.POS.Responses
 {
-    public class RefundResponse
+    public class RefundResponse : LoadKeysResponse
     {
-        public RefundCResponse Response { get; }
-
-        public int FunctionCode => Response.function;
-        public int ResponseCode => Response.responseCode;
-        public long CommerceCode => Response.commerceCode;
-        public string TerminalId => Response.terminalId;
-        public string AuthorizationCode => Response.authorizationCode;
-        public int OperationID => Response.operationID;
-        public int Initialized => Response.initilized;
-
-        public string ResponseMessage => ResponseCodes.Map[Response.responseCode];
-        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
-
-        public RefundResponse(RefundCResponse cresponse)
+        private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
-            Response = cresponse;
+            { "AuthorizationCode", 4},
+            { "OperationID", 5 }
+        };
+
+        public string AuthorizationCode
+        {
+            get
+            {
+                try
+                {
+                    return Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
+                }
+                catch (IndexOutOfRangeException) {
+                    return "";
+                }
+            }
         }
+        public int OperationID
+        {
+            get
+            {
+                _ = int.TryParse(Response.Split('|')[ParameterMap["OperationID"]].Trim(), out int operationID);
+                return operationID;
+            }
+        }
+
+        public RefundResponse(string response) : base(response) { }
 
         public override string ToString()
         {
-            return "Function: " + FunctionCode + "\n" +
-                   "Response: " + ResponseMessage + "\n" +
+            return base.ToString() + "\n" +
                    "AuthorizationCode: " + AuthorizationCode + "\n" +
                    "OperationID: " + OperationID;
         }

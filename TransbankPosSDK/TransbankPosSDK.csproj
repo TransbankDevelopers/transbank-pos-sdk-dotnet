@@ -8,18 +8,18 @@
     <StartupObject />
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>TransbankPosSDK</PackageId>
-    <Description>This is the .Net SDK for Transbank's Verifone VX520 and VX520c POS Integration.</Description>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/TransbankDevelopers/transbank-pos-sdk-dotnet/master/LICENSE.md</PackageLicenseUrl>
+    <Description>This is the .Net SDK for Transbank's Verifone VX520, VX520c and Ingenico DESK 3500 POS.</Description>
+    <License>LICENSE.md</License>
     <PackageProjectUrl>http://www.transbankdevelopers.cl/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TransbankDevelopers/transbank-pos-sdk-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageTags>payments, cl, chile, transbank, POS, Verifone, vx520, vx520c, integrated payment,</PackageTags>
-    <PackageIconUrl>https://www.transbankdevelopers.cl//favicon.ico</PackageIconUrl>
-    <VersionPrefix>2.1.2</VersionPrefix>
+    <PackageIcon>favicon.png</PackageIcon>
+    <VersionPrefix>2.3.0</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Product>TransbankPOSSDK</Product>
-    <Copyright>2019 - Transbank</Copyright>
+    <Copyright>2020 - Transbank</Copyright>
     <RootNamespace>Transbank.POS</RootNamespace>
     <Company>Transbank</Company>
     <Authors>Transbank</Authors>
@@ -38,11 +38,20 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
+  
+  <PropertyGroup>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+  </PropertyGroup>
+    
   <ItemGroup>
-    <PackageReference Include="MQTTnet" Version="3.0.8" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="TransbankSDK" Version="2.4.0" />
+    <PackageReference Include="System.IO.Ports" Version="4.7.0" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="..\favicon.png" Pack="true" PackagePath="">
+      <Link>favicon.png</Link>
+    </None>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="LICENSE.md">
+      <Link>LICENSE.md</Link>
+    </None>
+  </ItemGroup>
 </Project>

@@ -3,13 +3,11 @@ using Transbank.POS.Responses;
 
 namespace Transbank.POS.Exceptions
 {
-    public class TransbankGetTotalsException : TransbankException
+    [Obsolete("This class is not longe used, Please use TransbankTotalsException instead", error: false)]
+    public class TransbankGetTotalsException : TransbankTotalsException
     {
-        public TotalsResponse GetTotalsResponse;
+        public TransbankGetTotalsException(string message, TotalsResponse response) : base(message, response) { }
 
-        public TransbankGetTotalsException(string message, TotalsResponse response) : base(message)
-        {
-            GetTotalsResponse = response;
-        }
+        public TransbankGetTotalsException(string message, Exception inner) : base(message, inner) { }
     }
 }

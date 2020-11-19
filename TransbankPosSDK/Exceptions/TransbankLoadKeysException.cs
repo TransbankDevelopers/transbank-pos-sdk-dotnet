@@ -11,5 +11,7 @@ namespace Transbank.POS.Exceptions
         {
             LoadKeyResponse = response;
         }
+
+        public TransbankLoadKeysException(string message, Exception inner) : base(message, inner) { }
     }
 }

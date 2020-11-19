@@ -123,3 +123,48 @@ Linea de Comandos:
   ```bash
   dotnet.exe nuget push TransbankPosSDK/bin/Release/TransbankPosSDK.<version>.nupkg -k <APIKEY> -s https://api.nuget.org/v3/index.json
   ```
+
+## Contribuciones ✨
+
+Agradecimientos especiales a quienes nos ayudan a mejorar esta librería.
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/DarkFrostnight"><img src="https://avatars.githubusercontent.com/u/36648048?v=4" width="100px;" alt=""/><br /><sub><b>Mauricio Astudillo</b></sub></a><br /><a href="#bugs-DarkFrostnight" title="Reportar Bugs">🐛</a> <a href="userTest-DarkFrostnight" title="Pruebas de Usuario">📓</a> <a href="ideas-DarkFrostnight" title="Nuevas Ideas">🤔</a>
+    </td>
+  </tr>
+</table>
+
+### Simbología
+<table>
+  <tr>
+    <td align="center">
+      💻 <br> Código
+    </td>
+    <td align="center">
+      📖 <br> Documentación
+    </td>
+       <td align="center">
+      💡 <br> Ejemplos
+    </td>
+    </td>
+       <td align="center">
+      🤔 <br> Ideas
+    </td>
+  </tr>
+    <tr>
+    <td align="center">
+      💬 <br> Preguntas
+    </td>
+    <td align="center">
+      📓 <br> Pruebas de usuario
+    </td>
+       <td align="center">
+      🐛 <br> Reporte de bugs
+    </td>
+    </td>
+       <td align="center">
+      👀 <br> Reviews
+    </td>
+  </tr>
+</table>

@@ -11,5 +11,7 @@ namespace Transbank.POS.Exceptions
         {
             LastSaleResponse = response;
         }
+
+        public TransbankLastSaleException(string message, Exception inner) : base(message, inner) { }
     }
 }

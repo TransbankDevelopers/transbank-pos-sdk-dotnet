@@ -7,10 +7,9 @@ cache:
   - '%LocalAppData%\NuGet\Cache'    # NuGet < v3
   - '%LocalAppData%\NuGet\v3-cache' # NuGet v3
 before_build:
-- cmd: msbuild -t:restore
+- cmd: nuget restore
 build:
-  verbosity: normal
-platform: x64
+  verbosity: minimal
 configuration: Release
 before_deploy:
   - ps: '.\scripts\appveyor-before-deploy.ps1'
@@ -20,6 +19,7 @@ deploy:
       secure: gig6Cz+gPK+bdR2vEl/c/vgguBuPANzPo6Jx3bmiu9u1EIO5H6rwiC1rX9mrQeJ4
     on:
       branch: master
+
 notifications:
   - provider: Slack
     incoming_webhook:

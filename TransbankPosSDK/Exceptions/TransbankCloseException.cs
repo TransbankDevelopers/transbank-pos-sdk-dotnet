@@ -11,5 +11,9 @@ namespace Transbank.POS.Exceptions
         {
             RegisterCloseResponse = response;
         }
+
+        public TransbankCloseException(string message, Exception inner) : base(message, inner) { }
+
+        public TransbankCloseException(string message) : base(message) { }
     }
 }
