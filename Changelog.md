@@ -5,6 +5,27 @@ Todos los cambios notables a este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2020-11-19
+
+Se elimina el uso de las antiguas librerias en C, en favor de una libreria nativa de C# que mantiene la compatibilidad multiplataforma.
+
+### Added
+
+- Soporte para nuevos equipos Ingenico Desk3500.
+- Soporte para venta multi codigo en el metodo `MultiCodeSale`.
+  - Nuevo objeto de respuesta `MultiCodeDetails`.
+  - Nueva excepción `TransbankMultiCodeSaleException`.
+- Soporte para rescatar la ultima venta multicodigo en el metodo `MultiCodeLastSale`.
+  - Nuevo objeto de respuesta `MultiCodeLastSaleResponse`.
+  - Nueva excepción `TransbankMultiCodeLastSaleException`.
+- Soporte para rescatar el detalle de ventas multicodigo en el metodo `MultiCodeDetails`.
+  - Nuevo objeto de respuesta `MultiCodeDetailResponse`.
+  - Nueva excepción `TransbankMultiCodeDetailException`.
+
+### Changed
+
+- Se elimina la dependecia del Wrapper en C y de Libserialport, reemplazandola por el uso de la libreria Nuget `System.IO.Ports`.
+
 ## [2.1.2] - 2020-03-24
 
 ### Fix
