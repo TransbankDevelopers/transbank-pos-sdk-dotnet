@@ -135,7 +135,7 @@ Agradecimientos especiales a quienes nos ayudan a mejorar esta libreria.
   </tr>
 </table>
 
-### Simbologia
+### Simbología
 <table>
   <tr>
     <td align="center">
