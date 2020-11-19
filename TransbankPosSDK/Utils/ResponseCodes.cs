@@ -26,7 +26,7 @@ namespace Transbank.POS.Utils
             {17, "Error en los 4 últimos dígitos."},
             {18, "Menú invalido"},
             {19, "ERROR_TARJ_DIST"},
-            {20, "Tarjeta invalida"},
+            {20, "Tarjeta inválida"},
             {21, "Anulación no permitida"},
             {22, "TIMEOUT"},
             {24, "Impresora sin papel"},
