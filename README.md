@@ -3,7 +3,11 @@
 
 # Transbank POS .Net SDK
 
-SDK Oficial de Transbank para comunicarse con POS Verifone vx520 y vx520c
+SDK Oficial de Transbank para comunicarse con equipos POS Integrado:
+
+- Verifone vx520
+- Verifone vx520c
+- Ingeniko Desk3500
 
 ## Requisitos
 
@@ -13,10 +17,8 @@ SDK Oficial de Transbank para comunicarse con POS Verifone vx520 y vx520c
 
 ## Dependencias
 
-- [libSerialPort](https://sigrok.org/wiki/Libserialport)
-  - Puedes encontrar más información en [TransbankDevelopers](https://transbankdevelopers.cl/documentacion/posintegrado#libserialport)
-- [TransbankWrap](https://github.com/TransbankDevelopers/transbank-pos-sdk-c)
-  - Es un Wrapper de la librería en C para comunicarse con los POS.
+- [System.IO.Ports](https://www.nuget.org/packages/System.IO.Ports/)
+  - Esta dependencia se instala automaticamente al usar NuGet, puedes encontrar más información en [el sitio del proyecto](https://github.com/dotnet/runtime)
 
 ## Instalación
 
@@ -37,7 +39,7 @@ PM> Install-Package TransbankPosSDK
 #### Instalar con .Net CLI
 
 ```bash
-dotnet add package TransbankSDK -v 2.1.0
+dotnet add package TransbankSDK -v 2.3.0
 ```
 
 ### Desde Visual Studio
@@ -45,9 +47,8 @@ dotnet add package TransbankSDK -v 2.1.0
 1. Abrir el explorador de soluciones.
 2. Clic derecho en un proyecto dentro de tu solución.
 3. Clic en Administrar paquetes NuGet.
-4. Clic en la pestaña Examinar y marca el recuadro `Incluir PreReleases`
-5. Buscar el paquete `TransbankPosSDK`.
-6. Selecciona la versión que deseas utilizar y finalmente selecciona instalar.
+4. Buscar el paquete `TransbankPosSDK`.
+5. Selecciona la versión que deseas utilizar y finalmente selecciona instalar.
 
 ## Documentación
 
@@ -97,32 +98,19 @@ La documentación relevante para usar este SDK es:
     dotnet build
     ```
 
-### Generar una nueva versión
+## Generar una nueva versión (con deploy automático a NuGet)
 
-Para generar una nueva versión, se debe abrir un nuevo Pull Request, seguir la Guía de [SemVer](https://semver.org/) y empaquetar el artefacto NuGet:
+Para generar una nueva versión, se debe crear un PR (con un título "Prepare release X.Y.Z" con los valores que correspondan para `X`, `Y` y `Z`). Se debe seguir el estándar semver para determinar si se incrementa el valor de `X` (si hay cambios no retrocompatibles), `Y` (para mejoras retrocompatibles) o `Z` (si sólo hubo correcciones a bugs).
 
-1. Cambiar la configuración de la solución a Release.
-2. Actualizar el numero de version.
-3. Actualizar el Changelog con los cambios de la nueva version.
-4. Click derecho sobre el proyecto.
-5. Empaquetar.
+En ese PR deben incluirse los siguientes cambios:
 
-Los pasos anteriores generaran un nuevo artefacto NuGet correspondiente a la versión modificada en la configuración.
-Luego de generar esta nueva version, y mezclar el Pull Request con los cambios, es necesario la publicación manual en NugGet.
+1. Modificar al archivo `README.md` para que los ejemplos de instalación apunten a la ultima versión que se publicara.
+2. Modificar el archivo `CHANGELOG.md` para incluir una nueva entrada (al comienzo) para `X.Y.Z` que explique en español los cambios **de cara al usuario del SDK**.
+3. Modificar [TransbankPosSDK.csproj](./TransbankPosSDK/TransbankPosSDK.csproj) para que <`VersionPrefix`> sea `X.Y.{Z+1}` (de manera que los pre-releases que se generen después del release sean de la siguiente versión).
 
-Web de [Nuget.org](https://www.nuget.org):
+Luego de obtener aprobación del pull request, debe mezclarse a master e inmediatamente generar un release en GitHub con el tag `vX.Y.Z`. En la descripción del release debes poner lo mismo que agregaste al changelog.
 
-- Login en [Nuget.org](https://www.nuget.org)
-- Upload
-- Subir el artefacto NuGet generado anteriormente.
-
-Linea de Comandos:
-
-- Contar con ApiKey para poder subir el artefacto:
-
-  ```bash
-  dotnet.exe nuget push TransbankPosSDK/bin/Release/TransbankPosSDK.<version>.nupkg -k <APIKEY> -s https://api.nuget.org/v3/index.json
-  ```
+Con eso Appveyor generará automáticamente una nueva versión de la librería y la publicará en NuGet.
 
 ## Contribuciones ✨
 
