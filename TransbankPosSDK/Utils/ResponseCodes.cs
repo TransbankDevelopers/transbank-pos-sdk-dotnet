@@ -30,7 +30,7 @@ namespace Transbank.POS.Utils
             {21, "Anulación no permitida"},
             {22, "TIMEOUT"},
             {24, "Impresora sin papel"},
-            {25, "Fecha invalida"},
+            {25, "Fecha inválida"},
             {26, "Debe cargar llaves"},
             {27, "Debe actualizar"},
             {54, "Rechazado" },
