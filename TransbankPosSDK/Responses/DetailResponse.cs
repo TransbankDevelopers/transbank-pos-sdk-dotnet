@@ -158,8 +158,8 @@ namespace Transbank.POS.Responses
 
         public override string ToString()
         {
-            string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
-            string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string formattedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string formattedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             return "Function: " + FunctionCode + "\n" +
                    "Response: " + ResponseMessage + "\n" +
                    "Commerce Code: " + CommerceCode + "\n" +
@@ -172,10 +172,10 @@ namespace Transbank.POS.Responses
                    "Last 4 Digits: " + Last4Digits + "\n" +
                    "Operation Number: " + OperationNumber + "\n" +
                    "Card Type: " + CardType + "\n" +
-                   "Accounting Date: " + formatedAccountingDate + "\n" +
+                   "Accounting Date: " + formattedAccountingDate + "\n" +
                    "Account Number: " + AccountNumber + "\n" +
                    "Card Brand: " + CardBrand + "\n" +
-                   "Real Date: " + formatedRealDate + "\n" +
+                   "Real Date: " + formattedRealDate + "\n" +
                    "Employee Id: " + EmployeeId + "\n" +
                    "Tip: " + Tip;
         }
