@@ -5,6 +5,14 @@ Todos los cambios notables a este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2021-03-24
+
+Se soluciona problema que producía que la aplicación dejara de responder al momento de realizar una operación.
+
+### Fix
+
+- Bug al realizar la lectura del puerto serie, provocando que la aplicación dejara de responder.
+
 ## [2.3.0] - 2020-11-19
 
 Se elimina el uso de las antiguas librerias en C, en favor de una libreria nativa de C# que mantiene la compatibilidad multiplataforma.
