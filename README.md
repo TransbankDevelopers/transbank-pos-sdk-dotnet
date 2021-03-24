@@ -39,7 +39,7 @@ PM> Install-Package TransbankPosSDK
 #### Instalar con .Net CLI
 
 ```bash
-dotnet add package TransbankSDK -v 2.3.0
+dotnet add package TransbankSDK -v 2.3.1
 ```
 
 ### Desde Visual Studio
