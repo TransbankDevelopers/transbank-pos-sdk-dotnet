@@ -19,7 +19,7 @@
     <VersionPrefix>2.3.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Product>TransbankPOSSDK</Product>
-    <Copyright>2020 - Transbank</Copyright>
+    <Copyright>2021 - Transbank</Copyright>
     <RootNamespace>Transbank.POS</RootNamespace>
     <Company>Transbank</Company>
     <Authors>Transbank</Authors>
