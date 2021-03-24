@@ -11,6 +11,7 @@ namespace Transbank.POS
 {
     public class POS
     {
+        private static readonly byte ACK = 0x06;
         private static readonly int _defaultTimeout = 150000;
         private string _currentResponse;
         public event EventHandler<IntermediateResponse> IntermediateResponseChange;
@@ -259,10 +260,11 @@ namespace Transbank.POS
                 throw new TransbankException($"Unable to Poll port {Port.PortName} is closed");
             }
             try
-            {
+            {              
+                byte[] buffer = new byte[1];
                 Port.Write("0100");
-                string response = ((char)Port.ReadByte()).ToString();
-                return response.Equals("");
+                Instance.Port.BaseStream.ReadAsync(buffer, 0, 1).Wait();
+                return buffer[0] == ACK;
             }
             catch (Exception e)
             {
@@ -281,17 +283,10 @@ namespace Transbank.POS
             }
             try
             {
+                byte[] buffer = new byte[1];
                 Port.Write("0300\0");
-                string response = ((char)Port.ReadByte()).ToString();
-                if (response.Equals(""))
-                {
-                    ClosePort();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                Instance.Port.BaseStream.ReadAsync(buffer, 0, 1).Wait();
+                return buffer[0] == ACK;
             }
             catch (Exception e)
             {
@@ -310,9 +305,9 @@ namespace Transbank.POS
                 throw new TransbankException($"Unable to send message to {Port.PortName}");
             }
             Port.Write(payload);
-            Task<bool> ack = ReadAck(new CancellationTokenSource(_defaultTimeout).Token);
-            _ = await ack;
-            if (ack.Result)
+            bool ack = ReadAck(new CancellationTokenSource(_defaultTimeout).Token);
+            
+            if (ack)
             {
                 Console.WriteLine("Read ACK OK");
                 if (intermediateMessages)
@@ -396,7 +391,7 @@ namespace Transbank.POS
             Console.WriteLine(CurrentResponse);
         }
 
-        private async Task<bool> ReadAck(CancellationToken token)
+        private bool ReadAck(CancellationToken token)
         {
             while (!token.IsCancellationRequested && Port.BytesToRead <= 0)
             {
@@ -406,8 +401,8 @@ namespace Transbank.POS
                 throw new TransbankException($"Read operation Timeout");
             }
             byte[] result = new byte[1];
-            _ = await Instance.Port.BaseStream.ReadAsync(result, 0, 1, token);
-            return Encoding.ASCII.GetString(result).Equals("");
+            Instance.Port.BaseStream.ReadAsync(result, 0, 1, token).Wait();
+            return result[0] == ACK;
         }
 
         private bool CantWrite() => Port == null || !Port.IsOpen;
