@@ -17,12 +17,6 @@ namespace Transbank.POSAutoservicio
 
         public static POSAutoservicio Instance { get; } = new POSAutoservicio();
 
-        private void DiscardBuffer()
-        {
-            Port.DiscardInBuffer();
-            Port.DiscardOutBuffer();
-        }
-
         public bool Poll()
         {
             DiscardBuffer();
@@ -45,5 +39,17 @@ namespace Transbank.POSAutoservicio
             }
         }
 
+        public LoadKeysResponse LoadKeys()
+        {
+            try
+            {
+                WriteData("0800").Wait();
+                return new LoadKeysResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankLoadKeysException("Unable to execute Load Keys in pos", e);
+            }
+        }
     }
 }
