@@ -51,6 +51,12 @@ namespace Transbank.POS.Utils
             IntermediateResponseChange?.Invoke(this, new IntermediateResponse(message));
         }
 
+        protected void DiscardBuffer()
+        {
+            Port.DiscardInBuffer();
+            Port.DiscardOutBuffer();
+        }
+
         public void OpenPort(string portName, int baudrate = 115200)
         {
             if (Port != null && Port.IsOpen) ClosePort();
@@ -59,8 +65,7 @@ namespace Transbank.POS.Utils
                 Port = new SerialPort(portName, baudrate, Parity.None, 8, StopBits.One);
                 Port.Open();
                 ReadTimeout = DEFAULT_TIMEOUT;
-                Port.DiscardInBuffer();
-                Port.DiscardOutBuffer();
+                DiscardBuffer();
             }
             catch (Exception e)
             {
@@ -73,8 +78,7 @@ namespace Transbank.POS.Utils
             if (!Port.IsOpen) return;
             try
             {
-                Port.DiscardInBuffer();
-                Port.DiscardOutBuffer();
+                DiscardBuffer();
                 Port.Close();
             }
             catch (Exception e)
@@ -89,8 +93,7 @@ namespace Transbank.POS.Utils
 
         protected async Task WriteData(string payload, bool intermediateMessages = false, bool saleDetail = false, bool printOnPOS = true)
         {
-            Port.DiscardInBuffer();
-            Port.DiscardOutBuffer();
+            DiscardBuffer();
 
             CurrentResponse = "";
             if (CantWrite())
