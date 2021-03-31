@@ -23,6 +23,7 @@
     <RootNamespace>Transbank.POS</RootNamespace>
     <Company>Transbank</Company>
     <Authors>Transbank</Authors>
+    <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -53,5 +54,9 @@
     <None Include="..\LICENSE.md" Pack="true" PackagePath="LICENSE.md">
       <Link>LICENSE.md</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CommonResponses\" />
+    <Folder Include="CommonExceptions\" />
   </ItemGroup>
 </Project>
