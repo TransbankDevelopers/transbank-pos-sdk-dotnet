@@ -1,4 +1,4 @@
-﻿namespace Transbank.POS.Responses
+﻿namespace Transbank.POS.IntegradoResponses
 {
     public class LastSaleResponse : SaleResponse
     {

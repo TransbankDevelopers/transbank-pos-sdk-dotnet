@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Collections.Generic;
 
-namespace Transbank.POS.Responses
+namespace Transbank.POS.IntegradoResponses
 {
-    public class SaleResponse : LoadKeysResponse
+    public class SaleResponse : CommonResponses.LoadKeysResponse
     {
         protected Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {

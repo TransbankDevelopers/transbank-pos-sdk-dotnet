@@ -1,7 +1,7 @@
 ﻿using System;
-using Transbank.POS.Responses;
+using Transbank.POS.IntegradoResponses;
 
-namespace Transbank.POS.Exceptions
+namespace Transbank.POS.IntegradoExceptions
 {
     public class TransbankMultiCodeSaleException : TransbankSaleException
     {

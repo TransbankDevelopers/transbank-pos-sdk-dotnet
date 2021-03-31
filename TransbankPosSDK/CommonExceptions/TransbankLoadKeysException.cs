@@ -1,7 +1,7 @@
 ﻿using System;
-using Transbank.POS.Responses;
+using Transbank.POS.CommonResponses;
 
-namespace Transbank.POS.Exceptions
+namespace Transbank.POS.CommonExceptions
 {
     public class TransbankLoadKeysException : TransbankException
     {

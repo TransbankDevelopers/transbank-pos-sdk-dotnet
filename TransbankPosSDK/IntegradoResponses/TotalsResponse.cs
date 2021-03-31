@@ -1,9 +1,9 @@
 ﻿using Transbank.POS.Utils;
 using System.Collections.Generic;
 
-namespace Transbank.POS.Responses
+namespace Transbank.POS.IntegradoResponses
 {
-    public class TotalsResponse : BasicResponse
+    public class TotalsResponse : CommonResponses.BasicResponse
     {
         private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {

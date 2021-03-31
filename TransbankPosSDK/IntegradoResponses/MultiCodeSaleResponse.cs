@@ -1,15 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Globalization;
+using System.Collections.Generic;
 
-namespace Transbank.POS.Responses
+namespace Transbank.POS.IntegradoResponses
 {
-    public class MultiCodeDetailResponse : SaleResponse
+    public class MultiCodeSaleResponse : SaleResponse
     {
         protected new readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
-            { "Change", 19},
-            { "CommerceProviderCode", 20}
+            { "Filler", 19},
+            { "Change", 20},
+            { "CommerceProviderCode", 21 }
         };
 
+        public string Filler
+        {
+            get
+            {
+                try
+                {
+                    return Response.Split('|')[ParameterMap["Filler"]].Trim();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return "";
+                }
+            }
+        }
         public int Change
         {
             get
@@ -27,7 +44,7 @@ namespace Transbank.POS.Responses
             }
         }
 
-        public MultiCodeDetailResponse(string detail) : base(detail) { }
+        public MultiCodeSaleResponse(string response) : base(response) { }
 
         public override string ToString()
         {
