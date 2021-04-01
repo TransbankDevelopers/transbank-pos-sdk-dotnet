@@ -100,6 +100,9 @@ namespace Transbank.POS.Utils
             {
                 throw new TransbankException($"Unable to send message to {Port.PortName}");
             }
+
+            Console.WriteLine($"Out: {ToHexString(payload)}");
+
             Port.Write(payload);
             bool ack = ReadAck(new CancellationTokenSource(_timeout).Token);
 
