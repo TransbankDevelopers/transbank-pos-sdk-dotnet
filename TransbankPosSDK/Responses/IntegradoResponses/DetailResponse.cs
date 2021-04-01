@@ -1,83 +1,30 @@
 ﻿using System;
-using System.Globalization;
 using System.Collections.Generic;
+using System.Globalization;
 
-namespace Transbank.POS.IntegradoResponses
+namespace Transbank.POS.Responses.IntegradoResponses
 {
-    public class SaleResponse : CommonResponses.LoadKeysResponse
+    public class DetailResponse : SaleResponse
     {
-        protected Dictionary<string, int> ParameterMap = new Dictionary<string, int>
+        protected new readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
-            { "Ticket", 4},
-            { "AuthorizationCode", 5},
-            { "Amount", 6},
-            { "SharesNumber", 7},
-            { "SharesAmount", 8},
-            { "Last4Digits", 9},
-            { "OperationNumber", 10},
-            { "CardType", 11},
-            { "AccountingDate", 12},
-            { "AccountNumber", 13},
-            { "CardBrand", 14},
-            { "RealDate", 15},
-            { "RealTime", 16},
-            { "EmployeeId", 17},
-            { "Tip", 18}
+            { "Last4Digits", 7 },
+            { "OperationNumber", 8 },
+            { "CardType", 9 },
+            { "AccountingDate", 10 },
+            { "AccountNumber", 11 },
+            { "CardBrand", 12 },
+            { "RealDate", 13 },
+            { "RealTime", 14 },
+            { "EmployeeId", 15 },
+            { "Tip", 16 },
+            { "SharesAmount", 17 },
+            { "SharesNumber", 18 }
         };
 
-        public string Ticket
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["Ticket"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public string AuthorizationCode
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public int Amount
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["Amount"]].Trim(), out int amount);
-                return amount;
-            }
-        }
-        public int SharesNumber
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["SharesNumber"]].Trim(), out int SharesNumber);
-                return SharesNumber;
-            }
-        }
-        public int SharesAmount
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["SharesAmount"]].Trim(), out int sharesAmount);
-                return sharesAmount;
-            }
-        }
-        public int Last4Digits
+        public DetailResponse(string detail) : base(detail) { }
+
+        public new int Last4Digits
         {
             get
             {
@@ -85,7 +32,7 @@ namespace Transbank.POS.IntegradoResponses
                 return last4Digits;
             }
         }
-        public int OperationNumber
+        public new int OperationNumber
         {
             get
             {
@@ -93,7 +40,7 @@ namespace Transbank.POS.IntegradoResponses
                 return operationNumber;
             }
         }
-        public string CardType
+        public new string CardType
         {
             get
             {
@@ -107,7 +54,7 @@ namespace Transbank.POS.IntegradoResponses
                 }
             }
         }
-        public DateTime? AccountingDate
+        public new DateTime? AccountingDate
         {
             get
             {
@@ -126,7 +73,7 @@ namespace Transbank.POS.IntegradoResponses
                 return null;
             }
         }
-        public string AccountNumber
+        public new string AccountNumber
         {
             get
             {
@@ -140,7 +87,7 @@ namespace Transbank.POS.IntegradoResponses
                 }
             }
         }
-        public string CardBrand
+        public new string CardBrand
         {
             get
             {
@@ -154,7 +101,7 @@ namespace Transbank.POS.IntegradoResponses
                 }
             }
         }
-        public DateTime? RealDate
+        public new DateTime? RealDate
         {
             get
             {
@@ -176,7 +123,7 @@ namespace Transbank.POS.IntegradoResponses
                 return null;
             }
         }
-        public int EmployeeId
+        public new int EmployeeId
         {
             get
             {
@@ -184,7 +131,7 @@ namespace Transbank.POS.IntegradoResponses
                 return employeeId;
             }
         }
-        public int Tip
+        public new int Tip
         {
             get
             {
@@ -192,14 +139,31 @@ namespace Transbank.POS.IntegradoResponses
                 return tip;
             }
         }
-
-        public SaleResponse(string response) : base(response) { }
+        public new int SharesAmount
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["SharesAmount"]].Trim(), out int sharesAmount);
+                return sharesAmount;
+            }
+        }
+        public new int SharesNumber
+        {
+            get
+            {
+                int.TryParse(Response.Split('|')[ParameterMap["SharesNumber"]].Trim(), out int SharesNumber);
+                return SharesNumber;
+            }
+        }
 
         public override string ToString()
         {
-            string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
-            string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
-            return base.ToString() + "\n" +
+            string formattedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string formattedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            return "Function: " + FunctionCode + "\n" +
+                   "Response: " + ResponseMessage + "\n" +
+                   "Commerce Code: " + CommerceCode + "\n" +
+                   "Terminal Id: " + TerminalId + "\n" +
                    "Ticket: " + Ticket + "\n" +
                    "AuthorizationCode Code: " + AuthorizationCode + "\n" +
                    "Amount: " + Amount + "\n" +
@@ -208,12 +172,13 @@ namespace Transbank.POS.IntegradoResponses
                    "Last 4 Digits: " + Last4Digits + "\n" +
                    "Operation Number: " + OperationNumber + "\n" +
                    "Card Type: " + CardType + "\n" +
-                   "Accounting Date: " + formatedAccountingDate + "\n" +
+                   "Accounting Date: " + formattedAccountingDate + "\n" +
                    "Account Number: " + AccountNumber + "\n" +
                    "Card Brand: " + CardBrand + "\n" +
-                   "Real Date: " + formatedRealDate + "\n" +
+                   "Real Date: " + formattedRealDate + "\n" +
                    "Employee Id: " + EmployeeId + "\n" +
                    "Tip: " + Tip;
         }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Transbank.POS.IntegradoResponses
+﻿namespace Transbank.POS.Responses.IntegradoResponses
 {
     public class CloseResponse : CommonResponses.LoadKeysResponse
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace Transbank.POS.CommonResponses
+namespace Transbank.POS.Responses.CommonResponses
 {
     public class LoadKeysResponse : BasicResponse
     {

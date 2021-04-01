@@ -56,7 +56,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CommonResponses\" />
-    <Folder Include="CommonExceptions\" />
+    <Folder Include="Responses\CommonResponses\" />
+    <Folder Include="Exceptions\CommonExceptions\" />
   </ItemGroup>
 </Project>

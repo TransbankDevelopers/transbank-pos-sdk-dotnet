@@ -1,7 +1,7 @@
 ﻿using Transbank.POS.Utils;
 using System.Collections.Generic;
 
-namespace Transbank.POS.IntegradoResponses
+namespace Transbank.POS.Responses.IntegradoResponses
 {
     public class TotalsResponse : CommonResponses.BasicResponse
     {
