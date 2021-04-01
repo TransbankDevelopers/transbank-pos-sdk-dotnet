@@ -221,5 +221,10 @@ namespace Transbank.POS.Utils
             Console.WriteLine($"In: {string.Format("0:X2", ack)}");
             return ack == ACK;
         }
+
+        private string ToHexString(string text)
+        {
+            return BitConverter.ToString(Encoding.Default.GetBytes(text)).Replace('-', ' ');
+        }
     }
 }
