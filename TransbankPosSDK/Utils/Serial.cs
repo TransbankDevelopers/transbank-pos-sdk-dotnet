@@ -187,7 +187,7 @@ namespace Transbank.POS.Utils
             Port.ReadTo("");
             CurrentResponse = "" + Port.ReadTo("");
             Port.Write("");
-            Console.WriteLine(CurrentResponse);
+            Console.WriteLine($"In: {ToHexString(CurrentResponse)}");
         }
 
         private bool ReadAck(CancellationToken token)
