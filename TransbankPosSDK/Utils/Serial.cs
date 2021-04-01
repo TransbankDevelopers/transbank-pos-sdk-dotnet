@@ -215,5 +215,11 @@ namespace Transbank.POS.Utils
             }
             return (char)lrc;
         }
+
+        protected bool CheckACK(byte ack)
+        {
+            Console.WriteLine($"In: {string.Format("0:X2", ack)}");
+            return ack == ACK;
+        }
     }
 }
