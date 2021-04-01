@@ -201,7 +201,7 @@ namespace Transbank.POS.Utils
             }
             byte[] result = new byte[1];
             Port.BaseStream.ReadAsync(result, 0, 1, token).Wait();
-            return result[0] == ACK;
+            return CheckACK(result[0]);
         }
 
         protected string MessageWithLRC(string message)
