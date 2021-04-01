@@ -1,7 +1,7 @@
 ﻿using System;
-using Transbank.POS.IntegradoResponses;
+using Transbank.POS.Responses.IntegradoResponses;
 
-namespace Transbank.POS.IntegradoExceptions
+namespace Transbank.POS.Exceptions.IntegradoExceptions
 {
     [Obsolete("This class is not longe used, Please use TransbankTotalsException instead", error: false)]
     public class TransbankGetTotalsException : TransbankTotalsException

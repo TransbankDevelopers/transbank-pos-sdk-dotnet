@@ -1,10 +1,10 @@
 ﻿using System;
-using Transbank.POS.IntegradoResponses;
-using Transbank.POS.IntegradoExceptions;
+using Transbank.POS.Responses.IntegradoResponses;
+using Transbank.POS.Exceptions.IntegradoExceptions;
 using Transbank.POS.Utils;
 using System.Collections.Generic;
-using Transbank.POS.CommonResponses;
-using Transbank.POS.CommonExceptions;
+using Transbank.POS.Responses.CommonResponses;
+using Transbank.POS.Exceptions.CommonExceptions;
 
 namespace Transbank.POSIntegrado
 {
