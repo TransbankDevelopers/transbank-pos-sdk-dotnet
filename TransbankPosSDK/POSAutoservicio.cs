@@ -67,13 +67,13 @@ namespace Transbank.POSAutoservicio
             try
             {
                 byte[] buffer = new byte[1];
-                string command = "0070\x04";
+                string command = "0070";
 
-                Console.WriteLine($"Out: {BitConverter.ToString(Encoding.Default.GetBytes(command))}");
+                Console.WriteLine($"Out: {ToHexString(command)}");
 
                 Port.Write(command);
                 Port.BaseStream.ReadAsync(buffer, 0, 1).Wait();
-                return buffer[0] == ACK;
+                return CheckACK(buffer[0]);
             }
             catch (Exception e)
             {

@@ -221,11 +221,11 @@ namespace Transbank.POS.Utils
 
         protected bool CheckACK(byte ack)
         {
-            Console.WriteLine($"In: {string.Format("0:X2", ack)}");
+            Console.WriteLine($"In: {string.Format("{0:x2}", ack)}");
             return ack == ACK;
         }
 
-        private string ToHexString(string text)
+        protected string ToHexString(string text)
         {
             return BitConverter.ToString(Encoding.Default.GetBytes(text)).Replace('-', ' ');
         }
