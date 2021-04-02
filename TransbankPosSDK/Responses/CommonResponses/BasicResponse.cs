@@ -43,7 +43,7 @@ namespace Transbank.POS.Responses.CommonResponses
                 return responseCode;
             }
         }
-        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage);
+        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage) || ResponseCodes.Map[90].Equals(ResponseMessage);
 
         public BasicResponse(string response)
         {
