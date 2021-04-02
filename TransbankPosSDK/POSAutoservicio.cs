@@ -4,6 +4,7 @@ using Transbank.POS.Utils;
 using Transbank.POS.Exceptions.CommonExceptions;
 using System.Text;
 using Transbank.POS.Responses.CommonResponses;
+using Transbank.POS.Responses.AutoservicioResponse;
 
 namespace Transbank.POSAutoservicio
 {
@@ -76,6 +77,19 @@ namespace Transbank.POSAutoservicio
             catch (Exception e)
             {
                 throw new TransbankException($"Unable to send Initialization command on port {Port.PortName}", e);
+            }
+        }
+
+        public InitializationResponse InitializationResponse()
+        {
+            try
+            {
+                WriteData("0080\x0B").Wait();
+                return new InitializationResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankLoadKeysException("Unable to execute Load Keys in pos", e);
             }
         }
     }

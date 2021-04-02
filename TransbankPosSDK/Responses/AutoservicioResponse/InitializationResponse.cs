@@ -6,7 +6,7 @@ using Transbank.POS.Responses.CommonResponses;
 
 namespace Transbank.POS.Responses.AutoservicioResponse
 {
-    class InitializationResponse : BasicResponse
+    public class InitializationResponse : BasicResponse
     {
         private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
@@ -43,6 +43,7 @@ namespace Transbank.POS.Responses.AutoservicioResponse
         {
             string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             return base.ToString() + "\n" +
+                   "Success?: " + Success + "\n" +
                    "Real Date: " + formatedRealDate;
         }
     }
