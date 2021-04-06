@@ -115,5 +115,28 @@ namespace Transbank.POSAutoservicio
                 throw new TransbankSaleException($"Unable to execute sale on pos", e);
             }
         }
+
+        public MultiCodeSaleResponse MultiCodeSale(int amount, string ticket, long commerceCode = 0, bool sendVoucher = false, bool sendStatus = false)
+        {
+            if (amount <= 0)
+            {
+                throw new TransbankMultiCodeSaleException("Amount must be greater than 0");
+            }
+            if (ticket.Length != 6)
+            {
+                throw new TransbankMultiCodeSaleException("Ticket must be 6 characters.");
+            }
+            string code = commerceCode != 0 ? commerceCode.ToString() : "";
+            string message = $"0270|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}|{code}";
+            try
+            {
+                WriteData(MessageWithLRC(message), intermediateMessages: sendStatus).Wait();
+                return new MultiCodeSaleResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankMultiCodeSaleException($"Unable to execute multicode sale on pos", e);
+            }
+        }
     }
 }
