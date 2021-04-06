@@ -16,8 +16,15 @@ namespace Transbank.POS.Responses.CommonResponses
         {
             get
             {
-                _ = long.TryParse(Response.Split('|')[ParameterMap["CommerceCode"]].Trim(), out long commerceCode);
-                return commerceCode;
+                try
+                {
+                    _ = long.TryParse(Response.Split('|')[ParameterMap["CommerceCode"]].Trim(), out long commerceCode);
+                    return commerceCode;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return -1;
+                }
             }
         }
         public string TerminalId
