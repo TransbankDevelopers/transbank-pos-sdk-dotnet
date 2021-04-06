@@ -5,6 +5,7 @@ using Transbank.POS.Exceptions.CommonExceptions;
 using System.Text;
 using Transbank.POS.Responses.CommonResponses;
 using Transbank.POS.Responses.AutoservicioResponse;
+using Transbank.POS.Exceptions.IntegradoExceptions;
 
 namespace Transbank.POSAutoservicio
 {
@@ -90,6 +91,28 @@ namespace Transbank.POSAutoservicio
             catch (Exception e)
             {
                 throw new TransbankLoadKeysException("Unable to execute Load Keys in pos", e);
+            }
+        }
+
+        public SaleResponse Sale(int amount, string ticket, bool sendVoucher = false, bool sendStatus = false)
+        {
+            if (amount <= 0)
+            {
+                throw new TransbankSaleException("Amount must be greater than 0");
+            }
+            if (ticket.Length != 6)
+            {
+                throw new TransbankSaleException("Ticket must be 6 characters.");
+            }
+            string message = $"0200|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}";
+            try
+            {
+                WriteData(MessageWithLRC(message), intermediateMessages: sendStatus).Wait();
+                return new SaleResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankSaleException($"Unable to execute sale on pos", e);
             }
         }
     }
