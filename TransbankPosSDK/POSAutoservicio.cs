@@ -138,5 +138,19 @@ namespace Transbank.POSAutoservicio
                 throw new TransbankMultiCodeSaleException($"Unable to execute multicode sale on pos", e);
             }
         }
+
+        public LastSaleResponse LastSale(bool sendVoucher = false)
+        {
+            try
+            {
+                string message = $"0250|{Convert.ToInt32(sendVoucher)}";
+                WriteData(MessageWithLRC(message)).Wait();
+                return new LastSaleResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankLastSaleException($"Unable to recover last sale from pos", e);
+            }
+        }
     }
 }
