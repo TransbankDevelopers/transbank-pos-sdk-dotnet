@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Transbank.POS.Responses.IntegradoResponses
+namespace Transbank.POS.Responses.CommonResponses
 {
     public class RefundResponse : CommonResponses.LoadKeysResponse
     {

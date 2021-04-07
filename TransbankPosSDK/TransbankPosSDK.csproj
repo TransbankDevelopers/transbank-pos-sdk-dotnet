@@ -55,8 +55,4 @@
       <Link>LICENSE.md</Link>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Responses\CommonResponses\" />
-    <Folder Include="Exceptions\CommonExceptions\" />
-  </ItemGroup>
 </Project>
