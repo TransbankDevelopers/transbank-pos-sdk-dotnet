@@ -152,5 +152,20 @@ namespace Transbank.POSAutoservicio
                 throw new TransbankLastSaleException($"Unable to recover last sale from pos", e);
             }
         }
+
+        public RefundResponse Refund()
+        {
+            string message = $"1200";
+
+            try
+            {
+                WriteData(MessageWithLRC(message)).Wait();
+                return new RefundResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankRefundException("Unable to make Refund on POS", e);
+            }
+        }
     }
 }
