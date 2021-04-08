@@ -167,5 +167,20 @@ namespace Transbank.POSAutoservicio
                 throw new TransbankRefundException("Unable to make Refund on POS", e);
             }
         }
+
+        public CloseResponse Close(bool sendVoucher)
+        {
+            string message = $"0500|{Convert.ToInt32(sendVoucher)}";
+
+            try
+            {          
+                WriteData(MessageWithLRC(message)).Wait();
+                return new CloseResponse(CurrentResponse);
+            }
+            catch (Exception e)
+            {
+                throw new TransbankCloseException("Unable to execute close in pos", e);
+            }
+        }
     }
 }
