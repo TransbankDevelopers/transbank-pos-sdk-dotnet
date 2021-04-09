@@ -113,8 +113,7 @@ namespace Transbank.POS.Utils
                 {
                     await ReadMessage(new CancellationTokenSource(_timeout).Token);
                     string responseCode = CurrentResponse.Substring(1).Split('|')[1];
-                    while (responseCode == "78" || responseCode == "79" ||
-                        responseCode == "80" || responseCode == "81" || responseCode == "82")
+                    while (CheckIntermediateMessage(responseCode))
                     {
                         await ReadMessage(new CancellationTokenSource(_timeout).Token);
                         responseCode = CurrentResponse.Substring(1).Split('|')[1];
@@ -228,6 +227,14 @@ namespace Transbank.POS.Utils
         protected string ToHexString(string text)
         {
             return BitConverter.ToString(Encoding.Default.GetBytes(text)).Replace('-', ' ');
+        }
+
+        private bool CheckIntermediateMessage(string responseCode)
+        {
+            List<string> intermediateMsg = new List<string> { "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89" };
+
+            return intermediateMsg.Contains(responseCode);
+
         }
     }
 }
