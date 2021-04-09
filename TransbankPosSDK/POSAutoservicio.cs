@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Transbank.POS.Utils;
-using Transbank.POS.Exceptions.CommonExceptions;
+using Transbank.Utils;
+using Transbank.Exceptions.CommonExceptions;
 using System.Text;
-using Transbank.POS.Responses.CommonResponses;
-using Transbank.POS.Responses.AutoservicioResponse;
-using Transbank.POS.Exceptions.IntegradoExceptions;
+using Transbank.Responses.CommonResponses;
+using Transbank.Responses.AutoservicioResponse;
+using Transbank.Exceptions.IntegradoExceptions;
 
 namespace Transbank.POSAutoservicio
 {

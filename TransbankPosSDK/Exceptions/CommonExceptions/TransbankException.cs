@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Transbank.POS.Exceptions.CommonExceptions
+namespace Transbank.Exceptions.CommonExceptions
 {
     public class TransbankException : Exception
     {

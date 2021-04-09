@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Transbank.POS.Exceptions.IntegradoExceptions
+namespace Transbank.Exceptions.IntegradoExceptions
 {
     public class TransbankMultiCodeDetailException : TransbankSalesDetailException
     {

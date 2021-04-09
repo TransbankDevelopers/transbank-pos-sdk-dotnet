@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Transbank.POS.Utils
+namespace Transbank.Utils
 {
     public static class ResponseCodes
     {

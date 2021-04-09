@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System;
-using Transbank.POS.Exceptions.CommonExceptions;
+using Transbank.Exceptions.CommonExceptions;
 using System.Threading.Tasks;
 using System.Threading;
-using Transbank.POS.Responses.CommonResponses;
+using Transbank.Responses.CommonResponses;
 
-namespace Transbank.POS.Utils
+namespace Transbank.Utils
 {
     public class Serial
     {

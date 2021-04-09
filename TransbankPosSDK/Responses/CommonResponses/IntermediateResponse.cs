@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Transbank.POS.Responses.CommonResponses
+namespace Transbank.Responses.CommonResponses
 {
     public class IntermediateResponse : EventArgs
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using Transbank.POS.Responses.CommonResponses;
+using Transbank.Responses.CommonResponses;
 
-namespace Transbank.POS.Responses.AutoservicioResponse
+namespace Transbank.Responses.AutoservicioResponse
 {
     public class InitializationResponse : BasicResponse
     {

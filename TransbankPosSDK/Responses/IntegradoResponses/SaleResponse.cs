@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Collections.Generic;
 
-namespace Transbank.POS.Responses.IntegradoResponses
+namespace Transbank.Responses.IntegradoResponses
 {
     public class SaleResponse : CommonResponses.LoadKeysResponse
     {

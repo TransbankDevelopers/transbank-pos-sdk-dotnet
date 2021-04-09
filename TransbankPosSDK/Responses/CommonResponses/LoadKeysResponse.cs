@@ -1,8 +1,8 @@
-﻿using Transbank.POS.Utils;
+﻿using Transbank.Utils;
 using System.Collections.Generic;
 using System;
 
-namespace Transbank.POS.Responses.CommonResponses
+namespace Transbank.Responses.CommonResponses
 {
     public class LoadKeysResponse : BasicResponse
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using Transbank.POS.Responses.IntegradoResponses;
+using Transbank.Responses.IntegradoResponses;
 
-namespace Transbank.POS.Exceptions.IntegradoExceptions
+namespace Transbank.Exceptions.IntegradoExceptions
 {
     public class TransbankTotalsException : CommonExceptions.TransbankException
     {

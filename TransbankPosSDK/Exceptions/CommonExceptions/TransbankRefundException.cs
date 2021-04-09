@@ -1,7 +1,7 @@
 ﻿using System;
-using Transbank.POS.Responses.CommonResponses;
+using Transbank.Responses.CommonResponses;
 
-namespace Transbank.POS.Exceptions.CommonExceptions
+namespace Transbank.Exceptions.CommonExceptions
 {
     public class TransbankRefundException : CommonExceptions.TransbankException
     {

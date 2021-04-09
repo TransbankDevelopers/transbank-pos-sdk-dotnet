@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Collections.Generic;
 
-namespace Transbank.POS.Responses.AutoservicioResponse
+namespace Transbank.Responses.AutoservicioResponse
 {
     public class MultiCodeSaleResponse : SaleResponse
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Transbank.POS.Responses.AutoservicioResponse
+namespace Transbank.Responses.AutoservicioResponse
 {
     public class CloseResponse : CommonResponses.LoadKeysResponse
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using Transbank.POS.Responses.AutoservicioResponse;
+using Transbank.Responses.AutoservicioResponse;
 
-namespace Transbank.POS.Exceptions.AutoservicioExceptions
+namespace Transbank.Exceptions.AutoservicioExceptions
 {
     public class TransbankSaleException : CommonExceptions.TransbankException
     {
