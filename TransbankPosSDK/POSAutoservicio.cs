@@ -59,13 +59,6 @@ namespace Transbank.POSAutoservicio
 
         public bool Initialization()
         {
-            DiscardBuffer();
-
-            if (CantWrite())
-            {
-                throw new TransbankException($"Unable to Initialization port {Port.PortName} is closed");
-            }
-
             try
             {
                 byte[] buffer = new byte[1];
