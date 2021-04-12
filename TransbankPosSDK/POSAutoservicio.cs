@@ -31,10 +31,12 @@ namespace Transbank.POSAutoservicio
             {
                 byte[] buffer = new byte[1];
                 string command = "0100";
-                Console.WriteLine($"Out: {string.Format("0:X2", command)}");
+
+                Console.WriteLine($"Out: {ToHexString(command)}");
+
                 Port.Write("0100");
                 Port.BaseStream.ReadAsync(buffer, 0, 1).Wait();
-                return buffer[0] == ACK;
+                return CheckACK(buffer[0]);
             }
             catch (Exception e)
             {
