@@ -182,17 +182,30 @@ namespace Transbank.Responses.AutoservicioResponse
                 return null;
             }
         }
-        public string PrintingField
+        public List<string> PrintingField
         {
             get
             {
+                List<string> printingField = new List<string>();
+
                 try
                 {
-                    return Response.Split('|')[ParameterMap["PrintingField"]].Trim();
+                    string response = Response.Split('|')[ParameterMap["PrintingField"]];
+
+                    if (response.Length % 40 != 0)
+                    {
+                        printingField.Add(response);
+                        return printingField;
+                    }
+
+                    for (int i = 0; i < response.Length; i += 40)
+                        printingField.Add(response.Substring(i, 40));
+                    
+                    return printingField;
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    return "";
+                    return printingField;
                 }
             }
         }
@@ -258,6 +271,8 @@ namespace Transbank.Responses.AutoservicioResponse
 
         public SaleResponse(string response) : base(response) { }
 
+
+
         public override string ToString()
         {
             string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
@@ -273,7 +288,7 @@ namespace Transbank.Responses.AutoservicioResponse
                    "Account Number: " + AccountNumber + "\n" +
                    "Card Brand: " + CardBrand + "\n" +
                    "Real Date: " + formatedRealDate + "\n" +
-                   "Printing Field: " + PrintingField + "\n" +
+                   "Printing Field: " + ((PrintingField.Count > 1) ? "\r\n" + string.Join("\r\n", PrintingField) : PrintingField[0])  + "\n" +
                    "Shares Type: " + SharesType + "\n" +
                    "Shares Number: " + SharesNumber + "\n" +
                    "Shares Amount: " + SharesAmount + "\n" +

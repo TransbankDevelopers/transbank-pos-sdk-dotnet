@@ -10,17 +10,37 @@ namespace Transbank.Responses.AutoservicioResponse
             { "PrintingField", 4},
         };
 
-        public string PrintingField
+        public List<string> PrintingField
         {
             get
             {
+                List<string> printingField = new List<string>();
+
                 try
                 {
-                    return Response.Split('|')[ParameterMap["PrintingField"]].Trim();
+                    string[] arrayResponse = Response.Split('|');
+                    if (Response.Split('|').Length < 5)
+                    {
+                        printingField.Add("");
+                        return printingField;
+                    }
+
+                    string response = arrayResponse[ParameterMap["PrintingField"]];
+
+                    if (response.Length % 40 != 0)
+                    {
+                        printingField.Add(response);
+                        return printingField;
+                    }
+
+                    for (int i = 0; i < response.Length; i += 40)
+                        printingField.Add(response.Substring(i, 40));
+                 
+                    return printingField;
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    return "";
+                    return printingField;
                 }
             }
         }
@@ -30,7 +50,7 @@ namespace Transbank.Responses.AutoservicioResponse
         public override string ToString()
         {
             return base.ToString() + "\n" +
-                   "Printing Field: " + PrintingField;
+                   "Printing Field: " + ((PrintingField.Count > 1) ? "\n" + string.Join("\n", PrintingField) : PrintingField[0]);
         }
     }
 }
