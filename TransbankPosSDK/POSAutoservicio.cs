@@ -6,6 +6,7 @@ using System.Text;
 using Transbank.Responses.CommonResponses;
 using Transbank.Responses.AutoservicioResponse;
 using Transbank.Exceptions.IntegradoExceptions;
+using System.Threading.Tasks;
 
 namespace Transbank.POSAutoservicio
 {
@@ -18,7 +19,7 @@ namespace Transbank.POSAutoservicio
 
         public static POSAutoservicio Instance { get; } = new POSAutoservicio();
 
-        public bool Poll()
+        public async Task<bool> Poll()
         {
             DiscardBuffer();
 
@@ -35,7 +36,7 @@ namespace Transbank.POSAutoservicio
                 Console.WriteLine($"Out: {ToHexString(command)}");
 
                 Port.Write("0100");
-                Port.BaseStream.ReadAsync(buffer, 0, 1).Wait();
+                await Port.BaseStream.ReadAsync(buffer, 0, 1);
                 return CheckACK(buffer[0]);
             }
             catch (Exception e)
@@ -44,11 +45,11 @@ namespace Transbank.POSAutoservicio
             }
         }
 
-        public LoadKeysResponse LoadKeys()
+        public async Task<LoadKeysResponse> LoadKeys()
         {
             try
             {
-                WriteData("0800").Wait();
+                await WriteData("0800");
                 return new LoadKeysResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -57,7 +58,7 @@ namespace Transbank.POSAutoservicio
             }
         }
 
-        public bool Initialization()
+        public async Task<bool> Initialization()
         {
             try
             {
@@ -67,7 +68,7 @@ namespace Transbank.POSAutoservicio
                 Console.WriteLine($"Out: {ToHexString(command)}");
 
                 Port.Write(command);
-                Port.BaseStream.ReadAsync(buffer, 0, 1).Wait();
+                await Port.BaseStream.ReadAsync(buffer, 0, 1);
                 return CheckACK(buffer[0]);
             }
             catch (Exception e)
@@ -76,11 +77,11 @@ namespace Transbank.POSAutoservicio
             }
         }
 
-        public InitializationResponse InitializationResponse()
+        public async Task<InitializationResponse> InitializationResponse()
         {
             try
             {
-                WriteData("0080\x0B").Wait();
+                await WriteData("0080\x0B");
                 return new InitializationResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -89,7 +90,7 @@ namespace Transbank.POSAutoservicio
             }
         }
 
-        public SaleResponse Sale(int amount, string ticket, bool sendVoucher = false, bool sendStatus = false)
+        public async Task<SaleResponse> Sale(int amount, string ticket, bool sendVoucher = false, bool sendStatus = false)
         {
             if (amount <= 0)
             {
@@ -102,7 +103,7 @@ namespace Transbank.POSAutoservicio
             string message = $"0200|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}";
             try
             {
-                WriteData(MessageWithLRC(message), intermediateMessages: sendStatus).Wait();
+                await WriteData(MessageWithLRC(message), intermediateMessages: sendStatus);
                 return new SaleResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -111,7 +112,7 @@ namespace Transbank.POSAutoservicio
             }
         }
 
-        public MultiCodeSaleResponse MultiCodeSale(int amount, string ticket, long commerceCode = 0, bool sendVoucher = false, bool sendStatus = false)
+        public async Task<MultiCodeSaleResponse> MultiCodeSale(int amount, string ticket, long commerceCode = 0, bool sendVoucher = false, bool sendStatus = false)
         {
             if (amount <= 0)
             {
@@ -125,7 +126,7 @@ namespace Transbank.POSAutoservicio
             string message = $"0270|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}|{code}";
             try
             {
-                WriteData(MessageWithLRC(message), intermediateMessages: sendStatus).Wait();
+                await WriteData(MessageWithLRC(message), intermediateMessages: sendStatus);
                 return new MultiCodeSaleResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -134,12 +135,12 @@ namespace Transbank.POSAutoservicio
             }
         }
 
-        public LastSaleResponse LastSale(bool sendVoucher = false)
+        public async Task<LastSaleResponse> LastSale(bool sendVoucher = false)
         {
             try
             {
                 string message = $"0250|{Convert.ToInt32(sendVoucher)}";
-                WriteData(MessageWithLRC(message)).Wait();
+                await WriteData(MessageWithLRC(message));
                 return new LastSaleResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -148,13 +149,13 @@ namespace Transbank.POSAutoservicio
             }
         }
 
-        public RefundResponse Refund()
+        public async Task<RefundResponse> Refund()
         {
             string message = $"1200";
 
             try
             {
-                WriteData(MessageWithLRC(message)).Wait();
+                await WriteData(MessageWithLRC(message));
                 return new RefundResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -163,13 +164,13 @@ namespace Transbank.POSAutoservicio
             }
         }
 
-        public CloseResponse Close(bool sendVoucher)
+        public async Task<CloseResponse> Close(bool sendVoucher)
         {
             string message = $"0500|{Convert.ToInt32(sendVoucher)}";
 
             try
             {          
-                WriteData(MessageWithLRC(message)).Wait();
+                await WriteData(MessageWithLRC(message));
                 return new CloseResponse(CurrentResponse);
             }
             catch (Exception e)
