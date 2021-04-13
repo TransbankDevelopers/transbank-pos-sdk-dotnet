@@ -190,7 +190,14 @@ namespace Transbank.Responses.AutoservicioResponse
 
                 try
                 {
-                    string response = Response.Split('|')[ParameterMap["PrintingField"]];
+                    string[] arrayResponse = Response.Split('|');
+                    if (Response.Split('|').Length < 5)
+                    {
+                        printingField.Add("");
+                        return printingField;
+                    }
+
+                    string response = arrayResponse[ParameterMap["PrintingField"]];
 
                     if (response.Length % 40 != 0)
                     {
@@ -200,7 +207,7 @@ namespace Transbank.Responses.AutoservicioResponse
 
                     for (int i = 0; i < response.Length; i += 40)
                         printingField.Add(response.Substring(i, 40));
-                    
+
                     return printingField;
                 }
                 catch (IndexOutOfRangeException)
