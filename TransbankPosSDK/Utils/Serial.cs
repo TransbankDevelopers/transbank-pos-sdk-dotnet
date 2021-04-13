@@ -210,12 +210,12 @@ namespace Transbank.Utils
 
         protected char Lrc(string message)
         {
-            int lrc = 0;
+            char lrc = (char)0;
             for (int i = 1; i < message.Length; i++)
             {
-                lrc ^= Encoding.ASCII.GetBytes(message.Substring(i, 1))[0];
+                lrc ^= message[i];
             }
-            return (char)lrc;
+            return lrc;
         }
 
         protected bool CheckACK(byte ack)
