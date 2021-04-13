@@ -18,12 +18,6 @@ namespace Transbank.POSIntegrado
 
         public static POSIntegrado Instance { get; } = new POSIntegrado();
         
-        [ObsoleteAttribute("This method is obsolete. Call SaleResponse(int, string) instead.", false)]
-        public SaleResponse Sale(int amount, int ticket)
-        {
-            return Sale(amount, ticket.ToString());
-        }
-
         public async Task<SaleResponse> Sale(int amount, string ticket, bool sendStatus = false)
         {
             if (amount <= 0)
