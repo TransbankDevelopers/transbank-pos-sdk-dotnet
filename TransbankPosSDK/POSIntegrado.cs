@@ -199,7 +199,7 @@ namespace Transbank.POSIntegrado
                 byte[] buffer = new byte[1];
                 Port.Write("0100");
                 await Port.BaseStream.ReadAsync(buffer, 0, 1);
-                return buffer[0] == ACK;
+                return CheckACK(buffer[0]);
             }
             catch (Exception e)
             {
@@ -221,7 +221,7 @@ namespace Transbank.POSIntegrado
                 byte[] buffer = new byte[1];
                 Port.Write("0300\0");
                 await Port.BaseStream.ReadAsync(buffer, 0, 1);
-                return buffer[0] == ACK;
+                return CheckACK(buffer[0]);
             }
             catch (Exception e)
             {
