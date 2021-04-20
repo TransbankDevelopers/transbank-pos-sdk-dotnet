@@ -5,7 +5,7 @@ using Transbank.Exceptions.CommonExceptions;
 using System.Text;
 using Transbank.Responses.CommonResponses;
 using Transbank.Responses.AutoservicioResponse;
-using Transbank.Exceptions.IntegradoExceptions;
+using Transbank.Exceptions.AutoservicioExceptions;
 using System.Threading.Tasks;
 
 namespace Transbank.POSAutoservicio
@@ -86,7 +86,7 @@ namespace Transbank.POSAutoservicio
             }
             catch (Exception e)
             {
-                throw new TransbankLoadKeysException("Unable to execute Load Keys in pos", e);
+                throw new TransbankInitializationResponseException("Unable to execute Initialization Response in pos", e);
             }
         }
 

@@ -9,10 +9,11 @@ namespace Transbank.Responses.AutoservicioResponse
         protected new readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
             { "CommerceProviderCode", 14},
-            { "SharesType", 15},
-            { "SharesNumber", 17},
-            { "SharesAmount", 18},
-            { "SharesTypeGloss", 19}
+            { "PrintingField", 16},
+            { "SharesType", 17},
+            { "SharesNumber", 18},
+            { "SharesAmount", 19},
+            { "SharesTypeGloss", 20}
         };
 
         public int CommerceProviderCode
@@ -27,6 +28,40 @@ namespace Transbank.Responses.AutoservicioResponse
                 catch (IndexOutOfRangeException)
                 {
                     return -1;
+                }
+            }
+        }
+        public new List<string> PrintingField
+        {
+            get
+            {
+                List<string> printingField = new List<string>();
+
+                try
+                {
+                    string[] arrayResponse = Response.Split('|');
+                    if (Response.Split('|').Length < 5)
+                    {
+                        printingField.Add("");
+                        return printingField;
+                    }
+
+                    string response = arrayResponse[ParameterMap["PrintingField"]];
+
+                    if (response.Length % 40 != 0)
+                    {
+                        printingField.Add(response);
+                        return printingField;
+                    }
+
+                    for (int i = 0; i < response.Length; i += 40)
+                        printingField.Add(response.Substring(i, 40));
+
+                    return printingField;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return printingField;
                 }
             }
         }
@@ -111,6 +146,7 @@ namespace Transbank.Responses.AutoservicioResponse
                    "Card Brand: " + CardBrand + "\n" +
                    "Real Date: " + formatedRealDate + "\n" +
                    "CommerceProviderCode: " + CommerceProviderCode + "\n" +
+                   "Printing Field: " + ((PrintingField.Count > 1) ? "\r\n" + string.Join("\r\n", PrintingField) : PrintingField[0]) + "\n" +
                    "Shares Type: " + SharesType + "\n" +
                    "Shares Number: " + SharesNumber + "\n" +
                    "Shares Amount: " + SharesAmount + "\n" +
