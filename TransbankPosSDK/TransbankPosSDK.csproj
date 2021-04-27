@@ -8,13 +8,13 @@
     <StartupObject />
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>TransbankPosSDK</PackageId>
-    <Description>This is the .Net SDK for Transbank's Verifone VX520, VX520c and Ingenico DESK 3500 POS.</Description>
+    <Description>This is the .Net SDK for Transbank's Verifone VX520, VX520c and Ingenico DESK 3500 POS and selfservice POS.</Description>
     <License>LICENSE.md</License>
     <PackageProjectUrl>http://www.transbankdevelopers.cl/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TransbankDevelopers/transbank-pos-sdk-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageTags>payments, cl, chile, transbank, POS, Verifone, vx520, vx520c, integrated payment,</PackageTags>
+    <PackageTags>payments, cl, chile, transbank, POS, Verifone, vx520, vx520c, integrated payment, selfservice,</PackageTags>
     <PackageIcon>favicon.png</PackageIcon>
     <VersionPrefix>2.3.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
@@ -42,6 +42,7 @@
   
   <PropertyGroup>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <Version>3.0.0</Version>
   </PropertyGroup>
     
   <ItemGroup>
