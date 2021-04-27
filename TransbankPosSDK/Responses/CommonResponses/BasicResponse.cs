@@ -54,7 +54,7 @@ namespace Transbank.Responses.CommonResponses
         {
             return "Function: " + FunctionCode + "\n" +
                     "Response code:" + ResponseCode + "\n" +
-                    "Response: " + ResponseMessage + "\n";
+                    "Response message: " + ResponseMessage;
         }
     }
 }
