@@ -20,13 +20,13 @@ namespace Transbank.POSIntegrado
         
         public async Task<SaleResponse> Sale(int amount, string ticket, bool sendStatus = false)
         {
-            if (amount <= 0)
+            if (amount < 50)
             {
-                throw new TransbankSaleException("Amount must be greater than 0");
+                throw new TransbankSaleException("Amount must be greater than 50.");
             }
-            if (ticket.Length != 6)
+            if (amount > 999999999)
             {
-                throw new TransbankSaleException("Ticket must be 6 characters.");
+                throw new TransbankSaleException("Amount must be less than 999999999.");
             }
             string message = $"0200|{amount}|{ticket}|||{Convert.ToInt32(sendStatus)}|";
             try
@@ -42,9 +42,13 @@ namespace Transbank.POSIntegrado
 
         public async Task<MultiCodeSaleResponse> MultiCodeSale(int amount, string ticket, long commerceCode = 0, bool sendStatus = false)
         {
-            if (amount <= 0)
+            if (amount < 50)
             {
-                throw new TransbankSaleException("Amount must be greater than 0");
+                throw new TransbankMultiCodeSaleException("Amount must be greater than 50.");
+            }
+            if (amount > 999999999)
+            {
+                throw new TransbankMultiCodeSaleException("Amount must be less than 999999999.");
             }
             if (ticket.Length != 6)
             {

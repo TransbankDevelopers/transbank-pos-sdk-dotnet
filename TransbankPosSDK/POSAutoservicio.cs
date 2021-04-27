@@ -36,7 +36,7 @@ namespace Transbank.POSAutoservicio
                 Console.WriteLine($"Out (Hex): {ToHexString(command)}");
                 Console.WriteLine($"Out (ASCII): {command}");
 
-                Port.Write("0100");
+                Port.Write(command);
                 await Port.BaseStream.ReadAsync(buffer, 0, 1);
                 return CheckACK(buffer[0]);
             }
@@ -94,9 +94,13 @@ namespace Transbank.POSAutoservicio
 
         public async Task<SaleResponse> Sale(int amount, string ticket, bool sendVoucher = false, bool sendStatus = false)
         {
-            if (amount <= 0)
+            if (amount < 50)
             {
-                throw new TransbankSaleException("Amount must be greater than 0");
+                throw new TransbankSaleException("Amount must be greater than 50.");
+            }
+            if (amount > 999999999)
+            {
+                throw new TransbankSaleException("Amount must be less than 999999999.");
             }
             if (ticket.Length != 6)
             {
@@ -116,9 +120,13 @@ namespace Transbank.POSAutoservicio
 
         public async Task<MultiCodeSaleResponse> MultiCodeSale(int amount, string ticket, long commerceCode = 0, bool sendVoucher = false, bool sendStatus = false)
         {
-            if (amount <= 0)
+            if (amount < 50)
             {
-                throw new TransbankMultiCodeSaleException("Amount must be greater than 0");
+                throw new TransbankMultiCodeSaleException("Amount must be greater than 50.");
+            }
+            if (amount > 999999999)
+            {
+                throw new TransbankMultiCodeSaleException("Amount must be less than 999999999.");
             }
             if (ticket.Length != 6)
             {
