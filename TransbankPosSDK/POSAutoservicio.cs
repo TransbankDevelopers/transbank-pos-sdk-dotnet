@@ -33,7 +33,8 @@ namespace Transbank.POSAutoservicio
                 byte[] buffer = new byte[1];
                 string command = "0100";
 
-                Console.WriteLine($"Out: {ToHexString(command)}");
+                Console.WriteLine($"Out (Hex): {ToHexString(command)}");
+                Console.WriteLine($"Out (ASCII): {command}");
 
                 Port.Write("0100");
                 await Port.BaseStream.ReadAsync(buffer, 0, 1);
@@ -65,7 +66,8 @@ namespace Transbank.POSAutoservicio
                 byte[] buffer = new byte[1];
                 string command = "0070";
 
-                Console.WriteLine($"Out: {ToHexString(command)}");
+                Console.WriteLine($"Out (Hex): {ToHexString(command)}");
+                Console.WriteLine($"Out (ASCII): {command}");
 
                 Port.Write(command);
                 await Port.BaseStream.ReadAsync(buffer, 0, 1);

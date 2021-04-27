@@ -101,7 +101,8 @@ namespace Transbank.Utils
                 throw new TransbankException($"Unable to send message to {Port.PortName}");
             }
 
-            Console.WriteLine($"Out: {ToHexString(payload)}");
+            Console.WriteLine($"Out (Hex): {ToHexString(payload)}");
+            Console.WriteLine($"Out (ASCII): {payload}");
 
             Port.Write(payload);
             bool ack = ReadAck(new CancellationTokenSource(_timeout).Token);
@@ -186,7 +187,8 @@ namespace Transbank.Utils
             Port.ReadTo("");
             CurrentResponse = "" + Port.ReadTo("");
             Port.Write("");
-            Console.WriteLine($"In: {ToHexString(CurrentResponse)}");
+            Console.WriteLine($"In (Hex): {ToHexString(CurrentResponse)}");
+            Console.WriteLine($"In (ASCII): {CurrentResponse}");
         }
 
         private bool ReadAck(CancellationToken token)
