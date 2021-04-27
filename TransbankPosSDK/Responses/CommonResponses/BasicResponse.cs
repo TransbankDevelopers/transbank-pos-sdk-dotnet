@@ -53,6 +53,7 @@ namespace Transbank.Responses.CommonResponses
         public override string ToString()
         {
             return "Function: " + FunctionCode + "\n" +
+                    "Response code:" + ResponseCode + "\n" +
                     "Response: " + ResponseMessage + "\n";
         }
     }
