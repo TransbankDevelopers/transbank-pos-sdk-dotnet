@@ -197,7 +197,12 @@ namespace Transbank.POSIntegrado
             try
             {              
                 byte[] buffer = new byte[1];
-                Port.Write("0100");
+                string command = "0100";
+
+                Console.WriteLine($"Out (Hex): {ToHexString(command)}");
+                Console.WriteLine($"Out (ASCII): {command}");
+
+                Port.Write(command);
                 await Port.BaseStream.ReadAsync(buffer, 0, 1);
                 return CheckACK(buffer[0]);
             }
@@ -219,7 +224,12 @@ namespace Transbank.POSIntegrado
             try
             {
                 byte[] buffer = new byte[1];
-                Port.Write("0300\0");
+                string command = "0300\0";
+
+                Console.WriteLine($"Out (Hex): {ToHexString(command)}");
+                Console.WriteLine($"Out (ASCII): {command}");
+
+                Port.Write(command);
                 await Port.BaseStream.ReadAsync(buffer, 0, 1);
                 return CheckACK(buffer[0]);
             }
