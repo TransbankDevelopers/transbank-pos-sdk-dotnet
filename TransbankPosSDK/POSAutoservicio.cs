@@ -104,7 +104,7 @@ namespace Transbank.POSAutoservicio
             }
             if (ticket.Length > 20)
             {
-                throw new TransbankSaleException("The ticket must up to 20 characters.");
+                throw new TransbankSaleException("The ticket must be up to 20 characters.");
             }
             string message = $"0200|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}";
             try
