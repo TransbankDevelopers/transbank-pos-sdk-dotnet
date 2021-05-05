@@ -102,9 +102,9 @@ namespace Transbank.POSAutoservicio
             {
                 throw new TransbankSaleException("Amount must be less than 999999999.");
             }
-            if (ticket.Length != 6)
+            if (ticket.Length > 20)
             {
-                throw new TransbankSaleException("Ticket must be 6 characters.");
+                throw new TransbankSaleException("The ticket must be up to 20 characters.");
             }
             string message = $"0200|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}";
             try
@@ -128,9 +128,9 @@ namespace Transbank.POSAutoservicio
             {
                 throw new TransbankMultiCodeSaleException("Amount must be less than 999999999.");
             }
-            if (ticket.Length != 6)
+            if (ticket.Length > 20)
             {
-                throw new TransbankMultiCodeSaleException("Ticket must be 6 characters.");
+                throw new TransbankMultiCodeSaleException("The ticket must be up to 20 characters.");
             }
             string code = commerceCode != 0 ? commerceCode.ToString() : "";
             string message = $"0270|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}|{code}";
