@@ -5,6 +5,14 @@ Todos los cambios notables a este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.1] - 2021-05-05
+
+Se cambia el largo soportado para el campo ticket en POS Autoservicio.
+
+### Changed
+
+Largo soportado para el campo ticket en las operaciones de venta y venta multicódigo, ahora es de un máximo de 20 caracteres.
+
 ## [3.0.0] - 2021-04-27
 
 Se añade soporte para POS Autoservicio.
