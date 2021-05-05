@@ -130,7 +130,7 @@ namespace Transbank.POSAutoservicio
             }
             if (ticket.Length > 20)
             {
-                throw new TransbankMultiCodeSaleException("The ticket must up to 20 characters.");
+                throw new TransbankMultiCodeSaleException("The ticket must be up to 20 characters.");
             }
             string code = commerceCode != 0 ? commerceCode.ToString() : "";
             string message = $"0270|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}|{code}";
