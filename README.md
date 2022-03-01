@@ -40,7 +40,7 @@ PM> Install-Package TransbankPosSDK
 #### Instalar con .Net CLI
 
 ```bash
-dotnet add package TransbankSDK -v 3.0.1
+dotnet add package TransbankSDK -v 3.0.2
 ```
 
 ### Desde Visual Studio
@@ -119,7 +119,7 @@ Agradecimientos especiales a quienes nos ayudan a mejorar esta librería.
 
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/DarkFrostnight"><img src="https://avatars.githubusercontent.com/u/36648048?v=4" width="100px;" alt=""/><br /><sub><b>Mauricio Astudillo</b></sub></a><br /><a href="#bugs-DarkFrostnight" title="Reportar Bugs">🐛</a> <a href="userTest-DarkFrostnight" title="Pruebas de Usuario">📓</a> <a href="ideas-DarkFrostnight" title="Nuevas Ideas">🤔</a>
+    <td align="center"><a href="https://github.com/mastudillot"><img src="https://avatars.githubusercontent.com/u/36648048?v=4" width="100px;" alt=""/><br /><sub><b>Mauricio Astudillo</b></sub></a><br /><a href="#bugs-mastudillot" title="Reportar Bugs">🐛</a> <a href="userTest-mastudillot" title="Pruebas de Usuario">📓</a> <a href="ideas-mastudillot" title="Nuevas Ideas">🤔</a>
     </td>
   </tr>
 </table>
