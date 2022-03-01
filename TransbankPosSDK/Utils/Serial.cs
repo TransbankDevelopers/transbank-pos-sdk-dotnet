@@ -39,7 +39,7 @@ namespace Transbank.Utils
             set
             {
                 _currentResponse = value;
-                if (_currentResponse.Length >= 1 && _currentResponse.Substring(1).Split('|')[0] == "0900")
+                if (CheckIntermediateMessage(_currentResponse))
                 {
                     OnIntermediateMessageReceived(CurrentResponse);
                 }
@@ -113,11 +113,9 @@ namespace Transbank.Utils
                 if (intermediateMessages)
                 {
                     await ReadMessage(new CancellationTokenSource(_timeout).Token);
-                    string responseCode = CurrentResponse.Substring(1).Split('|')[1];
-                    while (CheckIntermediateMessage(responseCode))
+                    while (CheckIntermediateMessage(CurrentResponse))
                     {
                         await ReadMessage(new CancellationTokenSource(_timeout).Token);
-                        responseCode = CurrentResponse.Substring(1).Split('|')[1];
                     }
                 }
                 else
@@ -231,12 +229,9 @@ namespace Transbank.Utils
             return BitConverter.ToString(Encoding.Default.GetBytes(text)).Replace('-', ' ');
         }
 
-        private bool CheckIntermediateMessage(string responseCode)
+        private bool CheckIntermediateMessage(string response)
         {
-            List<string> intermediateMsg = new List<string> { "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89" };
-
-            return intermediateMsg.Contains(responseCode);
-
+            return response.Length >= 1 && response.Substring(1).Split('|')[0] == "0900";
         }
     }
 }
