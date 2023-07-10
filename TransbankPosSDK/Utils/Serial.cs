@@ -233,5 +233,17 @@ namespace Transbank.Utils
         {
             return response.Length >= 1 && response.Substring(1).Split('|')[0] == "0900";
         }
+
+        protected bool CheckLRC(String response)
+        {
+            if (response == String.Empty)
+            {
+                return false;
+            }
+
+            char ReceivedLrc = response[response.Length - 1];
+            char CalculatedLrc = Lrc(response.Substring(0, response.Length - 1));
+            return (ReceivedLrc == CalculatedLrc);
+        }
     }
 }
