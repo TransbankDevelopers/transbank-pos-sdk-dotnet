@@ -12,6 +12,7 @@ namespace Transbank.Utils
     public class Serial
     {
         protected static readonly byte ACK = 0x06;
+        protected static readonly byte ETX = 0x03;
         protected static readonly int DEFAULT_TIMEOUT = 150000;
         protected static readonly string NACK = "";
         protected static readonly int MAX_NACK_ATTEMPTS = 2;
@@ -261,6 +262,22 @@ namespace Transbank.Utils
             _sentNACK++;
             _fullResponse = String.Empty;
             Thread.Sleep(50);
+        }
+
+        protected bool CheckMissingETX()
+        {
+            if (_fullResponse == String.Empty)
+            {
+                return false;
+            }
+
+            if (_fullResponse[_fullResponse.Length - 2] != ETX)
+            {
+                return true;
+            }
+
+            return false;
+
         }
     }
 }
