@@ -273,6 +273,11 @@ namespace Transbank.Utils
                 return false;
             }
 
+            if (CheckIntermediateMessage(response))
+            {
+                return true;
+            }
+
             char ReceivedLrc = response[response.Length - 1];
             char CalculatedLrc = Lrc(response.Substring(0, response.Length - 1));
             return (ReceivedLrc == CalculatedLrc);
