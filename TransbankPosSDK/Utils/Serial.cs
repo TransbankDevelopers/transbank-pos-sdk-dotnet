@@ -263,7 +263,7 @@ namespace Transbank.Utils
 
         private bool CheckIntermediateMessage(string response)
         {
-            return response.Length >= 1 && response.Substring(1).Split('|')[0] == "0900";
+            return response.Length >= 1 && response.Split('|')[0] == "0900";
         }
 
         protected bool CheckLRC(String response)
