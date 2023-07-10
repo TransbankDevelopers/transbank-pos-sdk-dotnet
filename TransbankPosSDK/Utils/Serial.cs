@@ -13,6 +13,11 @@ namespace Transbank.Utils
     {
         protected static readonly byte ACK = 0x06;
         protected static readonly int DEFAULT_TIMEOUT = 150000;
+        protected static readonly string NACK = "";
+        protected static readonly int MAX_NACK_ATTEMPTS = 2;
+
+        private int _sentNACK;
+        private String _fullResponse;
 
         protected string _currentResponse;
         protected List<string> SaleDetail;
@@ -244,6 +249,18 @@ namespace Transbank.Utils
             char ReceivedLrc = response[response.Length - 1];
             char CalculatedLrc = Lrc(response.Substring(0, response.Length - 1));
             return (ReceivedLrc == CalculatedLrc);
+        }
+
+        protected void SendNACK()
+        {
+            if (_sentNACK >= MAX_NACK_ATTEMPTS)
+            {
+                throw new TransbankException($"Invalid message received");
+            }
+            Port.Write(NACK);
+            _sentNACK++;
+            _fullResponse = String.Empty;
+            Thread.Sleep(50);
         }
     }
 }
