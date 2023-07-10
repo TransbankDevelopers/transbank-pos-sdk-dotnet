@@ -188,11 +188,37 @@ namespace Transbank.Utils
                 throw new TransbankException($"Read operation Timeout");
             }
 
-            Port.ReadTo("");
-            CurrentResponse = "" + Port.ReadTo("");
+            _fullResponse = String.Empty;
+            _sentNACK = 0;
+
+            do
+            {
+                if (_fullResponse != String.Empty)
+                {
+                    SendNACK();
+                }
+
+                _fullResponse = Port.ReadExisting();
+
+                while (CheckMissingETX())
+                {
+                    Thread.Sleep(50);
+                    if (Port.BytesToRead <= 0)
+                    {
+                        SendNACK();
+                    }
+                    else
+                    {
+                        _fullResponse = _fullResponse + Port.ReadExisting();
+                    }
+                }
+
+            } while (!CheckLRC(_fullResponse));
+
+            CurrentResponse = _fullResponse.Substring(1, (_fullResponse.Length - 3));
             Port.Write("");
-            Console.WriteLine($"In (Hex): {ToHexString(CurrentResponse)}");
-            Console.WriteLine($"In (ASCII): {CurrentResponse}");
+            Console.WriteLine($"In (Hex): {ToHexString(_fullResponse)}");
+            Console.WriteLine($"In (ASCII): {_fullResponse}");
         }
 
         private bool ReadAck(CancellationToken token)
