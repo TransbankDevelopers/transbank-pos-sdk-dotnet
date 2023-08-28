@@ -14,7 +14,7 @@ namespace Transbank.Utils
         protected static readonly byte ACK = 0x06;
         protected static readonly byte ETX = 0x03;
         protected static readonly int DEFAULT_TIMEOUT = 150000;
-        protected static readonly string NACK = "";
+        protected static readonly byte NACK = 0x15;
         protected static readonly int MAX_NACK_ATTEMPTS = 2;
 
         private int _sentNACK;
@@ -289,7 +289,7 @@ namespace Transbank.Utils
             {
                 throw new TransbankException($"Invalid message received");
             }
-            Port.Write(NACK);
+            Port.Write(char.ConvertFromUtf32(NACK));
             _sentNACK++;
             _fullResponse = String.Empty;
             Thread.Sleep(50);
