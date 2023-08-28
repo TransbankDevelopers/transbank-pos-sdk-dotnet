@@ -302,12 +302,7 @@ namespace Transbank.Utils
                 return false;
             }
 
-            if (_fullResponse[_fullResponse.Length - 2] != ETX)
-            {
-                return true;
-            }
-
-            return false;
+            return _fullResponse[_fullResponse.Length - 2] != ETX;
 
         }
     }
