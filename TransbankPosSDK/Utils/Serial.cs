@@ -12,7 +12,13 @@ namespace Transbank.Utils
     public class Serial
     {
         protected static readonly byte ACK = 0x06;
+        protected static readonly byte ETX = 0x03;
         protected static readonly int DEFAULT_TIMEOUT = 150000;
+        protected static readonly byte NACK = 0x15;
+        protected static readonly int MAX_NACK_ATTEMPTS = 2;
+
+        private int _sentNACK;
+        private String _fullResponse;
 
         protected string _currentResponse;
         protected List<string> SaleDetail;
@@ -182,11 +188,37 @@ namespace Transbank.Utils
                 throw new TransbankException($"Read operation Timeout");
             }
 
-            Port.ReadTo("");
-            CurrentResponse = "" + Port.ReadTo("");
+            _fullResponse = String.Empty;
+            _sentNACK = 0;
+
+            do
+            {
+                if (_fullResponse != String.Empty)
+                {
+                    SendNACK();
+                }
+
+                _fullResponse = Port.ReadExisting();
+
+                while (CheckMissingETX())
+                {
+                    Thread.Sleep(50);
+                    if (Port.BytesToRead <= 0)
+                    {
+                        SendNACK();
+                    }
+                    else
+                    {
+                        _fullResponse = _fullResponse + Port.ReadExisting();
+                    }
+                }
+
+            } while (!CheckLRC(_fullResponse));
+
+            CurrentResponse = _fullResponse.Substring(1, (_fullResponse.Length - 3));
             Port.Write("");
-            Console.WriteLine($"In (Hex): {ToHexString(CurrentResponse)}");
-            Console.WriteLine($"In (ASCII): {CurrentResponse}");
+            Console.WriteLine($"In (Hex): {ToHexString(_fullResponse)}");
+            Console.WriteLine($"In (ASCII): {_fullResponse}");
         }
 
         private bool ReadAck(CancellationToken token)
@@ -231,7 +263,47 @@ namespace Transbank.Utils
 
         private bool CheckIntermediateMessage(string response)
         {
-            return response.Length >= 1 && response.Substring(1).Split('|')[0] == "0900";
+            return response.Length >= 1 && response.Split('|')[0] == "0900";
+        }
+
+        protected bool CheckLRC(String response)
+        {
+            if (response == String.Empty)
+            {
+                return false;
+            }
+
+            if (CheckIntermediateMessage(response))
+            {
+                return true;
+            }
+
+            char ReceivedLrc = response[response.Length - 1];
+            char CalculatedLrc = Lrc(response.Substring(0, response.Length - 1));
+            return (ReceivedLrc == CalculatedLrc);
+        }
+
+        protected void SendNACK()
+        {
+            if (_sentNACK >= MAX_NACK_ATTEMPTS)
+            {
+                throw new TransbankException($"Invalid message received");
+            }
+            Port.Write(char.ConvertFromUtf32(NACK));
+            _sentNACK++;
+            _fullResponse = String.Empty;
+            Thread.Sleep(50);
+        }
+
+        protected bool CheckMissingETX()
+        {
+            if (_fullResponse == String.Empty)
+            {
+                return false;
+            }
+
+            return _fullResponse[_fullResponse.Length - 2] != ETX;
+
         }
     }
 }
