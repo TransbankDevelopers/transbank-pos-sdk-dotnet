@@ -1,4 +1,4 @@
-﻿using Transbank.Utils;
+using Transbank.Utils;
 using System.Collections.Generic;
 
 namespace Transbank.Responses.CommonResponses
@@ -47,7 +47,7 @@ namespace Transbank.Responses.CommonResponses
 
         public BasicResponse(string response)
         {
-            Response = response.Substring(1);
+            Response = response;
         }
 
         public override string ToString()
