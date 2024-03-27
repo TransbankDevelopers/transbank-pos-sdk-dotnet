@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Transbank.Responses.IntegradoResponses;
 using Transbank.Exceptions.IntegradoExceptions;
 using Transbank.Utils;
@@ -226,15 +226,13 @@ namespace Transbank.POSIntegrado
             }
             try
             {
-                byte[] buffer = new byte[1];
                 string command = "0300\0";
 
                 Console.WriteLine($"Out (Hex): {ToHexString(command)}");
                 Console.WriteLine($"Out (ASCII): {command}");
 
                 Port.Write(command);
-                await Port.BaseStream.ReadAsync(buffer, 0, 1);
-                return CheckACK(buffer[0]);
+                return await ReadAck(new CancellationTokenSource(ReadTimeout).Token);
             }
             catch (Exception e)
             {
