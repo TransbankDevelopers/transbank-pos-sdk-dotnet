@@ -6,7 +6,7 @@ namespace Transbank.Responses.CommonResponses
     {
         private readonly BasicResponse message;
 
-        public int FunctionCode => message.FunctionCode;
+        public string FunctionCode => message.FunctionCode;
         public string ResponseMessage => message.ResponseMessage;
         public int ResponseCode => message.ResponseCode;
 
