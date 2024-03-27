@@ -1,4 +1,4 @@
-﻿using System.IO.Ports;
+using System.IO.Ports;
 using System.Collections.Generic;
 using System.Text;
 using System;
@@ -29,7 +29,7 @@ namespace Transbank.Utils
 
         public List<string> ListPorts() => new List<string>(collection: SerialPort.GetPortNames());
 
-        private int ReadTimeout
+        public int ReadTimeout
         {
             get { return _timeout; }
             set
