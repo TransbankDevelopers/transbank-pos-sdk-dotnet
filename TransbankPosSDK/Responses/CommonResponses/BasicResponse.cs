@@ -13,12 +13,11 @@ namespace Transbank.Responses.CommonResponses
 
         public string Response { get; }
 
-        public int FunctionCode
+        public string FunctionCode
         {
             get
             {
-                _ = int.TryParse(Response.Split('|')[ParameterMap["FunctionCode"]].Trim(), out int functionCode);
-                return functionCode;
+                return Response.Split('|')[ParameterMap["FunctionCode"]].Trim();
             }
         }
         public string ResponseMessage
