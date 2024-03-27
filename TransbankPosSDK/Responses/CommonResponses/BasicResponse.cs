@@ -1,10 +1,13 @@
-using Transbank.Utils;
+﻿using Transbank.Utils;
 using System.Collections.Generic;
 
 namespace Transbank.Responses.CommonResponses
 {
     public class BasicResponse
     {
+        const byte APPROVED_RESPONSE_CODE = 0;
+        const byte INITIALIZATION_OK_RESPONSE_CODE = 90;
+
         private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
             { "FunctionCode", 0},
@@ -42,7 +45,7 @@ namespace Transbank.Responses.CommonResponses
                 return responseCode;
             }
         }
-        public bool Success => ResponseCodes.Map[0].Equals(ResponseMessage) || ResponseCodes.Map[90].Equals(ResponseMessage);
+        public bool Success => ResponseCodes.Map[APPROVED_RESPONSE_CODE].Equals(ResponseMessage) || ResponseCodes.Map[INITIALIZATION_OK_RESPONSE_CODE].Equals(ResponseMessage);
 
         public BasicResponse(string response)
         {
