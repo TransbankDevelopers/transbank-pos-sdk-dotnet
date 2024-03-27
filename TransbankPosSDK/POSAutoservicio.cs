@@ -159,21 +159,6 @@ namespace Transbank.POSAutoservicio
             }
         }
 
-        public async Task<RefundResponse> Refund()
-        {
-            string message = $"1200";
-
-            try
-            {
-                await WriteData(MessageWithLRC(message));
-                return new RefundResponse(CurrentResponse);
-            }
-            catch (Exception e)
-            {
-                throw new TransbankRefundException("Unable to make Refund on POS", e);
-            }
-        }
-
         public async Task<CloseResponse> Close(bool sendVoucher)
         {
             string message = $"0500|{Convert.ToInt32(sendVoucher)}";
