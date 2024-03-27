@@ -1,4 +1,4 @@
-using System.IO.Ports;
+﻿using System.IO.Ports;
 using System.Collections.Generic;
 using System.Text;
 using System;
@@ -111,7 +111,7 @@ namespace Transbank.Utils
             Console.WriteLine($"Out (ASCII): {payload}");
 
             Port.Write(payload);
-            bool ack = ReadAck(new CancellationTokenSource(_timeout).Token);
+            bool ack = ReadAck(new CancellationTokenSource(_timeout).Token).Result;
 
             if (ack)
             {
@@ -221,7 +221,7 @@ namespace Transbank.Utils
             Console.WriteLine($"In (ASCII): {_fullResponse}");
         }
 
-        private bool ReadAck(CancellationToken token)
+        protected async Task<bool> ReadAck(CancellationToken token)
         {
             while (!token.IsCancellationRequested && Port.BytesToRead <= 0)
             {
@@ -231,7 +231,7 @@ namespace Transbank.Utils
                 throw new TransbankException($"Read operation Timeout");
             }
             byte[] result = new byte[1];
-            Port.BaseStream.ReadAsync(result, 0, 1, token).Wait();
+            await Port.BaseStream.ReadAsync(result, 0, 1, token);
             return CheckACK(result[0]);
         }
 
