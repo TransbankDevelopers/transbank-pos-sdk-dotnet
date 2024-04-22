@@ -5,6 +5,19 @@ Todos los cambios notables a este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2024-04-23
+
+### Changed
+- Se cambia el tipo de dato del campo function code de int a string en las respuestas.
+
+### Fix
+- Se arregla un problema que no permitía procesar de forma correcta algunas respuesta del POS.
+- Se arregla un problema que producía que no respondiera el SDK cuando se hacia una operación de Poll o cambio de modo y el POS no se encontrara conectado.
+- Se arregla un problema que provocaba que se cortara el primer caracter del código de función.
+
+### Added
+- Se agrega la posibilidad de asignar el timeout de lectura al puerto.
+
 ## [3.0.2] - 2022-03-01
 
 ### Fix
