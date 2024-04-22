@@ -42,7 +42,7 @@
   
   <PropertyGroup>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <Version>3.0.3</Version>
+    <Version>4.0.1</Version>
   </PropertyGroup>
     
   <ItemGroup>
