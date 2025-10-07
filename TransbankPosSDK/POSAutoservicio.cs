@@ -13,7 +13,7 @@ namespace Transbank.POSAutoservicio
 {
     public class POSAutoservicio : Serial
     {
-        public POSAutoservicio()
+        public POSAutoservicio() : base(Model.AUTOSERVICIO)
         {
 
         }
