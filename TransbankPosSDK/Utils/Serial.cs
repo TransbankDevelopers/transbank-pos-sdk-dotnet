@@ -19,7 +19,12 @@ namespace Transbank.Utils
 
         private int _sentNACK;
         private String _fullResponse;
-
+        protected enum Model
+        {
+            INTEGRADO = 0,
+            AUTOSERVICIO = 1,
+        }
+        protected Model POSType { get; private set; }
         protected string _currentResponse;
         protected List<string> SaleDetail;
         private int _timeout;
@@ -50,6 +55,11 @@ namespace Transbank.Utils
                     OnIntermediateMessageReceived(CurrentResponse);
                 }
             }
+        }
+
+        protected Serial(Model posType = Model.INTEGRADO)
+        {
+            POSType = posType;
         }
 
         protected virtual void OnIntermediateMessageReceived(string message)
