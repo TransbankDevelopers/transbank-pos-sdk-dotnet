@@ -21,8 +21,14 @@ namespace Transbank.Utils
         private String _fullResponse;
         protected enum Model
         {
-            INTEGRADO = 0,
-            AUTOSERVICIO = 1,
+            AUTOSERVICIO = 0,
+            INTEGRADO = 1,
+        }
+
+        protected enum LrcStartIndex
+        {
+            AUTOSERVICIO = 0,
+            INTEGRADO = 1,
         }
         protected Model POSType { get; private set; }
         protected string _currentResponse;
@@ -287,10 +293,23 @@ namespace Transbank.Utils
             {
                 return true;
             }
-            int StartIndex = (this.POSType == Model.AUTOSERVICIO) ? 0 : 1;
-            char ReceivedLrc = response[response.Length - 1];
-            char CalculatedLrc = Lrc(response.Substring(0, response.Length - 1), StartIndex);
+            int lrcIndex = response.Length - 1;
+            char ReceivedLrc = response[lrcIndex];
+            var trimmedResponse = response.Substring(0, lrcIndex);
+            char CalculatedLrc = this.POSType == Model.AUTOSERVICIO
+                ? CalculateAutoservicioLrc(trimmedResponse)
+                : CalculateIntegradoLrc(trimmedResponse);
             return ReceivedLrc == CalculatedLrc;
+        }
+
+        protected char CalculateIntegradoLrc(string message)
+        {
+            return Lrc(message, (int)LrcStartIndex.INTEGRADO);
+        }
+
+        protected char CalculateAutoservicioLrc(string message)
+        {
+            return Lrc(message, (int)LrcStartIndex.AUTOSERVICIO);
         }
 
         protected void SendNACK()
