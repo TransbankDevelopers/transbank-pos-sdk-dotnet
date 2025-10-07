@@ -191,7 +191,7 @@ namespace Transbank.Responses.AutoservicioResponse
                 try
                 {
                     string[] arrayResponse = Response.Split('|');
-                    if (arrayResponse.Length <= ParameterMap["PrintingField"])
+                    if (Response.Split('|').Length < 5)
                     {
                         printingField.Add("");
                         return printingField;
