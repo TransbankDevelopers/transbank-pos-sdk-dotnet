@@ -250,10 +250,10 @@ namespace Transbank.Utils
             return message + Lrc(message);
         }
 
-        protected char Lrc(string message)
+        protected char Lrc(string message, int startIndex = 1)
         {
             char lrc = (char)0;
-            for (int i = 1; i < message.Length; i++)
+            for (int i = startIndex; i < message.Length; i++)
             {
                 lrc ^= message[i];
             }
@@ -287,10 +287,10 @@ namespace Transbank.Utils
             {
                 return true;
             }
-
+            int StartIndex = (this.POSType == Model.AUTOSERVICIO) ? 0 : 1;
             char ReceivedLrc = response[response.Length - 1];
-            char CalculatedLrc = Lrc(response.Substring(0, response.Length - 1));
-            return (ReceivedLrc == CalculatedLrc);
+            char CalculatedLrc = Lrc(response.Substring(0, response.Length - 1), StartIndex);
+            return ReceivedLrc == CalculatedLrc;
         }
 
         protected void SendNACK()
