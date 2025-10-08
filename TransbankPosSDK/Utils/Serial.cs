@@ -12,6 +12,7 @@ namespace Transbank.Utils
     public class Serial
     {
         protected static readonly byte ACK = 0x06;
+        protected static readonly byte STX = 0x02;
         protected static readonly byte ETX = 0x03;
         protected static readonly int DEFAULT_TIMEOUT = 150000;
         protected static readonly byte NACK = 0x15;
@@ -250,7 +251,7 @@ namespace Transbank.Utils
 
         protected string CreateFullMessage(string message)
         {
-            return "" + message + "" + CalculateLrc(message + "");
+            return $"{(char)STX}{message}{(char)ETX}{CalculateLrc(message + (char)ETX)}";
         }
 
         protected char CalculateLrc(string message)
