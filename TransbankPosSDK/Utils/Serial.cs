@@ -16,16 +16,13 @@ namespace Transbank.Utils
         protected static readonly int DEFAULT_TIMEOUT = 150000;
         protected static readonly byte NACK = 0x15;
         protected static readonly int MAX_NACK_ATTEMPTS = 2;
+        protected static readonly int LRC_LENGTH = 1;
 
         private int _sentNACK;
         private String _fullResponse;
+        private const int AUTOSERVICIO_START_INDEX = 0;
+        private const int INTEGRADO_START_INDEX = 1;
         protected enum Model
-        {
-            AUTOSERVICIO = 0,
-            INTEGRADO = 1,
-        }
-
-        protected enum LrcStartIndex
         {
             AUTOSERVICIO = 0,
             INTEGRADO = 1,
@@ -229,7 +226,7 @@ namespace Transbank.Utils
                     }
                 }
 
-            } while (!CheckLRC(_fullResponse));
+            } while (!CheckReceivedLRC(_fullResponse));
 
             CurrentResponse = _fullResponse.Substring(1, (_fullResponse.Length - 3));
             Port.Write("");
@@ -282,7 +279,7 @@ namespace Transbank.Utils
             return response.Length >= 1 && response.Split('|')[0] == "0900";
         }
 
-        protected bool CheckLRC(String response)
+        protected bool CheckReceivedLRC(String response)
         {
             if (response == String.Empty)
             {
@@ -295,21 +292,16 @@ namespace Transbank.Utils
             }
             int lrcIndex = response.Length - 1;
             char ReceivedLrc = response[lrcIndex];
-            var trimmedResponse = response.Substring(0, lrcIndex);
-            char CalculatedLrc = this.POSType == Model.AUTOSERVICIO
-                ? CalculateAutoservicioLrc(trimmedResponse)
-                : CalculateIntegradoLrc(trimmedResponse);
+            char CalculatedLrc = CalculateResponseLrc(response);
             return ReceivedLrc == CalculatedLrc;
         }
 
-        protected char CalculateIntegradoLrc(string message)
+        private char CalculateResponseLrc(string message)
         {
-            return Lrc(message, (int)LrcStartIndex.INTEGRADO);
-        }
-
-        protected char CalculateAutoservicioLrc(string message)
-        {
-            return Lrc(message, (int)LrcStartIndex.AUTOSERVICIO);
+            int startIndex = POSType == Model.AUTOSERVICIO ? AUTOSERVICIO_START_INDEX : INTEGRADO_START_INDEX;
+            int charsToKeep = message.Length - startIndex - LRC_LENGTH;
+            string trimmedMessage = message.Substring(startIndex, charsToKeep);
+            return CalculateLrc(trimmedMessage);
         }
 
         protected void SendNACK()
