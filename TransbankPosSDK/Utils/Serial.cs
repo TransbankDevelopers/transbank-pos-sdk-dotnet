@@ -12,14 +12,23 @@ namespace Transbank.Utils
     public class Serial
     {
         protected static readonly byte ACK = 0x06;
+        protected static readonly byte STX = 0x02;
         protected static readonly byte ETX = 0x03;
         protected static readonly int DEFAULT_TIMEOUT = 150000;
         protected static readonly byte NACK = 0x15;
         protected static readonly int MAX_NACK_ATTEMPTS = 2;
+        protected static readonly int LRC_LENGTH = 1;
 
         private int _sentNACK;
         private String _fullResponse;
-
+        private const int AUTOSERVICIO_START_INDEX = 0;
+        private const int INTEGRADO_START_INDEX = 1;
+        protected enum Model
+        {
+            AUTOSERVICIO = 0,
+            INTEGRADO = 1,
+        }
+        protected Model POSType { get; private set; }
         protected string _currentResponse;
         protected List<string> SaleDetail;
         private int _timeout;
@@ -50,6 +59,11 @@ namespace Transbank.Utils
                     OnIntermediateMessageReceived(CurrentResponse);
                 }
             }
+        }
+
+        protected Serial(Model posType = Model.INTEGRADO)
+        {
+            POSType = posType;
         }
 
         protected virtual void OnIntermediateMessageReceived(string message)
@@ -213,7 +227,7 @@ namespace Transbank.Utils
                     }
                 }
 
-            } while (!CheckLRC(_fullResponse));
+            } while (!CheckReceivedLRC(_fullResponse));
 
             CurrentResponse = _fullResponse.Substring(1, (_fullResponse.Length - 3));
             Port.Write("");
@@ -235,15 +249,15 @@ namespace Transbank.Utils
             return CheckACK(result[0]);
         }
 
-        protected string MessageWithLRC(string message)
+        protected string CreateFullMessage(string message)
         {
-            return message + Lrc(message);
+            return $"{(char)STX}{message}{(char)ETX}{CalculateLrc(message + (char)ETX)}";
         }
 
-        protected char Lrc(string message)
+        protected char CalculateLrc(string message)
         {
             char lrc = (char)0;
-            for (int i = 1; i < message.Length; i++)
+            for (int i = 0; i < message.Length; i++)
             {
                 lrc ^= message[i];
             }
@@ -266,7 +280,7 @@ namespace Transbank.Utils
             return response.Length >= 1 && response.Split('|')[0] == "0900";
         }
 
-        protected bool CheckLRC(String response)
+        protected bool CheckReceivedLRC(String response)
         {
             if (response == String.Empty)
             {
@@ -277,10 +291,18 @@ namespace Transbank.Utils
             {
                 return true;
             }
+            int lrcIndex = response.Length - 1;
+            char ReceivedLrc = response[lrcIndex];
+            char CalculatedLrc = CalculateResponseLrc(response);
+            return ReceivedLrc == CalculatedLrc;
+        }
 
-            char ReceivedLrc = response[response.Length - 1];
-            char CalculatedLrc = Lrc(response.Substring(0, response.Length - 1));
-            return (ReceivedLrc == CalculatedLrc);
+        private char CalculateResponseLrc(string message)
+        {
+            int startIndex = POSType == Model.AUTOSERVICIO ? AUTOSERVICIO_START_INDEX : INTEGRADO_START_INDEX;
+            int charsToKeep = message.Length - startIndex - LRC_LENGTH;
+            string trimmedMessage = message.Substring(startIndex, charsToKeep);
+            return CalculateLrc(trimmedMessage);
         }
 
         protected void SendNACK()

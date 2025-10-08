@@ -13,7 +13,7 @@ namespace Transbank.POSAutoservicio
 {
     public class POSAutoservicio : Serial
     {
-        public POSAutoservicio()
+        public POSAutoservicio() : base(Model.AUTOSERVICIO)
         {
 
         }
@@ -105,10 +105,10 @@ namespace Transbank.POSAutoservicio
             {
                 throw new TransbankSaleException("The ticket must be up to 20 characters.");
             }
-            string message = $"0200|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}";
+            string message = $"0200|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}";
             try
             {
-                await WriteData(MessageWithLRC(message), intermediateMessages: sendStatus);
+                await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
                 return new SaleResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -132,10 +132,10 @@ namespace Transbank.POSAutoservicio
                 throw new TransbankMultiCodeSaleException("The ticket must be up to 20 characters.");
             }
             string code = commerceCode != 0 ? commerceCode.ToString() : "";
-            string message = $"0270|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}|{code}";
+            string message = $"0270|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}|{code}";
             try
             {
-                await WriteData(MessageWithLRC(message), intermediateMessages: sendStatus);
+                await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
                 return new MultiCodeSaleResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -148,8 +148,8 @@ namespace Transbank.POSAutoservicio
         {
             try
             {
-                string message = $"0250|{Convert.ToInt32(sendVoucher)}";
-                await WriteData(MessageWithLRC(message));
+                string message = $"0250|{Convert.ToInt32(sendVoucher)}";
+                await WriteData(CreateFullMessage(message));
                 return new LastSaleResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -160,11 +160,11 @@ namespace Transbank.POSAutoservicio
 
         public async Task<CloseResponse> Close(bool sendVoucher)
         {
-            string message = $"0500|{Convert.ToInt32(sendVoucher)}";
+            string message = $"0500|{Convert.ToInt32(sendVoucher)}";
 
             try
-            {          
-                await WriteData(MessageWithLRC(message));
+            {
+                await WriteData(CreateFullMessage(message));
                 return new CloseResponse(CurrentResponse);
             }
             catch (Exception e)
