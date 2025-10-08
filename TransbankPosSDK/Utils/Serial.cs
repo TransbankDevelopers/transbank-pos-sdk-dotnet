@@ -256,10 +256,10 @@ namespace Transbank.Utils
             return message + Lrc(message);
         }
 
-        protected char Lrc(string message, int startIndex = 1)
+        protected char CalculateLrc(string message)
         {
             char lrc = (char)0;
-            for (int i = startIndex; i < message.Length; i++)
+            for (int i = 0; i < message.Length; i++)
             {
                 lrc ^= message[i];
             }
