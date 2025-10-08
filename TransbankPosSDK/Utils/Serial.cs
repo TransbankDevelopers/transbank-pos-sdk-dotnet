@@ -251,9 +251,9 @@ namespace Transbank.Utils
             return CheckACK(result[0]);
         }
 
-        protected string MessageWithLRC(string message)
+        protected string CreateFullMessage(string message)
         {
-            return message + Lrc(message);
+            return "" + message + "" + CalculateLrc(message + "");
         }
 
         protected char CalculateLrc(string message)

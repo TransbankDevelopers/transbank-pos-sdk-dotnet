@@ -29,10 +29,10 @@ namespace Transbank.POSIntegrado
             {
                 throw new TransbankSaleException("Amount must be less than 999999999.");
             }
-            string message = $"0200|{amount}|{ticket}|||{Convert.ToInt32(sendStatus)}|";
+            string message = $"0200|{amount}|{ticket}|||{Convert.ToInt32(sendStatus)}|";
             try
             {
-                await WriteData(MessageWithLRC(message), intermediateMessages: sendStatus);
+                await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
                 return new SaleResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -56,10 +56,10 @@ namespace Transbank.POSIntegrado
                 throw new TransbankSaleException("Ticket must be 6 characters.");
             }
             string code = commerceCode != 0 ? commerceCode.ToString() : "";
-            string message = $"0270|{amount}|{ticket}|| |{Convert.ToInt32(sendStatus)}|{code}|";
+            string message = $"0270|{amount}|{ticket}|| |{Convert.ToInt32(sendStatus)}|{code}|";
             try
             {
-                await WriteData(MessageWithLRC(message), intermediateMessages: sendStatus);
+                await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
                 return new MultiCodeSaleResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -85,8 +85,8 @@ namespace Transbank.POSIntegrado
         {
             try
             {
-                string message = $"0280|{Convert.ToInt32(getVoucherInfo)}";
-                await WriteData(MessageWithLRC(message));
+                string message = $"0280|{Convert.ToInt32(getVoucherInfo)}";
+                await WriteData(CreateFullMessage(message));
                 return new MultiCodeLastSaleResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -98,11 +98,11 @@ namespace Transbank.POSIntegrado
 
         public async Task<RefundResponse> Refund(int operationID)
         {
-            string message = $"1200|{operationID}|";
+            string message = $"1200|{operationID}|";
 
             try
             {
-                await WriteData(MessageWithLRC(message));
+                await WriteData(CreateFullMessage(message));
                 return new RefundResponse(CurrentResponse);
             }
             catch (Exception e)
@@ -126,11 +126,11 @@ namespace Transbank.POSIntegrado
 
         public async Task<List<DetailResponse>> Details(bool printOnPOS = true)
         {
-            string message = $"0260|{Convert.ToInt32(!printOnPOS)}|";
+            string message = $"0260|{Convert.ToInt32(!printOnPOS)}|";
             List<DetailResponse> details = new List<DetailResponse>();
             try
             {
-                await WriteData(MessageWithLRC(message), printOnPOS: printOnPOS, saleDetail: true);
+                await WriteData(CreateFullMessage(message), printOnPOS: printOnPOS, saleDetail: true);
 
                 foreach (string sale in SaleDetail)
                 {
@@ -146,11 +146,11 @@ namespace Transbank.POSIntegrado
 
         public async Task<List<MultiCodeDetailResponse>> MultiCodeDetails(bool printOnPOS = true)
         {
-            string message = $"0260|{Convert.ToInt32(!printOnPOS)}|";
+            string message = $"0260|{Convert.ToInt32(!printOnPOS)}|";
             List<MultiCodeDetailResponse> details = new List<MultiCodeDetailResponse>();
             try
             {
-                await WriteData(MessageWithLRC(message), printOnPOS: printOnPOS, saleDetail: true);
+                await WriteData(CreateFullMessage(message), printOnPOS: printOnPOS, saleDetail: true);
 
                 foreach (string sale in SaleDetail)
                 {
