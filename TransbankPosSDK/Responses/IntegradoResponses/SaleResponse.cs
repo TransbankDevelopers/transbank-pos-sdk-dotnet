@@ -6,6 +6,7 @@ namespace Transbank.Responses.IntegradoResponses
 {
     public class SaleResponse : CommonResponses.LoadKeysResponse
     {
+        protected const int VOUCHER_LINE_LENGTH = 40;
         protected Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
             { "Ticket", 4},
@@ -205,14 +206,14 @@ namespace Transbank.Responses.IntegradoResponses
                 {
                     string response = Response.Split('|')[ParameterMap["Voucher"]];
 
-                    if (response.Length % 40 != 0 || response.Length == 0)
+                    if (response.Length % VOUCHER_LINE_LENGTH != 0 || response.Length == 0)
                     {
                         printingField.Add(response);
                         return printingField;
                     }
 
-                    for (int i = 0; i < response.Length; i += 40)
-                        printingField.Add(response.Substring(i, 40));
+                    for (int i = 0; i < response.Length; i += VOUCHER_LINE_LENGTH)
+                        printingField.Add(response.Substring(i, VOUCHER_LINE_LENGTH));
 
                     return printingField;
                 }
