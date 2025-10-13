@@ -19,7 +19,7 @@ namespace Transbank.POSIntegrado
 
         public static POSIntegrado Instance { get; } = new POSIntegrado();
         
-        public async Task<SaleResponse> Sale(int amount, string ticket, bool sendStatus = false)
+        public async Task<SaleResponse> Sale(int amount, string ticket, bool sendVoucher = false, bool sendStatus = false)
         {
             if (amount < 50)
             {
@@ -29,7 +29,9 @@ namespace Transbank.POSIntegrado
             {
                 throw new TransbankSaleException("Amount must be less than 999999999.");
             }
-            string message = $"0200|{amount}|{ticket}|||{Convert.ToInt32(sendStatus)}|";
+            string voucherFlag = sendVoucher ? "1" : "0";
+            string statusFlag = sendStatus ? "1" : "0";
+            string message = $"0200|{amount}|{ticket}||{voucherFlag}|{statusFlag}|";
             try
             {
                 await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
@@ -41,7 +43,7 @@ namespace Transbank.POSIntegrado
             }
         }
 
-        public async Task<MultiCodeSaleResponse> MultiCodeSale(int amount, string ticket, long commerceCode = 0, bool sendStatus = false)
+        public async Task<MultiCodeSaleResponse> MultiCodeSale(int amount, string ticket, long commerceCode = 0, bool sendVoucher = false, bool sendStatus = false)
         {
             if (amount < 50)
             {
@@ -56,7 +58,9 @@ namespace Transbank.POSIntegrado
                 throw new TransbankSaleException("Ticket must be 6 characters.");
             }
             string code = commerceCode != 0 ? commerceCode.ToString() : "";
-            string message = $"0270|{amount}|{ticket}|| |{Convert.ToInt32(sendStatus)}|{code}|";
+            string voucherFlag = sendVoucher ? "1" : "0";
+            string statusFlag = sendStatus ? "1" : "0";
+            string message = $"0270|{amount}|{ticket}||{voucherFlag}|{statusFlag}|{code}|";
             try
             {
                 await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
