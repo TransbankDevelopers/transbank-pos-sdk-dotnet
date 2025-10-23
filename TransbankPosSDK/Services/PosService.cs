@@ -249,13 +249,11 @@ namespace Transbank.Services
 
         private void SendAck()
         {
-            Console.WriteLine("[POS Service] Sending ACK");
             _handler.Write($"{ACK}");
         }
 
         private void SendNack()
         {
-            Console.WriteLine("[POS Service] Sending NACK");
             _handler.Write($"{NACK}");
         }
 
