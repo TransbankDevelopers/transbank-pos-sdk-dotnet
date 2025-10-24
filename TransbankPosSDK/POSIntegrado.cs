@@ -22,6 +22,13 @@ namespace Transbank.POSIntegrado
             _posService.IntermediateResponseReceived += OnIntermediateResponseReceived;
         }
 
+        internal POSIntegrado(ISerialHandler handler, PosService service)
+        {
+            _handler = handler;
+            _posService = service;
+            _posService.IntermediateResponseReceived += OnIntermediateResponseReceived;
+        }
+
         private void OnIntermediateResponseReceived(object sender, string response)
         {
             IntermediateResponseChange?.Invoke(this, new IntermediateResponse(response));
