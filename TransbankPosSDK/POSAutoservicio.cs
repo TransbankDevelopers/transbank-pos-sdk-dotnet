@@ -50,6 +50,8 @@ namespace Transbank.POSAutoservicio
         {
             _posService.ClosePort();
         }
+
+        public bool IsPortOpen => _posService.IsPortOpen;
         public async Task<bool> Poll()
         {
             try
