@@ -13,7 +13,7 @@ namespace Transbank.POSIntegrado
     public class POSIntegrado
     {
         public event EventHandler<IntermediateResponse> IntermediateResponseChange;
-        private SerialHandler _handler;
+        private ISerialHandler _handler;
         private PosService _posService;
         private POSIntegrado()
         {

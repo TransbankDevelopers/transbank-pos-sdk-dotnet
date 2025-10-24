@@ -6,7 +6,7 @@ using Transbank.Exceptions.CommonExceptions;
 
 namespace Transbank.SerialPortHandler
 {
-    public class SerialHandler
+    public class SerialHandler : ISerialHandler
     {
         private SerialPort _port;
 

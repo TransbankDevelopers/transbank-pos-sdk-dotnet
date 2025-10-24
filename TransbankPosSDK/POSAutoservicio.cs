@@ -13,7 +13,7 @@ namespace Transbank.POSAutoservicio
     public class POSAutoservicio
     {
         public event EventHandler<IntermediateResponse> IntermediateResponseChange;
-        private SerialHandler _handler;
+        private ISerialHandler _handler;
         private PosService _posService;
         public POSAutoservicio()
         {

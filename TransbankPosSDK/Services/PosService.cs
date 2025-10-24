@@ -10,7 +10,7 @@ namespace Transbank.Services
 {
     public class PosService
     {
-        private readonly SerialHandler _handler;
+        private readonly ISerialHandler _handler;
         private readonly StringBuilder _buffer = new StringBuilder();
         private const string INTERMEDIATE_MSG_CODE = "0900";
         private const int AUTOSERVICIO_START_INDEX = 0;
@@ -28,7 +28,7 @@ namespace Transbank.Services
             INTEGRADO = 1,
         }
         protected static Model _posModel { get; private set; }
-        public PosService(SerialHandler handler, Model posModel = Model.INTEGRADO)
+        public PosService(ISerialHandler handler, Model posModel = Model.INTEGRADO)
         {
             _handler = handler;
             _posModel = posModel;
