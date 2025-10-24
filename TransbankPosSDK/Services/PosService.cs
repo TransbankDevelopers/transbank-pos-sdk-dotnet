@@ -96,7 +96,7 @@ namespace Transbank.Services
             }
         }
 
-        private void HandleCommonResponse(string rawData, TaskCompletionSource<string> tcs,  bool shortResponse)
+        private void HandleCommonResponse(string rawData, TaskCompletionSource<string> tcs, bool shortResponse)
         {
             if (rawData == ACK.ToString())
             {

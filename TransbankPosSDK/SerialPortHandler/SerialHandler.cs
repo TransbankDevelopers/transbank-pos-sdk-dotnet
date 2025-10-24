@@ -73,7 +73,7 @@ namespace Transbank.SerialPortHandler
         }
 
         protected bool CantWrite() => _port == null || !_port.IsOpen;
-        
+
         protected string ToHexString(string text)
         {
             return BitConverter.ToString(Encoding.Default.GetBytes(text)).Replace('-', ' ');
