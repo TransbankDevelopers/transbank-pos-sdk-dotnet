@@ -27,7 +27,7 @@ namespace Transbank.Services
             AUTOSERVICIO = 0,
             INTEGRADO = 1,
         }
-        protected static Model _posModel { get; private set; }
+        protected Model _posModel { get; private set; }
         public PosService(ISerialHandler handler, Model posModel = Model.INTEGRADO)
         {
             _handler = handler;
@@ -141,7 +141,6 @@ namespace Transbank.Services
                 _buffer.Clear();
                 return;
             }
-
             _buffer.Append(rawData);
             if (IsMessageCompleted(_buffer.ToString()))
             {
@@ -151,12 +150,11 @@ namespace Transbank.Services
                     _buffer.Clear();
                     return;
                 }
-
                 responseList.Add(_buffer.ToString());
                 SendAck();
                 _buffer.Clear();
                 if (IsDetailsListCompleted(responseList))
-                {   
+                {
                     tcs.TrySetResult(responseList);
                     return;
                 }
