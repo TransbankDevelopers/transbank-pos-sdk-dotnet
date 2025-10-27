@@ -40,40 +40,25 @@ namespace Transbank.Services
         }
         public async Task<string> SendNormalCommand(string message, bool shortResponse = false)
         {
-            string fullMessage = CreateFullMessage(message);
             var tcs = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
             void Handler(string data) => HandleCommonResponse(data, tcs, shortResponse);
-            _handler.DataReceived += Handler;
 
-            try
-            {
-                _buffer.Clear();
-                _handler.Write(fullMessage);
-                using (var cts = new CancellationTokenSource(_defaultTimeout))
-                {
-                    cts.Token.Register(() =>
-                    {
-                        if (!tcs.Task.IsCompleted)
-                            tcs.TrySetCanceled();
-                    });
-                    return await tcs.Task;
-                }
-            }
-            finally
-            {
-                _handler.DataReceived -= Handler;
-            }
+            return await SendCommand(tcs, message, Handler);
         }
 
         public async Task<List<string>> SendDetailsCommand(string message, bool printOnPOS)
         {
-            string fullMessage = CreateFullMessage(message);
             var tcs = new TaskCompletionSource<List<string>>(TaskCreationOptions.RunContinuationsAsynchronously);
             var responseList = new List<string>();
 
             void Handler(string data) => HandleDetailsResponse(data, tcs, responseList, printOnPOS);
-            _handler.DataReceived += Handler;
+            return await SendCommand(tcs, message, Handler);
+        }
 
+        private async Task<T> SendCommand<T>( TaskCompletionSource<T> tcs, string Message, Action<string> onDataReceived)
+        {
+            _handler.DataReceived += onDataReceived;
+            string fullMessage = CreateFullMessage(Message);
             try
             {
                 _buffer.Clear();
@@ -92,7 +77,7 @@ namespace Transbank.Services
             }
             finally
             {
-                _handler.DataReceived -= Handler;
+                _handler.DataReceived -= onDataReceived;
             }
         }
 
