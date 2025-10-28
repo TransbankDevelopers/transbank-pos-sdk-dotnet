@@ -1,47 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
-using Transbank.Utils;
 using Transbank.Exceptions.CommonExceptions;
-using System.Text;
 using Transbank.Responses.CommonResponses;
 using Transbank.Responses.AutoservicioResponse;
 using Transbank.Exceptions.AutoservicioExceptions;
 using System.Threading.Tasks;
-using System.Threading;
+using Transbank.SerialPortHandler;
+using Transbank.Services;
 
 namespace Transbank.POSAutoservicio
 {
-    public class POSAutoservicio : Serial
+    public class POSAutoservicio
     {
-        public POSAutoservicio() : base(Model.AUTOSERVICIO)
+        public event EventHandler<IntermediateResponse> IntermediateResponseChange;
+        private ISerialHandler _handler;
+        private PosService _posService;
+        public POSAutoservicio()
         {
+            _handler = new SerialHandler();
+            _posService = new PosService(_handler, PosService.Model.AUTOSERVICIO);
+            _posService.IntermediateResponseReceived += OnIntermediateResponseReceived;
+        }
 
+        internal POSAutoservicio(ISerialHandler handler, PosService service)
+        {
+            _handler = handler;
+            _posService = service;
+            _posService.IntermediateResponseReceived += OnIntermediateResponseReceived;
+        }
+
+        private void OnIntermediateResponseReceived(object sender, string response)
+        {
+            IntermediateResponseChange?.Invoke(this, new IntermediateResponse(response));
         }
 
         public static POSAutoservicio Instance { get; } = new POSAutoservicio();
 
+        public List<string> ListPorts()
+        {
+            return _posService.getPorts();
+        }
+
+        public void OpenPort(string portName, int baudrate = 115200)
+        {
+            _posService.OpenPort(portName, baudrate);
+        }
+
+        public void ClosePort()
+        {
+            _posService.ClosePort();
+        }
+
+        public bool IsPortOpen => _posService.IsPortOpen;
         public async Task<bool> Poll()
         {
-            DiscardBuffer();
-
-            if (CantWrite())
-            {
-                throw new TransbankException($"Unable to Poll port {Port.PortName} is closed");
-            }
-
             try
-            {
-                string command = "0100";
-
-                Console.WriteLine($"Out (Hex): {ToHexString(command)}");
-                Console.WriteLine($"Out (ASCII): {command}");
-
-                Port.Write(command);
-                return await ReadAck(new CancellationTokenSource(ReadTimeout).Token);
+            {              
+                string command = "0100";
+                string response = await _posService.ProcessNormalCommand(command, shortResponse: true);
+                return response == ((char)0x06).ToString();
             }
             catch (Exception e)
             {
-                throw new TransbankException($"Unable to send Poll command on port {Port.PortName}", e);
+                throw new TransbankException($"Unable to send Poll command on port", e);
             }
         }
 
@@ -49,8 +70,9 @@ namespace Transbank.POSAutoservicio
         {
             try
             {
-                await WriteData("0800");
-                return new LoadKeysResponse(CurrentResponse);
+                string command = "0800";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new LoadKeysResponse(response);
             }
             catch (Exception e)
             {
@@ -62,19 +84,13 @@ namespace Transbank.POSAutoservicio
         {
             try
             {
-                byte[] buffer = new byte[1];
-                string command = "0070";
-
-                Console.WriteLine($"Out (Hex): {ToHexString(command)}");
-                Console.WriteLine($"Out (ASCII): {command}");
-
-                Port.Write(command);
-                await Port.BaseStream.ReadAsync(buffer, 0, 1);
-                return CheckACK(buffer[0]);
+                string command = "0070";
+                string response = await _posService.ProcessNormalCommand(command, shortResponse: true);
+                return response == ((char)0x06).ToString();
             }
             catch (Exception e)
             {
-                throw new TransbankException($"Unable to send Initialization command on port {Port.PortName}", e);
+                throw new TransbankException($"Unable to send Initialization command in pos", e);
             }
         }
 
@@ -82,8 +98,9 @@ namespace Transbank.POSAutoservicio
         {
             try
             {
-                await WriteData("0080\x0B");
-                return new InitializationResponse(CurrentResponse);
+                string command = "0080";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new InitializationResponse(response);
             }
             catch (Exception e)
             {
@@ -105,11 +122,11 @@ namespace Transbank.POSAutoservicio
             {
                 throw new TransbankSaleException("The ticket must be up to 20 characters.");
             }
-            string message = $"0200|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}";
             try
             {
-                await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
-                return new SaleResponse(CurrentResponse);
+                string command = $"0200|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new SaleResponse(response);
             }
             catch (Exception e)
             {
@@ -131,12 +148,12 @@ namespace Transbank.POSAutoservicio
             {
                 throw new TransbankMultiCodeSaleException("The ticket must be up to 20 characters.");
             }
-            string code = commerceCode != 0 ? commerceCode.ToString() : "";
-            string message = $"0270|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}|{code}";
             try
             {
-                await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
-                return new MultiCodeSaleResponse(CurrentResponse);
+                string code = commerceCode != 0 ? commerceCode.ToString() : "";
+                string command = $"0270|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}|{code}";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new MultiCodeSaleResponse(response);
             }
             catch (Exception e)
             {
@@ -148,9 +165,9 @@ namespace Transbank.POSAutoservicio
         {
             try
             {
-                string message = $"0250|{Convert.ToInt32(sendVoucher)}";
-                await WriteData(CreateFullMessage(message));
-                return new LastSaleResponse(CurrentResponse);
+                string command = $"0250|{Convert.ToInt32(sendVoucher)}";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new LastSaleResponse(response);
             }
             catch (Exception e)
             {
@@ -160,12 +177,12 @@ namespace Transbank.POSAutoservicio
 
         public async Task<CloseResponse> Close(bool sendVoucher)
         {
-            string message = $"0500|{Convert.ToInt32(sendVoucher)}";
 
             try
             {
-                await WriteData(CreateFullMessage(message));
-                return new CloseResponse(CurrentResponse);
+                string command = $"0500|{Convert.ToInt32(sendVoucher)}";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new CloseResponse(response);
             }
             catch (Exception e)
             {

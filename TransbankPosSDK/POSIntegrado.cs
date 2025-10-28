@@ -1,23 +1,57 @@
 ﻿using System;
 using Transbank.Responses.IntegradoResponses;
 using Transbank.Exceptions.IntegradoExceptions;
-using Transbank.Utils;
 using System.Collections.Generic;
 using Transbank.Responses.CommonResponses;
 using Transbank.Exceptions.CommonExceptions;
 using System.Threading.Tasks;
-using System.Threading;
+using Transbank.SerialPortHandler;
+using Transbank.Services;
 
 namespace Transbank.POSIntegrado
 {
-    public class POSIntegrado : Serial
+    public class POSIntegrado
     {
+        public event EventHandler<IntermediateResponse> IntermediateResponseChange;
+        private ISerialHandler _handler;
+        private PosService _posService;
         private POSIntegrado()
         {
-            
+            _handler = new SerialHandler();
+            _posService = new PosService(_handler);
+            _posService.IntermediateResponseReceived += OnIntermediateResponseReceived;
+        }
+
+        internal POSIntegrado(ISerialHandler handler, PosService service)
+        {
+            _handler = handler;
+            _posService = service;
+            _posService.IntermediateResponseReceived += OnIntermediateResponseReceived;
+        }
+
+        private void OnIntermediateResponseReceived(object sender, string response)
+        {
+            IntermediateResponseChange?.Invoke(this, new IntermediateResponse(response));
         }
 
         public static POSIntegrado Instance { get; } = new POSIntegrado();
+
+        public List<string> ListPorts()
+        {
+            return _posService.getPorts();
+        }
+
+        public void OpenPort(string portName, int baudrate = 115200)
+        {
+            _posService.OpenPort(portName, baudrate);
+        }
+
+        public void ClosePort()
+        {
+            _posService.ClosePort();
+        }
+
+        public bool IsPortOpen => _posService.IsPortOpen;
         
         public async Task<SaleResponse> Sale(int amount, string ticket, bool sendVoucher = false, bool sendStatus = false)
         {
@@ -31,11 +65,11 @@ namespace Transbank.POSIntegrado
             }
             string voucherFlag = sendVoucher ? "1" : "0";
             string statusFlag = sendStatus ? "1" : "0";
-            string message = $"0200|{amount}|{ticket}||{voucherFlag}|{statusFlag}|";
+            string command = $"0200|{amount}|{ticket}||{voucherFlag}|{statusFlag}|";
             try
             {
-                await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
-                return new SaleResponse(CurrentResponse);
+                string response = await _posService.ProcessNormalCommand(command);
+                return new SaleResponse(response);
             }
             catch (Exception e)
             {
@@ -60,11 +94,11 @@ namespace Transbank.POSIntegrado
             string code = commerceCode != 0 ? commerceCode.ToString() : "";
             string voucherFlag = sendVoucher ? "1" : "0";
             string statusFlag = sendStatus ? "1" : "0";
-            string message = $"0270|{amount}|{ticket}||{voucherFlag}|{statusFlag}|{code}|";
+            string command = $"0270|{amount}|{ticket}||{voucherFlag}|{statusFlag}|{code}|";
             try
             {
-                await WriteData(CreateFullMessage(message), intermediateMessages: sendStatus);
-                return new MultiCodeSaleResponse(CurrentResponse);
+                string response = await _posService.ProcessNormalCommand(command);
+                return new MultiCodeSaleResponse(response);
             }
             catch (Exception e)
             {
@@ -76,8 +110,9 @@ namespace Transbank.POSIntegrado
         {
             try
             {
-                await WriteData("0250|x");
-                return new LastSaleResponse(CurrentResponse);
+                string command = "0250|";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new LastSaleResponse(response);
             }
             catch (Exception e)
             {
@@ -89,9 +124,9 @@ namespace Transbank.POSIntegrado
         {
             try
             {
-                string message = $"0280|{Convert.ToInt32(getVoucherInfo)}";
-                await WriteData(CreateFullMessage(message));
-                return new MultiCodeLastSaleResponse(CurrentResponse);
+                string command = $"0280|{Convert.ToInt32(getVoucherInfo)}";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new MultiCodeLastSaleResponse(response);
             }
             catch (Exception e)
             {
@@ -102,12 +137,12 @@ namespace Transbank.POSIntegrado
 
         public async Task<RefundResponse> Refund(int operationID)
         {
-            string message = $"1200|{operationID}|";
 
             try
             {
-                await WriteData(CreateFullMessage(message));
-                return new RefundResponse(CurrentResponse);
+                string command = $"1200|{operationID}|";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new RefundResponse(response);
             }
             catch (Exception e)
             {
@@ -119,8 +154,9 @@ namespace Transbank.POSIntegrado
         {
             try
             {
-                await WriteData("0700||");
-                return new TotalsResponse(CurrentResponse);
+                string command = "0700|";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new TotalsResponse(response);
             }
             catch (Exception e)
             {
@@ -134,46 +170,47 @@ namespace Transbank.POSIntegrado
             List<DetailResponse> details = new List<DetailResponse>();
             try
             {
-                await WriteData(CreateFullMessage(message), printOnPOS: printOnPOS, saleDetail: true);
+                List<string> responses = await _posService.ProcessDetailsCommand(message, printOnPOS);
 
-                foreach (string sale in SaleDetail)
+                foreach (string sale in responses)
                 {
                     details.Add(new DetailResponse(sale));
                 }
+                return details;
             }
             catch (Exception e)
             {
                 throw new TransbankSalesDetailException("Unabel to request sale detail on pos", e);
             }
-            return details;
         }
 
         public async Task<List<MultiCodeDetailResponse>> MultiCodeDetails(bool printOnPOS = true)
         {
-            string message = $"0260|{Convert.ToInt32(!printOnPOS)}|";
+            string command = $"0290|{Convert.ToInt32(!printOnPOS)}|";
             List<MultiCodeDetailResponse> details = new List<MultiCodeDetailResponse>();
             try
             {
-                await WriteData(CreateFullMessage(message), printOnPOS: printOnPOS, saleDetail: true);
+                List<string> responses = await _posService.ProcessDetailsCommand(command, printOnPOS);
 
-                foreach (string sale in SaleDetail)
+                foreach (string sale in responses)
                 {
                     details.Add(new MultiCodeDetailResponse(sale));
                 }
+                return details;
             }
             catch (Exception e)
             {
                 throw new TransbankMultiCodeDetailException("Unabel to request sale detail on pos", e);
             }
-            return details;
         }
 
         public async Task<CloseResponse> Close()
         {
             try
             {
-                await WriteData("0500||");
-                return new CloseResponse(CurrentResponse);
+                string command = "0500||";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new CloseResponse(response);
             }
             catch (Exception e)
             {
@@ -185,8 +222,9 @@ namespace Transbank.POSIntegrado
         {
             try
             {
-                await WriteData("0800");
-                return new LoadKeysResponse(CurrentResponse);
+                string command = "0800";
+                string response = await _posService.ProcessNormalCommand(command);
+                return new LoadKeysResponse(response);
             }
             catch (Exception e)
             {
@@ -196,51 +234,29 @@ namespace Transbank.POSIntegrado
 
         public async Task<bool> Poll()
         {
-            Port.DiscardInBuffer();
-            Port.DiscardOutBuffer();
-
-            if (CantWrite())
-            {
-                throw new TransbankException($"Unable to Poll port {Port.PortName} is closed");
-            }
             try
             {              
-                string command = "0100";
-
-                Console.WriteLine($"Out (Hex): {ToHexString(command)}");
-                Console.WriteLine($"Out (ASCII): {command}");
-
-                Port.Write(command);
-                return await ReadAck(new CancellationTokenSource(ReadTimeout).Token);
+                string command = "0100";
+                string response = await _posService.ProcessNormalCommand(command, shortResponse: true);
+                return response == ((char)0x06).ToString();
             }
             catch (Exception e)
             {
-                throw new TransbankException($"Unable to send Poll command on port {Port.PortName}", e);
+                throw new TransbankException($"Unable to send Poll command on port", e);
             }
         }
 
         public async Task<bool> SetNormalMode()
         {
-            Port.DiscardInBuffer();
-            Port.DiscardOutBuffer();
-
-            if (CantWrite())
-            {
-                throw new TransbankException($"Unable to Set Normal Mode port {Port.PortName} is closed");
-            }
             try
             {
-                string command = "0300\0";
-
-                Console.WriteLine($"Out (Hex): {ToHexString(command)}");
-                Console.WriteLine($"Out (ASCII): {command}");
-
-                Port.Write(command);
-                return await ReadAck(new CancellationTokenSource(ReadTimeout).Token);
+                string command = "0300";
+                string response = await _posService.ProcessNormalCommand(command, shortResponse: true);
+                return response == ((char)0x06).ToString();
             }
             catch (Exception e)
             {
-                throw new TransbankException($"Unable to send Normal Mode command on port {Port.PortName}", e);
+                throw new TransbankException($"Unable to send Normal Mode command on port", e);
             }
         }
     }
