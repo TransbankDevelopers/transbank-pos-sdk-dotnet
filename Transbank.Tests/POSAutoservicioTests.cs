@@ -2,6 +2,8 @@ using Transbank.Responses.CommonResponses;
 using Transbank.Services;
 using Transbank.Tests.Mocks;
 using Transbank.Responses.AutoservicioResponse;
+using System.Threading.Tasks;
+using Xunit;
 
 
 namespace Transbank.Tests

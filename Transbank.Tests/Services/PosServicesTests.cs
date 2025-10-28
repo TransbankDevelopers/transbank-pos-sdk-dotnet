@@ -1,5 +1,8 @@
 using Transbank.Tests.Mocks;
 using Transbank.Services;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Transbank.Tests
 {

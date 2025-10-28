@@ -3,6 +3,9 @@ using Transbank.Responses.IntegradoResponses;
 using Transbank.Exceptions.IntegradoExceptions;
 using Transbank.Services;
 using Transbank.Tests.Mocks;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Xunit;
 
 
 namespace Transbank.Tests
