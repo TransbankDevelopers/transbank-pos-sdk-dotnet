@@ -57,7 +57,7 @@ namespace Transbank.POSAutoservicio
             try
             {              
                 string command = "0100";
-                string response = await _posService.SendNormalCommand(command, shortResponse: true);
+                string response = await _posService.ProcessNormalCommand(command, shortResponse: true);
                 return response == ((char)0x06).ToString();
             }
             catch (Exception e)
@@ -71,7 +71,7 @@ namespace Transbank.POSAutoservicio
             try
             {
                 string command = "0800";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new LoadKeysResponse(response);
             }
             catch (Exception e)
@@ -85,7 +85,7 @@ namespace Transbank.POSAutoservicio
             try
             {
                 string command = "0070";
-                string response = await _posService.SendNormalCommand(command, shortResponse: true);
+                string response = await _posService.ProcessNormalCommand(command, shortResponse: true);
                 return response == ((char)0x06).ToString();
             }
             catch (Exception e)
@@ -99,7 +99,7 @@ namespace Transbank.POSAutoservicio
             try
             {
                 string command = "0080";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new InitializationResponse(response);
             }
             catch (Exception e)
@@ -125,7 +125,7 @@ namespace Transbank.POSAutoservicio
             try
             {
                 string command = $"0200|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new SaleResponse(response);
             }
             catch (Exception e)
@@ -152,7 +152,7 @@ namespace Transbank.POSAutoservicio
             {
                 string code = commerceCode != 0 ? commerceCode.ToString() : "";
                 string command = $"0270|{amount}|{ticket}|{Convert.ToInt32(sendVoucher)}|{Convert.ToInt32(sendStatus)}|{code}";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new MultiCodeSaleResponse(response);
             }
             catch (Exception e)
@@ -166,7 +166,7 @@ namespace Transbank.POSAutoservicio
             try
             {
                 string command = $"0250|{Convert.ToInt32(sendVoucher)}";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new LastSaleResponse(response);
             }
             catch (Exception e)
@@ -181,7 +181,7 @@ namespace Transbank.POSAutoservicio
             try
             {
                 string command = $"0500|{Convert.ToInt32(sendVoucher)}";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new CloseResponse(response);
             }
             catch (Exception e)

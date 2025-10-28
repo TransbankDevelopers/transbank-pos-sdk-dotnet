@@ -68,7 +68,7 @@ namespace Transbank.POSIntegrado
             string command = $"0200|{amount}|{ticket}||{voucherFlag}|{statusFlag}|";
             try
             {
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new SaleResponse(response);
             }
             catch (Exception e)
@@ -97,7 +97,7 @@ namespace Transbank.POSIntegrado
             string command = $"0270|{amount}|{ticket}||{voucherFlag}|{statusFlag}|{code}|";
             try
             {
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new MultiCodeSaleResponse(response);
             }
             catch (Exception e)
@@ -111,7 +111,7 @@ namespace Transbank.POSIntegrado
             try
             {
                 string command = "0250|";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new LastSaleResponse(response);
             }
             catch (Exception e)
@@ -125,7 +125,7 @@ namespace Transbank.POSIntegrado
             try
             {
                 string command = $"0280|{Convert.ToInt32(getVoucherInfo)}";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new MultiCodeLastSaleResponse(response);
             }
             catch (Exception e)
@@ -141,7 +141,7 @@ namespace Transbank.POSIntegrado
             try
             {
                 string command = $"1200|{operationID}|";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new RefundResponse(response);
             }
             catch (Exception e)
@@ -155,7 +155,7 @@ namespace Transbank.POSIntegrado
             try
             {
                 string command = "0700|";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new TotalsResponse(response);
             }
             catch (Exception e)
@@ -170,7 +170,7 @@ namespace Transbank.POSIntegrado
             List<DetailResponse> details = new List<DetailResponse>();
             try
             {
-                List<string> responses = await _posService.SendDetailsCommand(message, printOnPOS);
+                List<string> responses = await _posService.ProcessDetailsCommand(message, printOnPOS);
 
                 foreach (string sale in responses)
                 {
@@ -190,7 +190,7 @@ namespace Transbank.POSIntegrado
             List<MultiCodeDetailResponse> details = new List<MultiCodeDetailResponse>();
             try
             {
-                List<string> responses = await _posService.SendDetailsCommand(command, printOnPOS);
+                List<string> responses = await _posService.ProcessDetailsCommand(command, printOnPOS);
 
                 foreach (string sale in responses)
                 {
@@ -209,7 +209,7 @@ namespace Transbank.POSIntegrado
             try
             {
                 string command = "0500||";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new CloseResponse(response);
             }
             catch (Exception e)
@@ -223,7 +223,7 @@ namespace Transbank.POSIntegrado
             try
             {
                 string command = "0800";
-                string response = await _posService.SendNormalCommand(command);
+                string response = await _posService.ProcessNormalCommand(command);
                 return new LoadKeysResponse(response);
             }
             catch (Exception e)
@@ -237,7 +237,7 @@ namespace Transbank.POSIntegrado
             try
             {              
                 string command = "0100";
-                string response = await _posService.SendNormalCommand(command, shortResponse: true);
+                string response = await _posService.ProcessNormalCommand(command, shortResponse: true);
                 return response == ((char)0x06).ToString();
             }
             catch (Exception e)
@@ -251,7 +251,7 @@ namespace Transbank.POSIntegrado
             try
             {
                 string command = "0300";
-                string response = await _posService.SendNormalCommand(command, shortResponse: true);
+                string response = await _posService.ProcessNormalCommand(command, shortResponse: true);
                 return response == ((char)0x06).ToString();
             }
             catch (Exception e)

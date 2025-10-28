@@ -45,7 +45,7 @@ namespace Transbank.Tests
             string payload = "0800";
             string expected = $"{STX}{payload}{ETX}{(char)0x0B}";
 
-            var task = _service.SendNormalCommand(payload);
+            var task = _service.ProcessNormalCommand(payload);
             _mock.SimulateIncoming(expected);
 
             string response = await task;
@@ -60,7 +60,7 @@ namespace Transbank.Tests
             string payload = "TEST";
             string expected = $"{ACK}";
 
-            var task = _service.SendNormalCommand(payload, shortResponse: true);
+            var task = _service.ProcessNormalCommand(payload, shortResponse: true);
             _mock.SimulateIncoming(expected);
             string response = await task;
 
@@ -76,7 +76,7 @@ namespace Transbank.Tests
             string response3 = $"{STX}0261|00|597029414300|IT750050||||||||||||||||{ETX}{(char)0x62}";
             string response4 = $"{STX}0261|00|597029414300|IT750050||||||||||||||||{ETX}{(char)0x62}";
 
-            var task = _service.SendDetailsCommand(payload, printOnPOS: false);
+            var task = _service.ProcessDetailsCommand(payload, printOnPOS: false);
 
             _mock.SimulateIncoming(response1);
             _mock.SimulateIncoming(response2);

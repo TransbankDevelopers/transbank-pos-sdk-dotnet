@@ -38,46 +38,55 @@ namespace Transbank.Services
         {
             IntermediateResponseReceived?.Invoke(this, response);
         }
-        public async Task<string> SendNormalCommand(string message, bool shortResponse = false)
+        public async Task<string> ProcessNormalCommand(string message, bool shortResponse = false)
         {
+            string fullMessage = CreateFullMessage(message);
             var tcs = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
-            void Handler(string data) => HandleCommonResponse(data, tcs, shortResponse);
+            void ResponseHandler(string data) => HandleCommonResponse(data, tcs, shortResponse);
+            _handler.DataReceived += ResponseHandler;
 
-            return await SendCommand(tcs, message, Handler);
-        }
-
-        public async Task<List<string>> SendDetailsCommand(string message, bool printOnPOS)
-        {
-            var tcs = new TaskCompletionSource<List<string>>(TaskCreationOptions.RunContinuationsAsynchronously);
-            var responseList = new List<string>();
-
-            void Handler(string data) => HandleDetailsResponse(data, tcs, responseList, printOnPOS);
-            return await SendCommand(tcs, message, Handler);
-        }
-
-        private async Task<T> SendCommand<T>( TaskCompletionSource<T> tcs, string Message, Action<string> onDataReceived)
-        {
-            _handler.DataReceived += onDataReceived;
-            string fullMessage = CreateFullMessage(Message);
             try
             {
-                _buffer.Clear();
-                _handler.Write(fullMessage);
-
-                using (var cts = new CancellationTokenSource(_defaultTimeout))
-                {
-                    cts.Token.Register(() =>
-                    {
-                        if (!tcs.Task.IsCompleted)
-                            tcs.TrySetCanceled();
-                    });
-
-                    return await tcs.Task;
-                }
+                return await SendCommand(tcs, fullMessage);
             }
             finally
             {
-                _handler.DataReceived -= onDataReceived;
+                _handler.DataReceived -= ResponseHandler;
+            }
+        }
+
+        public async Task<List<string>> ProcessDetailsCommand(string message, bool printOnPOS)
+        {
+            string fullMessage = CreateFullMessage(message);
+            var tcs = new TaskCompletionSource<List<string>>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var responseList = new List<string>();
+            void ResponseHandler(string data) => HandleDetailsResponse(data, tcs, responseList, printOnPOS);
+            _handler.DataReceived += ResponseHandler;
+
+            try
+            {
+                return await SendCommand(tcs, fullMessage);
+            }
+            finally
+            {
+                _handler.DataReceived -= ResponseHandler;
+            }
+        }
+
+        private async Task<T> SendCommand<T>( TaskCompletionSource<T> tcs, string fullMessage)
+        {
+            _buffer.Clear();
+            _handler.Write(fullMessage);
+
+            using (var cts = new CancellationTokenSource(_defaultTimeout))
+            {
+                cts.Token.Register(() =>
+                {
+                    if (!tcs.Task.IsCompleted)
+                        tcs.TrySetCanceled();
+                });
+
+                return await tcs.Task;
             }
         }
 
