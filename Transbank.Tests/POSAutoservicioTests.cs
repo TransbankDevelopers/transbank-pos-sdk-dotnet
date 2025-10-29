@@ -128,6 +128,18 @@ namespace Transbank.Tests
         }
 
         [Fact]
+        public async Task PrintLastSaleResponse_ShouldResultOk()
+        {
+            string expected = $"{STX}0260|00|597029414300|IM750015|abc123|414170|12000|6590|62|CR|||VI|28102025|174756{ETX}{(char)0x69}";
+            var task = _pos.LastSale();
+            _mockHandler.SimulateIncoming(expected);
+
+            SaleResponse response = await task;
+
+            Assert.Contains("Function: 0260", response.ToString());
+        }
+
+        [Fact]
         public async Task Close_ShouldReturnValidResponse()
         {
             string expected = $"{STX}0510|00|597029414300|IT750050||{ETX}{(char)0x61}";
