@@ -104,6 +104,18 @@ namespace Transbank.Tests
         }
 
         [Fact]
+        public async Task Canceled_Sale_ShouldSetValidResponseCode()
+        {
+            string expected = $"{STX}0210|07{ETX}{(char)0x79}";
+            var task = _pos.Sale(1000, "ABC123");
+            _mockHandler.SimulateIncoming(expected);
+
+            SaleResponse response = await task;
+
+            Assert.Equal(07, response.ResponseCode);
+        }
+
+        [Fact]
         public async Task MultiCodeSale_ShouldReturnValidResponse()
         {
             string expected = $"{STX}0271|78{ETX}{(char)0x76}";
