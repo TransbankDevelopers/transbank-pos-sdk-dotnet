@@ -119,7 +119,8 @@ namespace Transbank.Services
                     return;
                 }
                 SendAck();
-                tcs.TrySetResult(_buffer.ToString());
+                string cleanedResponse = CleanResponse(_buffer.ToString());
+                tcs.TrySetResult(cleanedResponse);
                 _buffer.Clear();
             }
         }
@@ -144,7 +145,8 @@ namespace Transbank.Services
                     _buffer.Clear();
                     return;
                 }
-                responseList.Add(_buffer.ToString());
+                string cleanedResponse = CleanResponse(_buffer.ToString());
+                responseList.Add(cleanedResponse);
                 SendAck();
                 _buffer.Clear();
                 if (IsDetailsListCompleted(responseList))
@@ -247,6 +249,19 @@ namespace Transbank.Services
         private void SendNack()
         {
             _handler.Write($"{NACK}");
+        }
+
+        private string CleanResponse(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+                return string.Empty;
+
+            int stxIndex = message.IndexOf(STX);
+            int etxIndex = message.IndexOf(ETX);
+
+            if (stxIndex == -1 || etxIndex == -1 || etxIndex <= stxIndex + 1)
+                return string.Empty;
+            return message.Substring(stxIndex + 1, etxIndex - stxIndex - 1);
         }
 
     }
