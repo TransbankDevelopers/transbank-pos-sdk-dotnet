@@ -119,8 +119,8 @@ namespace Transbank.Services
                     return;
                 }
                 SendAck();
-                string cleanedResponse = CleanResponse(_buffer.ToString());
-                tcs.TrySetResult(cleanedResponse);
+                string payload = ExtractPayload(_buffer.ToString());
+                tcs.TrySetResult(payload);
                 _buffer.Clear();
             }
         }
@@ -145,8 +145,8 @@ namespace Transbank.Services
                     _buffer.Clear();
                     return;
                 }
-                string cleanedResponse = CleanResponse(_buffer.ToString());
-                responseList.Add(cleanedResponse);
+                string payload = ExtractPayload(_buffer.ToString());
+                responseList.Add(payload);
                 SendAck();
                 _buffer.Clear();
                 if (IsDetailsListCompleted(responseList))
@@ -251,7 +251,7 @@ namespace Transbank.Services
             _handler.Write($"{NACK}");
         }
 
-        private string CleanResponse(string message)
+        private string ExtractPayload(string message)
         {
             if (string.IsNullOrEmpty(message))
                 return string.Empty;
