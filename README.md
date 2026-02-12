@@ -9,6 +9,7 @@ SDK Oficial de Transbank para comunicarse con equipos POS Integrado y POS Autose
 - Verifone vx520c
 - Ingeniko Desk3500
 - POS Autoservicio (UX100, UX300, UX400)
+- POS Autoservicio IM30
 
 ## Requisitos
 
@@ -40,7 +41,7 @@ PM> Install-Package TransbankPosSDK
 #### Instalar con .Net CLI
 
 ```bash
-dotnet add package TransbankSDK -v 3.0.2
+dotnet add package TransbankSDK -v 4.1.0
 ```
 
 ### Desde Visual Studio
