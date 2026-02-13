@@ -5,6 +5,26 @@ Todos los cambios notables a este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-02-12
+
+### Agrega
+
+- Se agrega parámetro al comando de venta para obtener el comprobante en la respuesta.
+
+- Se agrega parámetro al comando de venta multicódigo para obtener el comprobante en la respuesta.
+
+- Se agregan tests unitarios al proyecto.
+
+### Actualiza
+
+- Se refina la rutina para el cálculo del LRC según los distintos modelos de POS.
+
+- Se refina el flujo de manejo para las respuestas de detalles.
+
+- Se refina el manejo de la respuesta del comando última venta.
+
+- Se refina el control del payload de respuesta.
+
 ## [4.0.0] - 2024-04-23
 
 ### Changed

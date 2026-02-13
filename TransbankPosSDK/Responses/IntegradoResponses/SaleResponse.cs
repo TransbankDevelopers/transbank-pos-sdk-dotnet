@@ -6,6 +6,7 @@ namespace Transbank.Responses.IntegradoResponses
 {
     public class SaleResponse : CommonResponses.LoadKeysResponse
     {
+        protected const int VOUCHER_LINE_LENGTH = 40;
         protected Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
             { "Ticket", 4},
@@ -22,7 +23,9 @@ namespace Transbank.Responses.IntegradoResponses
             { "RealDate", 15},
             { "RealTime", 16},
             { "EmployeeId", 17},
-            { "Tip", 18}
+            { "Tip", 18 },
+            { "Voucher", 19 }
+
         };
 
         public string Ticket
@@ -193,6 +196,35 @@ namespace Transbank.Responses.IntegradoResponses
             }
         }
 
+        public List<string> PrintingField
+        {
+            get
+            {
+                List<string> printingField = new List<string>();
+
+                try
+                {
+                    string response = Response.Split('|')[ParameterMap["Voucher"]];
+
+                    if (response.Length % VOUCHER_LINE_LENGTH != 0 || response.Length == 0)
+                    {
+                        printingField.Add(response);
+                        return printingField;
+                    }
+
+                    for (int i = 0; i < response.Length; i += VOUCHER_LINE_LENGTH)
+                        printingField.Add(response.Substring(i, VOUCHER_LINE_LENGTH));
+
+                    return printingField;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return printingField;
+                }
+            }
+        }
+
+
         public SaleResponse(string response) : base(response) { }
 
         public override string ToString()
@@ -213,7 +245,8 @@ namespace Transbank.Responses.IntegradoResponses
                    "Card Brand: " + CardBrand + "\n" +
                    "Real Date: " + formatedRealDate + "\n" +
                    "Employee Id: " + EmployeeId + "\n" +
-                   "Tip: " + Tip;
+                   "Tip: " + Tip + "\n" +
+                   "Printing Field: " + ((PrintingField.Count > 1) ? "\r\n" + string.Join("\r\n", PrintingField) : PrintingField[0]);
         }
     }
 }
