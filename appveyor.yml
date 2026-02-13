@@ -16,7 +16,7 @@ before_deploy:
 deploy:
   - provider: NuGet
     api_key:
-      secure: xKHD+d8N8yuimk8KRQd78yJRsg6SAkdTnpNIMiaj5WjxVcTetr5DBEeqs/EpBxok
+      secure: $(NUGET_API_KEY)
     on:
       branch: master
 
