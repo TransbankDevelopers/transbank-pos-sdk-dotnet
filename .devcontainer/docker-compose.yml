@@ -1,0 +1,8 @@
+services:
+  transbank-pos-sdk-dotnet:
+    image: mcr.microsoft.com/devcontainers/dotnet:1-8.0
+    working_dir: /workspaces/transbank-pos-sdk-dotnet
+    volumes:
+      - ..:/workspaces/transbank-pos-sdk-dotnet:cached
+    command: sleep infinity
+    tty: true
