@@ -1,0 +1,63 @@
+{
+  "name": "Transbank POS SDK .NET Dev Container",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "transbank-pos-sdk-dotnet",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "remoteUser": "root",
+  "postCreateCommand": "bash /workspaces/${localWorkspaceFolderBasename}/.devcontainer/post-create.sh",
+  "shutdownAction": "stopCompose",
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
+  ],
+  "features": {
+    "ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
+      "plugins": "git zsh-autosuggestions zsh-syntax-highlighting",
+      "omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "explorer.confirmDelete": false,
+        "editor.bracketPairColorization.enabled": true,
+        "editor.guides.bracketPairs": true,
+        "editor.autoClosingBrackets": "always",
+        "editor.linkedEditing": true,
+        "editor.fontLigatures": true,
+        "editor.suggestSelection": "first",
+        "editor.inlineSuggest.enabled": true,
+        "editor.guides.bracketPairsHorizontal": true,
+        "editor.unicodeHighlight.invisibleCharacters": false,
+        "editor.codeLens": true,
+        "editor.formatOnSave": true,
+        "editor.rulers": [120],
+        "files.insertFinalNewline": true,
+        "github.copilot.nextEditSuggestions.enabled": true,
+        "git.enableCommitSigning": false,
+        "files.watcherExclude": {
+          "**/bin/**": true,
+          "**/obj/**": true
+        }
+      },
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "ms-vsliveshare.vsliveshare",
+        "Gruntfuggly.todo-tree",
+        "GitHub.copilot",
+        "github.vscode-github-actions",
+        "fill-labs.dependi",
+        "usernamehw.errorlens",
+        "editorconfig.editorconfig",
+        "adpyke.codesnap",
+        "redhat.vscode-yaml",
+        "exiasr.hadolint",
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker",
+        "streetsidesoftware.code-spell-checker-spanish",
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.vscode-dotnet-runtime"
+      ]
+    }
+  }
+}
