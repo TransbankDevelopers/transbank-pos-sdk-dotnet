@@ -23,6 +23,23 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
+        public async Task Poll_ShouldSendExpectedCommand_AndCompleteOnAck()
+        {
+            const string expectedCommandPayload = "0100";
+
+            var task = _pos.Poll();
+
+            Assert.Equal(BuildFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+
+            bool response = await task;
+
+            Assert.True(response);
+            Assert.Single(_mockHandler.WrittenData);
+        }
+
+        [Fact]
         public async Task LoadKeys_ShouldSendExpectedCommand_AndParseApprovedResponse()
         {
             const string expectedCommandPayload = "0800";
