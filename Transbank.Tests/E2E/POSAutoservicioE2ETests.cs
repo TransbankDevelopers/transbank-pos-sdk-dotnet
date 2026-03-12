@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 using Transbank.Responses.CommonResponses;
+using Transbank.Responses.AutoservicioResponse;
 using Transbank.Services;
 using Transbank.Tests.Mocks;
 using Xunit;
@@ -37,6 +39,47 @@ namespace Transbank.Tests.E2E
 
             Assert.True(response);
             Assert.Single(_mockHandler.WrittenData);
+        }
+
+        [Fact]
+        public async Task Initialization_ShouldSendExpectedCommand_AndCompleteOnAck()
+        {
+            const string expectedCommandPayload = "0070";
+
+            var task = _pos.Initialization();
+
+            Assert.Equal(BuildFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+
+            bool response = await task;
+
+            Assert.True(response);
+            Assert.Single(_mockHandler.WrittenData);
+        }
+
+        [Fact]
+        public async Task InitializationResponse_ShouldSendExpectedCommand_AndParseApprovedResponse()
+        {
+            const string expectedCommandPayload = "0080";
+            const string responsePayload = "1080|90|03022026|111543";
+
+            var task = _pos.InitializationResponse();
+
+            Assert.Equal(BuildFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildFrame(responsePayload));
+
+            InitializationResponse response = await task;
+
+            Assert.NotNull(response);
+            Assert.Equal("1080", response.FunctionCode);
+            Assert.Equal(90, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(new DateTime(2026, 2, 3, 11, 15, 43), response.RealDate);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
         }
 
         [Fact]
