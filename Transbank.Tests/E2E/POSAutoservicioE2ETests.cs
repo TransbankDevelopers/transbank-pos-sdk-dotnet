@@ -47,6 +47,35 @@ namespace Transbank.Tests.E2E
             Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
         }
 
+        [Fact]
+        public async Task ShouldSendNackAndKeepWaiting_WhenResponseLrcIsInvalid()
+        {
+            const string commandPayload = "0800";
+            const string responsePayload = "0810|00|597029414300|IM750164";
+
+            var task = _pos.LoadKeys();
+
+            Assert.Equal(BuildFrame(commandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildFrameWithInvalidLrc(responsePayload));
+
+            Assert.False(task.IsCompleted);
+            Assert.Equal(((char)0x15).ToString(), _mockHandler.WrittenData.Last());
+
+            _mockHandler.SimulateIncoming(BuildFrame(responsePayload));
+
+            LoadKeysResponse response = await task;
+
+            Assert.Equal("0810", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.Equal(3, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
         private static string BuildFrame(string payload)
         {
             char lrc = ETX;
@@ -56,6 +85,11 @@ namespace Transbank.Tests.E2E
             }
 
             return $"{STX}{payload}{ETX}{lrc}";
+        }
+
+        private static string BuildFrameWithInvalidLrc(string payload)
+        {
+            return $"{STX}{payload}{ETX}{(char)0x00}";
         }
     }
 }
