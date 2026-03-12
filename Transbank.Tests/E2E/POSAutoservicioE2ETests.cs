@@ -31,7 +31,7 @@ namespace Transbank.Tests.E2E
 
             var task = _pos.Poll();
 
-            Assert.Equal(BuildFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
 
             _mockHandler.SimulateIncoming(ACK.ToString());
 
@@ -48,7 +48,7 @@ namespace Transbank.Tests.E2E
 
             var task = _pos.Initialization();
 
-            Assert.Equal(BuildFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
 
             _mockHandler.SimulateIncoming(ACK.ToString());
 
@@ -66,10 +66,10 @@ namespace Transbank.Tests.E2E
 
             var task = _pos.InitializationResponse();
 
-            Assert.Equal(BuildFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
 
             _mockHandler.SimulateIncoming(ACK.ToString());
-            _mockHandler.SimulateIncoming(BuildFrame(responsePayload));
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
 
             InitializationResponse response = await task;
 
@@ -90,10 +90,10 @@ namespace Transbank.Tests.E2E
 
             var task = _pos.LoadKeys();
 
-            Assert.Equal(BuildFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
 
             _mockHandler.SimulateIncoming(ACK.ToString());
-            _mockHandler.SimulateIncoming(BuildFrame(responsePayload));
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
 
             LoadKeysResponse response = await task;
 
@@ -115,7 +115,7 @@ namespace Transbank.Tests.E2E
 
             var task = _pos.LoadKeys();
 
-            Assert.Equal(BuildFrame(commandPayload), _mockHandler.WrittenData.Single());
+            Assert.Equal(BuildCommandFrame(commandPayload), _mockHandler.WrittenData.Single());
 
             _mockHandler.SimulateIncoming(ACK.ToString());
             _mockHandler.SimulateIncoming(BuildFrameWithInvalidLrc(responsePayload));
@@ -123,7 +123,7 @@ namespace Transbank.Tests.E2E
             Assert.False(task.IsCompleted);
             Assert.Equal(((char)0x15).ToString(), _mockHandler.WrittenData.Last());
 
-            _mockHandler.SimulateIncoming(BuildFrame(responsePayload));
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
 
             LoadKeysResponse response = await task;
 
@@ -136,7 +136,7 @@ namespace Transbank.Tests.E2E
             Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
         }
 
-        private static string BuildFrame(string payload)
+        private static string BuildCommandFrame(string payload)
         {
             char lrc = ETX;
             foreach (char c in payload)
@@ -144,6 +144,18 @@ namespace Transbank.Tests.E2E
                 lrc ^= c;
             }
 
+            return $"{STX}{payload}{ETX}{lrc}";
+        }
+
+        private static string BuildResponseFrame(string payload)
+        {
+            char lrc = STX;
+            foreach (char c in payload)
+            {
+                lrc ^= c;
+            }
+
+            lrc ^= ETX;
             return $"{STX}{payload}{ETX}{lrc}";
         }
 
