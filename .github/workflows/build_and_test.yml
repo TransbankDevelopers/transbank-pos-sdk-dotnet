@@ -50,7 +50,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          "${{ runner.temp }}/scanner/dotnet-sonarscanner" begin /k:"TransbankDevelopers_transbank-pos-sdk-dotnet" /o:"transbankdevelopers" /d:sonar.token="${SONAR_TOKEN}"
+          "${{ runner.temp }}/scanner/dotnet-sonarscanner" begin /k:"TransbankDevelopers_transbank-pos-sdk-dotnet" /o:"transbankdevelopers" /d:sonar.token="${SONAR_TOKEN}" /d:sonar.cs.opencover.reportsPaths=Transbank.Tests/TestResults/coverage.opencover.xml
 
       - name: Restore solution
         run: dotnet restore TransbankPosSDK.sln
@@ -59,9 +59,9 @@ jobs:
         run: dotnet build TransbankPosSDK.sln --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test Transbank.Tests/Transbank.Tests.csproj --configuration Release --no-build
+        run: dotnet test Transbank.Tests/Transbank.Tests.csproj --configuration Release --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage.opencover.xml
 
-      - name: End SonarCloud analysis
+      - name: SonarCloud scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
