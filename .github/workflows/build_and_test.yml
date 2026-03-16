@@ -1,0 +1,26 @@
+name: Build And Test
+
+on:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore solution
+        run: dotnet restore TransbankPosSDK.sln
+
+      - name: Build solution
+        run: dotnet build TransbankPosSDK.sln --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test Transbank.Tests/Transbank.Tests.csproj --configuration Release --no-build
