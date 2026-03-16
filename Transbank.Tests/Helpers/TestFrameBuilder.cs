@@ -16,7 +16,6 @@ namespace Transbank.Tests.Helpers
             return $"{STX}{payload}{ETX}{lrc}";
         }
 
-        // Responses include STX in the LRC calculation for the current SDK protocol handling.
         internal static string BuildResponseFrame(string payload)
         {
             char lrc = STX;
