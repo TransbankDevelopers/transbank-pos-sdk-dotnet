@@ -2,6 +2,7 @@ using Transbank.Responses.CommonResponses;
 using Transbank.Responses.IntegradoResponses;
 using Transbank.Exceptions.IntegradoExceptions;
 using Transbank.Services;
+using Transbank.Tests.Helpers;
 using Transbank.Tests.Mocks;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -25,17 +26,6 @@ namespace Transbank.Tests
             _mockHandler = new MockSerialHandler();
             _service = new PosService(_mockHandler);
             _pos = new POSIntegrado.POSIntegrado(_mockHandler, _service);
-        }
-
-        private static string BuildFrame(string payload)
-        {
-            char lrc = ETX;
-            foreach (char c in payload)
-            {
-                lrc ^= c;
-            }
-
-            return $"{STX}{payload}{ETX}{lrc}";
         }
 
         [Fact]
@@ -252,11 +242,11 @@ namespace Transbank.Tests
 
             foreach (string intermediatePayload in intermediatePayloads)
             {
-                _mockHandler.SimulateIncoming(BuildFrame(intermediatePayload));
+                _mockHandler.SimulateIncoming(TestFrameBuilder.BuildCommandFrame(intermediatePayload));
                 Assert.False(task.IsCompleted);
             }
 
-            _mockHandler.SimulateIncoming(BuildFrame(finalResponsePayload));
+            _mockHandler.SimulateIncoming(TestFrameBuilder.BuildCommandFrame(finalResponsePayload));
 
             SaleResponse saleResponse = await task;
 

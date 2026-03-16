@@ -1,6 +1,7 @@
 using Transbank.Responses.CommonResponses;
 using Transbank.Services;
 using Transbank.Tests.Mocks;
+using Transbank.Tests.Helpers;
 using Transbank.Responses.AutoservicioResponse;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -24,29 +25,6 @@ namespace Transbank.Tests
             _mockHandler = new MockSerialHandler();
             _serviceAutoservicio = new PosService(_mockHandler, PosService.Model.AUTOSERVICIO);
             _pos = new POSAutoservicio.POSAutoservicio(_mockHandler, _serviceAutoservicio);
-        }
-
-        private static string BuildCommandFrame(string payload)
-        {
-            char lrc = ETX;
-            foreach (char c in payload)
-            {
-                lrc ^= c;
-            }
-
-            return $"{STX}{payload}{ETX}{lrc}";
-        }
-
-        private static string BuildResponseFrame(string payload)
-        {
-            char lrc = STX;
-            foreach (char c in payload)
-            {
-                lrc ^= c;
-            }
-
-            lrc ^= ETX;
-            return $"{STX}{payload}{ETX}{lrc}";
         }
 
         [Fact]
@@ -214,11 +192,11 @@ namespace Transbank.Tests
 
             foreach (string intermediatePayload in intermediatePayloads)
             {
-                _mockHandler.SimulateIncoming(BuildResponseFrame(intermediatePayload));
+                _mockHandler.SimulateIncoming(TestFrameBuilder.BuildResponseFrame(intermediatePayload));
                 Assert.False(task.IsCompleted);
             }
 
-            _mockHandler.SimulateIncoming(BuildResponseFrame(finalResponsePayload));
+            _mockHandler.SimulateIncoming(TestFrameBuilder.BuildResponseFrame(finalResponsePayload));
 
             SaleResponse saleResponse = await task;
 
@@ -234,7 +212,7 @@ namespace Transbank.Tests
 
             Assert.Equal(0, saleResponse.ResponseCode);
             Assert.Equal(1, _mockHandler.WrittenData.Count(data => data == ACK.ToString()));
-            Assert.Equal(BuildCommandFrame("0200|1200|123asd|1|1"), _mockHandler.WrittenData[0]);
+            Assert.Equal(TestFrameBuilder.BuildCommandFrame("0200|1200|123asd|1|1"), _mockHandler.WrittenData[0]);
         }
     }
 }
