@@ -1,4 +1,5 @@
 using System;
+using Transbank.Exceptions.CommonExceptions;
 using Transbank.Responses.CommonResponses;
 using Xunit;
 
@@ -19,9 +20,9 @@ namespace Transbank.Tests
         [Fact]
         public void IntermediateResponse_ShouldFail_WhenPayloadIsIncomplete()
         {
-            var response = new IntermediateResponse("0900");
+            var exception = Assert.Throws<IntermediateResponseException>(() => new IntermediateResponse("0900"));
 
-            Assert.Throws<IndexOutOfRangeException>(() => _ = response.ResponseCode);
+            Assert.Equal("Invalid intermediate response format: 0900", exception.Message);
         }
     }
 }

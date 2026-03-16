@@ -1,5 +1,6 @@
 using Transbank.Tests.Mocks;
 using Transbank.Services;
+using Transbank.Tests.Helpers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +20,6 @@ namespace Transbank.Tests
         {
             _mock = new MockSerialHandler();
             _service = new PosService(_mock);
-        }
-
-        private static string BuildCommandFrame(string payload)
-        {
-            char lrc = ETX;
-            foreach (char c in payload)
-            {
-                lrc ^= c;
-            }
-
-            return $"{STX}{payload}{ETX}{lrc}";
         }
 
         [Fact]
@@ -58,7 +48,7 @@ namespace Transbank.Tests
         public async Task SendNormalCommand_ShouldReturnResponse_WhenValidMessageReceived()
         {
             string payload = "0800";
-            string expected = BuildCommandFrame(payload);
+            string expected = TestFrameBuilder.BuildCommandFrame(payload);
 
             var task = _service.ProcessNormalCommand(payload);
             _mock.SimulateIncoming(expected);
@@ -117,11 +107,11 @@ namespace Transbank.Tests
 
             foreach (string intermediatePayload in intermediatePayloads)
             {
-                _mock.SimulateIncoming(BuildCommandFrame(intermediatePayload));
+                _mock.SimulateIncoming(TestFrameBuilder.BuildCommandFrame(intermediatePayload));
                 Assert.False(task.IsCompleted);
             }
 
-            _mock.SimulateIncoming(BuildCommandFrame(finalResponsePayload));
+            _mock.SimulateIncoming(TestFrameBuilder.BuildCommandFrame(finalResponsePayload));
 
             string response = await task;
 
