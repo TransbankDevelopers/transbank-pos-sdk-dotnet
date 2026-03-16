@@ -5,6 +5,7 @@ using Transbank.Services;
 using Transbank.Tests.Mocks;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 
@@ -26,12 +27,23 @@ namespace Transbank.Tests
             _pos = new POSIntegrado.POSIntegrado(_mockHandler, _service);
         }
 
+        private static string BuildFrame(string payload)
+        {
+            char lrc = ETX;
+            foreach (char c in payload)
+            {
+                lrc ^= c;
+            }
+
+            return $"{STX}{payload}{ETX}{lrc}";
+        }
+
         [Fact]
         public void ListPorts_ShouldReturnFakePort()
         {
             var ports = _pos.ListPorts();
             Assert.Single(ports);
-            Assert.Contains("FAKE_PORT", ports);
+            Assert.Equal("FAKE_PORT", ports[0]);
         }
 
         [Fact]
@@ -54,7 +66,7 @@ namespace Transbank.Tests
             LoadKeysResponse response = await task;
 
             Assert.NotNull(response);
-            Assert.Contains("0810", response.FunctionCode);
+            Assert.Equal("0810", response.FunctionCode);
         }
 
         [Fact]
@@ -217,6 +229,49 @@ namespace Transbank.Tests
             bool response = await task;
 
             Assert.True(response);
+        }
+
+        [Fact]
+        public async Task Sale_ShouldRaiseCleanIntermediateResponses_BeforeFinalResponse()
+        {
+            string finalResponsePayload = "0210|00|597029414300|IT750050|ABC123|925171|1200|00|0|3331|000072|DB|000000|0000000000000000331|P|16032026|120653||||";
+            string[] intermediatePayloads = { "0900|84", "0900|83", "0900|81", "0900|82" };
+            int[] expectedCodes = { 84, 83, 81, 82 };
+            string[] expectedMessages =
+            {
+                "Opere tarjeta",
+                "Selección menú crédito/redcompra",
+                "Solicitando ingreso de clave",
+                "Enviando transacción al host"
+            };
+            List<IntermediateResponse> responses = new();
+
+            _pos.IntermediateResponseChange += (_, response) => responses.Add(response);
+
+            var task = _pos.Sale(1200, "ABC123", sendVoucher: true, sendStatus: true);
+
+            foreach (string intermediatePayload in intermediatePayloads)
+            {
+                _mockHandler.SimulateIncoming(BuildFrame(intermediatePayload));
+                Assert.False(task.IsCompleted);
+            }
+
+            _mockHandler.SimulateIncoming(BuildFrame(finalResponsePayload));
+
+            SaleResponse saleResponse = await task;
+
+            Assert.Equal(4, responses.Count);
+            for (int i = 0; i < responses.Count; i++)
+            {
+                Assert.Equal("0900", responses[i].FunctionCode);
+                Assert.Equal(expectedCodes[i], responses[i].ResponseCode);
+                Assert.Equal(expectedMessages[i], responses[i].ResponseMessage);
+                Assert.Equal(-1, responses[i].FunctionCode.IndexOf(STX));
+                Assert.Equal(-1, responses[i].FunctionCode.IndexOf(ETX));
+            }
+
+            Assert.Equal(0, saleResponse.ResponseCode);
+            Assert.Equal(1, _mockHandler.WrittenData.Count(data => data == ACK.ToString()));
         }
     }
 }
