@@ -152,7 +152,6 @@ namespace Transbank.Services
                 if (IsDetailsListCompleted(responseList))
                 {
                     tcs.TrySetResult(responseList);
-                    return;
                 }
             }
         }
