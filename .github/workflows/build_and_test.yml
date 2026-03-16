@@ -2,6 +2,7 @@ name: Build And Test
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   build-and-test:
@@ -10,17 +11,49 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: zulu
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
-      - name: Restore solution
-        run: dotnet restore TransbankPosSDK.sln
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
-      - name: Build solution
-        run: dotnet build TransbankPosSDK.sln --configuration Release --no-restore
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
 
-      - name: Run tests
-        run: dotnet test Transbank.Tests/Transbank.Tests.csproj --configuration Release --no-build
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "${{ runner.temp }}/scanner"
+          dotnet tool update dotnet-sonarscanner --tool-path "${{ runner.temp }}/scanner"
+
+      - name: Build, test and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          SONAR_PROJECT_KEY="$(grep '^sonar.projectKey=' sonar-project.properties | cut -d'=' -f2-)"
+          SONAR_ORGANIZATION="$(grep '^sonar.organization=' sonar-project.properties | cut -d'=' -f2-)"
+          "${{ runner.temp }}/scanner/dotnet-sonarscanner" begin /k:"${SONAR_PROJECT_KEY}" /o:"${SONAR_ORGANIZATION}" /d:sonar.token="${SONAR_TOKEN}"
+          dotnet restore TransbankPosSDK.sln
+          dotnet build TransbankPosSDK.sln --configuration Release --no-restore
+          dotnet test Transbank.Tests/Transbank.Tests.csproj --configuration Release --no-build
+          "${{ runner.temp }}/scanner/dotnet-sonarscanner" end /d:sonar.token="${SONAR_TOKEN}"
