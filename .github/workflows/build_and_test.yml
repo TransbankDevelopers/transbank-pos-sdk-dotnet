@@ -46,14 +46,23 @@ jobs:
           mkdir -p "${{ runner.temp }}/scanner"
           dotnet tool update dotnet-sonarscanner --tool-path "${{ runner.temp }}/scanner"
 
-      - name: Build, test and analyze
+      - name: Begin SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          SONAR_PROJECT_KEY="$(grep '^sonar.projectKey=' sonar-project.properties | cut -d'=' -f2-)"
-          SONAR_ORGANIZATION="$(grep '^sonar.organization=' sonar-project.properties | cut -d'=' -f2-)"
-          "${{ runner.temp }}/scanner/dotnet-sonarscanner" begin /k:"${SONAR_PROJECT_KEY}" /o:"${SONAR_ORGANIZATION}" /d:sonar.token="${SONAR_TOKEN}"
-          dotnet restore TransbankPosSDK.sln
-          dotnet build TransbankPosSDK.sln --configuration Release --no-restore
-          dotnet test Transbank.Tests/Transbank.Tests.csproj --configuration Release --no-build
+          "${{ runner.temp }}/scanner/dotnet-sonarscanner" begin /k:"TransbankDevelopers_transbank-pos-sdk-dotnet" /o:"transbankdevelopers" /d:sonar.token="${SONAR_TOKEN}"
+
+      - name: Restore solution
+        run: dotnet restore TransbankPosSDK.sln
+
+      - name: Build solution
+        run: dotnet build TransbankPosSDK.sln --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test Transbank.Tests/Transbank.Tests.csproj --configuration Release --no-build
+
+      - name: End SonarCloud analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
           "${{ runner.temp }}/scanner/dotnet-sonarscanner" end /d:sonar.token="${SONAR_TOKEN}"
