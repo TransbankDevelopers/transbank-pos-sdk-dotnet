@@ -72,12 +72,16 @@ namespace Transbank.Tests.E2E
             _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
 
             InitializationResponse response = await task;
+            string initializationResponseText = response.ToString();
 
             Assert.NotNull(response);
             Assert.Equal("1080", response.FunctionCode);
             Assert.Equal(90, response.ResponseCode);
             Assert.True(response.Success);
             Assert.Equal(new DateTime(2026, 2, 3, 11, 15, 43), response.RealDate);
+            Assert.Contains("Function: 1080", initializationResponseText);
+            Assert.Contains("Response code:90", initializationResponseText);
+            Assert.Contains("Response message: Inicialización Exitosa", initializationResponseText);
             Assert.Equal(2, _mockHandler.WrittenData.Count);
             Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
         }
@@ -96,6 +100,7 @@ namespace Transbank.Tests.E2E
             _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
 
             LoadKeysResponse response = await task;
+            string loadKeysResponseText = response.ToString();
 
             Assert.NotNull(response);
             Assert.Equal("0810", response.FunctionCode);
@@ -103,6 +108,10 @@ namespace Transbank.Tests.E2E
             Assert.True(response.Success);
             Assert.Equal(597029414300, response.CommerceCode);
             Assert.Equal("IM750164", response.TerminalId);
+            Assert.Contains("Function: 0810", loadKeysResponseText);
+            Assert.Contains("Response code:0", loadKeysResponseText);
+            Assert.Contains("Commerce Code: 597029414300", loadKeysResponseText);
+            Assert.Contains("Terminal Id: IM750164", loadKeysResponseText);
             Assert.Equal(2, _mockHandler.WrittenData.Count);
             Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
         }
@@ -126,12 +135,17 @@ namespace Transbank.Tests.E2E
             _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
 
             LoadKeysResponse response = await task;
+            string loadKeysResponseText = response.ToString();
 
             Assert.Equal("0810", response.FunctionCode);
             Assert.Equal(0, response.ResponseCode);
             Assert.True(response.Success);
             Assert.Equal(597029414300, response.CommerceCode);
             Assert.Equal("IM750164", response.TerminalId);
+            Assert.Contains("Function: 0810", loadKeysResponseText);
+            Assert.Contains("Response code:0", loadKeysResponseText);
+            Assert.Contains("Commerce Code: 597029414300", loadKeysResponseText);
+            Assert.Contains("Terminal Id: IM750164", loadKeysResponseText);
             Assert.Equal(3, _mockHandler.WrittenData.Count);
             Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
         }
