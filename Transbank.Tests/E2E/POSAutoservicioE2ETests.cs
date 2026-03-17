@@ -136,6 +136,319 @@ namespace Transbank.Tests.E2E
             Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
         }
 
+        [Fact]
+        public async Task LastSale_ShouldParseApprovedDebitResponseWithoutVoucher_WhenThereIsALastSale()
+        {
+            const string expectedCommandPayload = "0250|0";
+            const string responsePayload = "0260|00|597029414300|IM750164|123456|574062|1000|3331|56|DB|10032026|331|P |12032026|171142";
+
+            var task = _pos.LastSale();
+
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            LastSaleResponse response = await task;
+            string lastSaleResponseText = response.ToString();
+
+            Assert.Equal("0260", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.Equal("123456", response.Ticket);
+            Assert.Equal("574062", response.AuthorizationCode);
+            Assert.Equal(1000, response.Amount);
+            Assert.Equal(3331, response.Last4Digits);
+            Assert.Equal(56, response.OperationNumber);
+            Assert.Equal("DB", response.CardType);
+            Assert.Equal(new DateTime(2026, 3, 10), response.AccountingDate);
+            Assert.Equal("331", response.AccountNumber);
+            Assert.Equal("P", response.CardBrand);
+            Assert.Equal(new DateTime(2026, 3, 12, 17, 11, 42), response.RealDate);
+            Assert.Single(response.PrintingField);
+            Assert.Equal(string.Empty, response.PrintingField[0]);
+            Assert.Equal(-1, response.SharesType);
+            Assert.Equal(-1, response.SharesNumber);
+            Assert.Equal(-1, response.SharesAmount);
+            Assert.Equal(string.Empty, response.SharesTypeGloss);
+            Assert.Contains("Function: 0260", lastSaleResponseText);
+            Assert.Contains("Response code:0", lastSaleResponseText);
+            Assert.Contains("Card Type: DB", lastSaleResponseText);
+            Assert.Contains("Card Brand: P", lastSaleResponseText);
+            Assert.Contains("Shares Type: -1", lastSaleResponseText);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
+        [Fact]
+        public async Task LastSale_ShouldParseAccountingDate_WhenDateIsValid()
+        {
+            const string responsePayload = "0260|00|597029414300|IM750164|123456|574062|1000|3331|56|DB|10032026|331|P |12032026|171142";
+
+            var task = _pos.LastSale();
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            LastSaleResponse response = await task;
+
+            Assert.Equal(new DateTime(2026, 3, 10), response.AccountingDate);
+        }
+
+        [Fact]
+        public async Task LastSale_ShouldReturnMinValueAccountingDate_WhenDateIsInvalid()
+        {
+            const string responsePayload = "0260|00|597029414300|IM750164|123456|574062|1000|3331|56|DB|abc|331|P |12032026|171142";
+
+            var task = _pos.LastSale();
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            LastSaleResponse response = await task;
+
+            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+        }
+
+        [Fact]
+        public async Task LastSale_ShouldReturnNullAccountingDate_WhenDateIsMissing()
+        {
+            const string responsePayload = "0260|00|597029414300|IM750164|123456|575354|10000|6590|34|CR|||VI|17032026|115006||03|03|3334|CUOTAS SIN INTERES";
+
+            var task = _pos.LastSale();
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            LastSaleResponse response = await task;
+
+            Assert.Null(response.AccountingDate);
+        }
+
+        [Fact]
+        public async Task LastSale_ShouldParseApprovedDebitResponseWithVoucher_WhenVoucherIsRequested()
+        {
+            const string expectedCommandPayload = "0250|1";
+            const string responsePayload =
+                "0260|00|597029414300|IM750164|123456|574062|1000|3331|56|DB|10032026|331|P |12032026|171142|" +
+                "          COMPROBANTE DE VENTA                     TARJETA DE DEBITO                              Tbk" +
+                "                                     MATI                                  Santiago                " +
+                "               11111111-1                               SANTIAGO                           *** DUPLIC" +
+                "ADO ***                      597029414300-M261L1           FECHA             HORA          TERMINAL" +
+                "12/03/26        17:11:42        IM750164FECHA CONTABLE                  10032026NUMERO DE TARJETA " +
+                "  NUM DE CUENTA  MARCA************3331      ********331   B-DBOTRA                                    " +
+                "TOTAL:                           $ 1.000NUMERO DE BOLETA:                 123456NUMERO DE OPERACION" +
+                ":              000056CODIGO DE AUTORIZACION:           574062                              " +
+                "                                           GRACIAS POR SU COMPRA           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR ";
+
+            var task = _pos.LastSale(sendVoucher: true);
+
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            LastSaleResponse response = await task;
+            string voucher = string.Concat(response.PrintingField);
+            string lastSaleResponseText = response.ToString();
+
+            Assert.Equal("0260", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.Equal("123456", response.Ticket);
+            Assert.Equal("574062", response.AuthorizationCode);
+            Assert.Equal(1000, response.Amount);
+            Assert.Equal(3331, response.Last4Digits);
+            Assert.Equal(56, response.OperationNumber);
+            Assert.Equal("DB", response.CardType);
+            Assert.Equal(new DateTime(2026, 3, 10), response.AccountingDate);
+            Assert.Equal("331", response.AccountNumber);
+            Assert.Equal("P", response.CardBrand);
+            Assert.Equal(new DateTime(2026, 3, 12, 17, 11, 42), response.RealDate);
+            Assert.NotEmpty(response.PrintingField);
+            Assert.Contains("COMPROBANTE DE VENTA", voucher);
+            Assert.Contains("TARJETA DE DEBITO", voucher);
+            Assert.Contains("TOTAL:", voucher);
+            Assert.Contains("CODIGO DE AUTORIZACION:", voucher);
+            Assert.Contains("GRACIAS POR SU COMPRA", voucher);
+            Assert.Equal(-1, response.SharesType);
+            Assert.Equal(-1, response.SharesNumber);
+            Assert.Equal(-1, response.SharesAmount);
+            Assert.Equal(string.Empty, response.SharesTypeGloss);
+            Assert.Contains("Function: 0260", lastSaleResponseText);
+            Assert.Contains("Response code:0", lastSaleResponseText);
+            Assert.Contains("Card Type: DB", lastSaleResponseText);
+            Assert.Contains("Card Brand: P", lastSaleResponseText);
+            Assert.Contains("Printing Field:", lastSaleResponseText);
+            Assert.Contains("GRACIAS POR SU COMPRA", lastSaleResponseText);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
+        [Fact]
+        public async Task LastSale_ShouldParseApprovedCreditResponseWithVoucher_WhenAccountingDateIsEmpty()
+        {
+            const string expectedCommandPayload = "0250|1";
+            const string responsePayload =
+                "0260|00|597029414300|IM750164|123456|575354|10000|6590|34|CR|||VI|17032026|115006|" +
+                "          COMPROBANTE DE VENTA                       PAGO EN CUOTAS                        TARJETA DE CREDITO" +
+                "                             Tbk                                     MATI                                  Santiago" +
+                "                               11111111-1                               SANTIAGO                           *** DUPLICADO ***" +
+                "                      597029414300-M261L1           FECHA             HORA          TERMINAL17/03/26        11:50:06" +
+                "        IM750164                                        NUMERO DE TARJETA                   B-CR************6590" +
+                "                        VISA                                    TOTAL:                          $ 10.000NUMERO DE CUOTAS:" +
+                "                     03TIPO DE CUOTAS:       CUOTAS SIN INTERESMONTO CUOTA:                     $ 3.334TASA DE INTERES:" +
+                "                  00.00%NUMERO DE BOLETA:                 123456NUMERO DE OPERACION:              000034CODIGO DE AUTORIZACION:" +
+                "           575354                                                 GRACIAS POR SU COMPRA           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR |03|03|3334|CUOTAS SIN INTERES";
+
+            var task = _pos.LastSale(sendVoucher: true);
+
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+
+            string fullResponseFrame = BuildResponseFrame(responsePayload);
+            int splitIndex = fullResponseFrame.IndexOf("ACION:", StringComparison.Ordinal);
+            _mockHandler.SimulateIncoming(fullResponseFrame[..splitIndex]);
+            Assert.False(task.IsCompleted);
+            _mockHandler.SimulateIncoming(fullResponseFrame[splitIndex..]);
+
+            LastSaleResponse response = await task;
+            string voucher = string.Concat(response.PrintingField);
+            string lastSaleResponseText = response.ToString();
+
+            Assert.Equal("0260", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.Equal("123456", response.Ticket);
+            Assert.Equal("575354", response.AuthorizationCode);
+            Assert.Equal(10000, response.Amount);
+            Assert.Equal(6590, response.Last4Digits);
+            Assert.Equal(34, response.OperationNumber);
+            Assert.Equal("CR", response.CardType);
+            Assert.Null(response.AccountingDate);
+            Assert.Equal(string.Empty, response.AccountNumber);
+            Assert.Equal("VI", response.CardBrand);
+            Assert.Equal(new DateTime(2026, 3, 17, 11, 50, 6), response.RealDate);
+            Assert.NotEmpty(response.PrintingField);
+            Assert.Contains("COMPROBANTE DE VENTA", voucher);
+            Assert.Contains("PAGO EN CUOTAS", voucher);
+            Assert.Contains("TARJETA DE CREDITO", voucher);
+            Assert.Contains("NUMERO DE CUOTAS", voucher);
+            Assert.Contains("TIPO DE CUOTAS", voucher);
+            Assert.Contains("CUOTAS SIN INTERES", voucher);
+            Assert.Equal(3, response.SharesType);
+            Assert.Equal(3, response.SharesNumber);
+            Assert.Equal(3334, response.SharesAmount);
+            Assert.Equal("CUOTAS SIN INTERES", response.SharesTypeGloss);
+            Assert.Contains("Function: 0260", lastSaleResponseText);
+            Assert.Contains("Response code:0", lastSaleResponseText);
+            Assert.Contains("Card Type: CR", lastSaleResponseText);
+            Assert.Contains("Card Brand: VI", lastSaleResponseText);
+            Assert.Contains("Shares Type: 3", lastSaleResponseText);
+            Assert.Contains("Shares Type Gloss: CUOTAS SIN INTERES", lastSaleResponseText);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
+        [Fact]
+        public async Task LastSale_ShouldParseApprovedCreditResponseWithoutVoucher_WhenAccountingDateIsEmpty()
+        {
+            const string expectedCommandPayload = "0250|0";
+            const string responsePayload = "0260|00|597029414300|IM750164|123456|575354|10000|6590|34|CR|||VI|17032026|115006||03|03|3334|CUOTAS SIN INTERES";
+
+            var task = _pos.LastSale();
+
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            LastSaleResponse response = await task;
+            string lastSaleResponseText = response.ToString();
+
+            Assert.Equal("0260", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.Equal("123456", response.Ticket);
+            Assert.Equal("575354", response.AuthorizationCode);
+            Assert.Equal(10000, response.Amount);
+            Assert.Equal(6590, response.Last4Digits);
+            Assert.Equal(34, response.OperationNumber);
+            Assert.Equal("CR", response.CardType);
+            Assert.Null(response.AccountingDate);
+            Assert.Equal(string.Empty, response.AccountNumber);
+            Assert.Equal("VI", response.CardBrand);
+            Assert.Equal(new DateTime(2026, 3, 17, 11, 50, 6), response.RealDate);
+            Assert.Single(response.PrintingField);
+            Assert.Equal(string.Empty, response.PrintingField[0]);
+            Assert.Equal(3, response.SharesType);
+            Assert.Equal(3, response.SharesNumber);
+            Assert.Equal(3334, response.SharesAmount);
+            Assert.Equal("CUOTAS SIN INTERES", response.SharesTypeGloss);
+            Assert.Contains("Function: 0260", lastSaleResponseText);
+            Assert.Contains("Response code:0", lastSaleResponseText);
+            Assert.Contains("Card Type: CR", lastSaleResponseText);
+            Assert.Contains("Card Brand: VI", lastSaleResponseText);
+            Assert.Contains("Shares Type: 3", lastSaleResponseText);
+            Assert.Contains("Shares Type Gloss: CUOTAS SIN INTERES", lastSaleResponseText);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
+        [Fact]
+        public async Task LastSale_ShouldParseNoSaleResponse_WhenThereIsNoLastSale()
+        {
+            const string expectedCommandPayload = "0250|0";
+            const string responsePayload = "0260|11|597029414300|IM750164";
+
+            var task = _pos.LastSale();
+
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            var response = await task;
+            string lastSaleResponseText = response.ToString();
+
+            Assert.NotNull(response);
+            Assert.Equal("0260", response.FunctionCode);
+            Assert.Equal(11, response.ResponseCode);
+            Assert.False(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.Equal(string.Empty, response.Ticket);
+            Assert.Equal(string.Empty, response.AuthorizationCode);
+            Assert.Equal(-1, response.Amount);
+            Assert.Equal(-1, response.Last4Digits);
+            Assert.Equal(-1, response.OperationNumber);
+            Assert.Equal(string.Empty, response.CardType);
+            Assert.Equal(string.Empty, response.CardBrand);
+            Assert.Null(response.AccountingDate);
+            Assert.Null(response.RealDate);
+            Assert.Single(response.PrintingField);
+            Assert.Equal(string.Empty, response.PrintingField[0]);
+            Assert.Equal(-1, response.SharesType);
+            Assert.Equal(-1, response.SharesNumber);
+            Assert.Equal(-1, response.SharesAmount);
+            Assert.Equal(string.Empty, response.SharesTypeGloss);
+            Assert.Contains("Function: 0260", lastSaleResponseText);
+            Assert.Contains("Response code:11", lastSaleResponseText);
+            Assert.Contains("Response message: No existe venta", lastSaleResponseText);
+            Assert.Contains("Shares Type: -1", lastSaleResponseText);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
         private static string BuildCommandFrame(string payload)
         {
             char lrc = ETX;
