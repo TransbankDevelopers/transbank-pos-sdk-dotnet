@@ -449,6 +449,148 @@ namespace Transbank.Tests.E2E
             Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
         }
 
+        [Fact]
+        public async Task Close_ShouldParseApprovedResponseWithVoucher_WhenThereAreCapturedTransactions()
+        {
+            const string expectedCommandPayload = "0500|1";
+            const string responsePayload =
+                "0510|00|597029414300|IM750164|" +
+                "    REPORTE DEL CIERRE DEL TERMINAL                       Tbk                                     MATI                                  Santiago                " +
+                "               11111111-1                               SANTIAGO                          597029414300-M261L1           FECHA             HORA          TERMINAL" +
+                "17/03/26        12:06:39        IM750164                                                       NUMERO              TOTAL" +
+                "VISA             002             $20.000----------------------------------------TOTAL CAPTURAS   002             $20.000";
+
+            var task = _pos.Close(sendVoucher: true);
+
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            CloseResponse response = await task;
+            string voucher = string.Concat(response.PrintingField);
+            string closeResponseText = response.ToString();
+
+            Assert.Equal("0510", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.NotEmpty(response.PrintingField);
+            Assert.Contains("REPORTE DEL CIERRE DEL TERMINAL", voucher);
+            Assert.Contains("NUMERO              TOTAL", voucher);
+            Assert.Contains("VISA", voucher);
+            Assert.Contains("TOTAL CAPTURAS", voucher);
+            Assert.Contains("$20.000", voucher);
+            Assert.Contains("Function: 0510", closeResponseText);
+            Assert.Contains("Response code:0", closeResponseText);
+            Assert.Contains("Printing Field:", closeResponseText);
+            Assert.Contains("TOTAL CAPTURAS", closeResponseText);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
+        [Fact]
+        public async Task Close_ShouldParseApprovedResponseWithoutVoucher_WhenThereAreCapturedTransactions()
+        {
+            const string expectedCommandPayload = "0500|0";
+            const string responsePayload = "0510|00|597029414300|IM750164|";
+
+            var task = _pos.Close(sendVoucher: false);
+
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            CloseResponse response = await task;
+            string closeResponseText = response.ToString();
+
+            Assert.Equal("0510", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.Single(response.PrintingField);
+            Assert.Equal(string.Empty, response.PrintingField[0]);
+            Assert.Contains("Function: 0510", closeResponseText);
+            Assert.Contains("Response code:0", closeResponseText);
+            Assert.Contains("Printing Field:", closeResponseText);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
+        [Fact]
+        public async Task Close_ShouldParseApprovedResponseWithVoucher_WhenThereAreNoCapturedTransactions()
+        {
+            const string expectedCommandPayload = "0500|1";
+            const string responsePayload =
+                "0510|00|597029414300|IM750164|" +
+                "    REPORTE DEL CIERRE DEL TERMINAL                       Tbk                                     MATI                                  Santiago                " +
+                "               11111111-1                               SANTIAGO                          597029414300-M261L1           FECHA             HORA          TERMINAL" +
+                "17/03/26        12:08:10        IM750164                                                       NUMERO              TOTAL" +
+                "----------------------------------------TOTAL CAPTURAS   000                  $0";
+
+            var task = _pos.Close(sendVoucher: true);
+
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            CloseResponse response = await task;
+            string voucher = string.Concat(response.PrintingField);
+            string closeResponseText = response.ToString();
+
+            Assert.Equal("0510", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.NotEmpty(response.PrintingField);
+            Assert.Contains("REPORTE DEL CIERRE DEL TERMINAL", voucher);
+            Assert.Contains("NUMERO              TOTAL", voucher);
+            Assert.DoesNotContain("VISA", voucher);
+            Assert.Contains("TOTAL CAPTURAS", voucher);
+            Assert.Contains("$0", voucher);
+            Assert.Contains("Function: 0510", closeResponseText);
+            Assert.Contains("Response code:0", closeResponseText);
+            Assert.Contains("Printing Field:", closeResponseText);
+            Assert.Contains("TOTAL CAPTURAS   000", closeResponseText);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
+        [Fact]
+        public async Task Close_ShouldParseApprovedResponseWithoutVoucher_WhenThereAreNoCapturedTransactions()
+        {
+            const string expectedCommandPayload = "0500|0";
+            const string responsePayload = "0510|00|597029414300|IM750164|";
+
+            var task = _pos.Close(sendVoucher: false);
+
+            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
+
+            _mockHandler.SimulateIncoming(ACK.ToString());
+            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+
+            CloseResponse response = await task;
+            string closeResponseText = response.ToString();
+
+            Assert.Equal("0510", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IM750164", response.TerminalId);
+            Assert.Single(response.PrintingField);
+            Assert.Equal(string.Empty, response.PrintingField[0]);
+            Assert.Contains("Function: 0510", closeResponseText);
+            Assert.Contains("Response code:0", closeResponseText);
+            Assert.Contains("Printing Field:", closeResponseText);
+            Assert.Equal(2, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
         private static string BuildCommandFrame(string payload)
         {
             char lrc = ETX;
