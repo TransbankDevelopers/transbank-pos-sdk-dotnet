@@ -38,6 +38,28 @@ namespace Transbank.Tests.E2E
             "                     03TIPO DE CUOTAS:       CUOTAS SIN INTERESMONTO CUOTA:                     $ 3.334TASA DE INTERES:" +
             "                  00.00%NUMERO DE BOLETA:                 123456NUMERO DE OPERACION:              000057CODIGO DE AUTORIZACION:" +
             "           316557                                                 GRACIAS POR SU COMPRA           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR |03|03|3334|CUOTAS SIN INTERES";
+        private const string MultiCodeSaleDebitWithVoucherResponsePayload =
+            "0271|00|597029414303|IM750164|123456|475618|1000|3331|62|DB|00-00-00|331|P |18032026|171040|" +
+            "          COMPROBANTE DE VENTA                     TARJETA DE DEBITO                              Tbk" +
+            "                                     MATI                                  Santiago                " +
+            "               11111111-1                               SANTIAGO                          597029414303-M261M1" +
+            "           FECHA             HORA          TERMINAL18/03/26        17:10:40        IM750164FECHA CONTABLE" +
+            "                  00-00-00NUMERO DE TARJETA   NUM DE CUENTA  MARCA************3331      ********331   B-DB" +
+            "OTRA                                    TOTAL:                           $ 1.000NUMERO DE BOLETA:                 123456" +
+            "NUMERO DE OPERACION:              000062CODIGO DE AUTORIZACION:           475618" +
+            "                                                                                         GRACIAS POR SU COMPRA" +
+            "           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR ";
+        private const string MultiCodeSaleCreditWithVoucherResponsePayload =
+            "0271|00|597029414303|IM750164|123456|194937|10000|6590|64|CR|||VI|18032026|171153|" +
+            "          COMPROBANTE DE VENTA                       PAGO EN CUOTAS                        TARJETA DE CREDITO" +
+            "                             Tbk                                     MATI                                  Santiago" +
+            "                               11111111-1                               SANTIAGO                          597029414303-M261M1" +
+            "           FECHA             HORA          TERMINAL18/03/26        17:11:53        IM750164" +
+            "                                        NUMERO DE TARJETA                   B-CR************6590" +
+            "                        VISA                                    TOTAL:                          $ 10.000NUMERO DE CUOTAS:" +
+            "                     03TIPO DE CUOTAS:       CUOTAS SIN INTERESMONTO CUOTA:                     $ 3.334TASA DE INTERES:" +
+            "                  00.00%NUMERO DE BOLETA:                 123456NUMERO DE OPERACION:              000064CODIGO DE AUTORIZACION:" +
+            "           194937                                                 GRACIAS POR SU COMPRA           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR |03|03|3334|CUOTAS SIN INTERES";
         private const string LastSaleDebitWithVoucherResponsePayload =
             "0260|00|597029414300|IM750164|123456|574062|1000|3331|56|DB|10032026|331|P |12032026|171142|" +
             "          COMPROBANTE DE VENTA                     TARJETA DE DEBITO                              Tbk" +
@@ -283,6 +305,113 @@ namespace Transbank.Tests.E2E
             AssertEmptyPrintingField(response.PrintingField);
             AssertInstallments(response, 3, 3, 3334, "CUOTAS SIN INTERES");
             AssertBaseResponseText(saleResponseText, "0210", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task MultiCodeSale_ShouldParseApprovedDebitResponseWithVoucher()
+        {
+            const string expectedCommandPayload = "0270|1000|123456|1|0|597029414303";
+
+            var task = _pos.MultiCodeSale(1000, "123456", 597029414303, sendVoucher: true);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(MultiCodeSaleDebitWithVoucherResponsePayload);
+
+            MultiCodeSaleResponse response = await task;
+            string voucher = string.Concat(response.PrintingField);
+            string multiCodeSaleResponseText = response.ToString();
+
+            AssertBasicResponse(response, "0271", 0, success: true, 597029414303, "IM750164");
+            AssertSaleFields(response, "123456", "475618", 1000, 3331, 62, "DB", "331", "P", new DateTime(2026, 3, 18, 17, 10, 40));
+            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.Contains("COMPROBANTE DE VENTA", voucher);
+            Assert.Contains("TARJETA DE DEBITO", voucher);
+            Assert.Contains("TOTAL:", voucher);
+            Assert.Contains("CODIGO DE AUTORIZACION:", voucher);
+            Assert.Contains("GRACIAS POR SU COMPRA", voucher);
+            AssertVoucherLinesHaveFixedWidth(response.PrintingField);
+            AssertInstallments(response, -1, -1, -1, string.Empty);
+            AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task MultiCodeSale_ShouldParseApprovedDebitResponseWithoutVoucher()
+        {
+            const string expectedCommandPayload = "0270|1000|123456|0|0|597029414303";
+            const string responsePayload = "0271|00|597029414303|IM750164|123456|673501|1000|3331|63|DB|00-00-00|331|P |18032026|171113";
+
+            var task = _pos.MultiCodeSale(1000, "123456", 597029414303);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
+
+            MultiCodeSaleResponse response = await task;
+            string multiCodeSaleResponseText = response.ToString();
+
+            AssertBasicResponse(response, "0271", 0, success: true, 597029414303, "IM750164");
+            AssertSaleFields(response, "123456", "673501", 1000, 3331, 63, "DB", "331", "P", new DateTime(2026, 3, 18, 17, 11, 13));
+            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            AssertEmptyPrintingField(response.PrintingField);
+            AssertInstallments(response, -1, -1, -1, string.Empty);
+            AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task MultiCodeSale_ShouldParseApprovedCreditResponseWithVoucher_WhenAccountingDateIsEmpty()
+        {
+            const string expectedCommandPayload = "0270|10000|123456|1|0|597029414303";
+
+            var task = _pos.MultiCodeSale(10000, "123456", 597029414303, sendVoucher: true);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendFragmentedResponseAndAssertPending(task, MultiCodeSaleCreditWithVoucherResponsePayload);
+
+            MultiCodeSaleResponse response = await task;
+            string voucher = string.Concat(response.PrintingField);
+            string multiCodeSaleResponseText = response.ToString();
+
+            AssertBasicResponse(response, "0271", 0, success: true, 597029414303, "IM750164");
+            AssertSaleFields(response, "123456", "194937", 10000, 6590, 64, "CR", string.Empty, "VI", new DateTime(2026, 3, 18, 17, 11, 53));
+            Assert.Null(response.AccountingDate);
+            Assert.Contains("COMPROBANTE DE VENTA", voucher);
+            Assert.Contains("PAGO EN CUOTAS", voucher);
+            Assert.Contains("TARJETA DE CREDITO", voucher);
+            Assert.Contains("NUMERO DE CUOTAS", voucher);
+            Assert.Contains("TIPO DE CUOTAS", voucher);
+            Assert.Contains("CUOTAS SIN INTERES", voucher);
+            AssertVoucherLinesHaveFixedWidth(response.PrintingField);
+            AssertInstallments(response, 3, 3, 3334, "CUOTAS SIN INTERES");
+            AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task MultiCodeSale_ShouldParseApprovedCreditResponseWithoutVoucher_WhenAccountingDateIsEmpty()
+        {
+            const string expectedCommandPayload = "0270|10000|123456|0|0|597029414303";
+            const string responsePayload = "0271|00|597029414303|IM750164|123456|785992|10000|6590|65|CR|||VI|18032026|171232||03|03|3334|CUOTAS SIN INTERES";
+
+            var task = _pos.MultiCodeSale(10000, "123456", 597029414303);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
+
+            MultiCodeSaleResponse response = await task;
+            string multiCodeSaleResponseText = response.ToString();
+
+            AssertBasicResponse(response, "0271", 0, success: true, 597029414303, "IM750164");
+            AssertSaleFields(response, "123456", "785992", 10000, 6590, 65, "CR", string.Empty, "VI", new DateTime(2026, 3, 18, 17, 12, 32));
+            Assert.Null(response.AccountingDate);
+            AssertEmptyPrintingField(response.PrintingField);
+            AssertInstallments(response, 3, 3, 3334, "CUOTAS SIN INTERES");
+            AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
             AssertFinalAckWritten(2);
         }
 
