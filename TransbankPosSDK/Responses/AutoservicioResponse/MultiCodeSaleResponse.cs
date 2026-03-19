@@ -8,7 +8,7 @@ namespace Transbank.Responses.AutoservicioResponse
     {
         protected new readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
-            { "CommerceProviderCode", 14},
+            { "CommerceProviderCode", 15},
             { "PrintingField", 16},
             { "SharesType", 17},
             { "SharesNumber", 18},
@@ -36,32 +36,36 @@ namespace Transbank.Responses.AutoservicioResponse
             get
             {
                 List<string> printingField = new List<string>();
+                string rawVoucher = RawVoucher;
 
+                if (string.IsNullOrWhiteSpace(rawVoucher) || rawVoucher.Length % 40 != 0)
+                {
+                    return printingField;
+                }
+
+                for (int i = 0; i < rawVoucher.Length; i += 40)
+                    printingField.Add(rawVoucher.Substring(i, 40));
+
+                return printingField;
+            }
+        }
+        public new string RawVoucher
+        {
+            get
+            {
                 try
                 {
                     string[] arrayResponse = Response.Split('|');
-                    if (Response.Split('|').Length < 5)
+                    if (arrayResponse.Length <= ParameterMap["PrintingField"])
                     {
-                        printingField.Add("");
-                        return printingField;
+                        return string.Empty;
                     }
 
-                    string response = arrayResponse[ParameterMap["PrintingField"]];
-
-                    if (response.Length % 40 != 0)
-                    {
-                        printingField.Add(response);
-                        return printingField;
-                    }
-
-                    for (int i = 0; i < response.Length; i += 40)
-                        printingField.Add(response.Substring(i, 40));
-
-                    return printingField;
+                    return arrayResponse[ParameterMap["PrintingField"]];
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    return printingField;
+                    return string.Empty;
                 }
             }
         }
@@ -131,7 +135,11 @@ namespace Transbank.Responses.AutoservicioResponse
         {
             string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string printingFieldText = PrintingField.Count == 0
+                ? ""
+                : string.Join("\r\n", PrintingField);
             return "Function: " + FunctionCode + "\n" +
+                   "Response code:" + ResponseCode + "\n" +
                    "Response: " + ResponseMessage + "\n" +
                    "Commerce Code: " + CommerceCode + "\n" +
                    "Terminal Id: " + TerminalId + "\n" +
@@ -146,7 +154,7 @@ namespace Transbank.Responses.AutoservicioResponse
                    "Card Brand: " + CardBrand + "\n" +
                    "Real Date: " + formatedRealDate + "\n" +
                    "CommerceProviderCode: " + CommerceProviderCode + "\n" +
-                   "Printing Field: " + ((PrintingField.Count > 1) ? "\r\n" + string.Join("\r\n", PrintingField) : PrintingField[0]) + "\n" +
+                   "Printing Field: " + printingFieldText + "\n" +
                    "Shares Type: " + SharesType + "\n" +
                    "Shares Number: " + SharesNumber + "\n" +
                    "Shares Amount: " + SharesAmount + "\n" +
