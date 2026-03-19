@@ -110,8 +110,8 @@ namespace Transbank.Responses.AutoservicioResponse
 
         public override string ToString()
         {
-            string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
-            string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string formattedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string formattedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             string printingFieldText = VoucherParser.FormatPrintingField(PrintingField);
             return "Function: " + FunctionCode + "\n" +
                    "Response code:" + ResponseCode + "\n" +
@@ -124,10 +124,10 @@ namespace Transbank.Responses.AutoservicioResponse
                    "Last 4 Digits: " + Last4Digits + "\n" +
                    "Operation Number: " + OperationNumber + "\n" +
                    "Card Type: " + CardType + "\n" +
-                   "Accounting Date: " + formatedAccountingDate + "\n" +
+                   "Accounting Date: " + formattedAccountingDate + "\n" +
                    "Account Number: " + AccountNumber + "\n" +
                    "Card Brand: " + CardBrand + "\n" +
-                   "Real Date: " + formatedRealDate + "\n" +
+                   "Real Date: " + formattedRealDate + "\n" +
                    "CommerceProviderCode: " + CommerceProviderCode + "\n" +
                    "Printing Field: " + "\n" + printingFieldText + "\n" +
                    "Shares Type: " + SharesType + "\n" +
