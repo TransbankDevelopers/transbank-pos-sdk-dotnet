@@ -18,96 +18,31 @@ namespace Transbank.Tests.E2E
         private const char ACK = (char)0x06;
         private const string SaleDebitWithVoucherResponsePayload =
             "0210|00|597029414300|IM750164|123456|547545|1000|3331|55|DB|00-00-00|331|P |18032026|123230|" +
-            "          COMPROBANTE DE VENTA                     TARJETA DE DEBITO                              Tbk" +
-            "                                     MATI                                  Santiago                " +
-            "               11111111-1                               SANTIAGO                          597029414300-M261L1" +
-            "           FECHA             HORA          TERMINAL18/03/26        12:32:30        IM750164FECHA CONTABLE" +
-            "                  00-00-00NUMERO DE TARJETA   NUM DE CUENTA  MARCA************3331      ********331   B-DB" +
-            "OTRA                                    TOTAL:                           $ 1.000NUMERO DE BOLETA:                 123456" +
-            "NUMERO DE OPERACION:              000055CODIGO DE AUTORIZACION:           547545" +
-            "                                                                                         GRACIAS POR SU COMPRA" +
-            "           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR ";
+            POSAutoservicioVoucherFixtures.SaleDebitVoucher;
         private const string SaleCreditWithVoucherResponsePayload =
             "0210|00|597029414300|IM750164|123456|316557|10000|6590|57|CR|||VI|18032026|123429|" +
-            "          COMPROBANTE DE VENTA                       PAGO EN CUOTAS                        TARJETA DE CREDITO" +
-            "                             Tbk                                     MATI                                  Santiago" +
-            "                               11111111-1                               SANTIAGO                          597029414300-M261L1" +
-            "           FECHA             HORA          TERMINAL18/03/26        12:34:29        IM750164" +
-            "                                        NUMERO DE TARJETA                   B-CR************6590" +
-            "                        VISA                                    TOTAL:                          $ 10.000NUMERO DE CUOTAS:" +
-            "                     03TIPO DE CUOTAS:       CUOTAS SIN INTERESMONTO CUOTA:                     $ 3.334TASA DE INTERES:" +
-            "                  00.00%NUMERO DE BOLETA:                 123456NUMERO DE OPERACION:              000057CODIGO DE AUTORIZACION:" +
-            "           316557                                                 GRACIAS POR SU COMPRA           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR |03|03|3334|CUOTAS SIN INTERES";
+            POSAutoservicioVoucherFixtures.SaleCreditVoucher +
+            "|03|03|3334|CUOTAS SIN INTERES";
         private const string MultiCodeSaleDebitWithVoucherResponsePayload =
             "0271|00|597029414303|IM750164|123456|475618|1000|3331|62|DB|00-00-00|331|P |18032026|171040|" +
-            "          COMPROBANTE DE VENTA                     TARJETA DE DEBITO                              Tbk" +
-            "                                     MATI                                  Santiago                " +
-            "               11111111-1                               SANTIAGO                          597029414303-M261M1" +
-            "           FECHA             HORA          TERMINAL18/03/26        17:10:40        IM750164FECHA CONTABLE" +
-            "                  00-00-00NUMERO DE TARJETA   NUM DE CUENTA  MARCA************3331      ********331   B-DB" +
-            "OTRA                                    TOTAL:                           $ 1.000NUMERO DE BOLETA:                 123456" +
-            "NUMERO DE OPERACION:              000062CODIGO DE AUTORIZACION:           475618" +
-            "                                                                                         GRACIAS POR SU COMPRA" +
-            "           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR ";
+            POSAutoservicioVoucherFixtures.MultiCodeSaleDebitVoucher;
         private const string MultiCodeSaleCreditWithVoucherResponsePayload =
             "0271|00|597029414303|IM750164|123456|194937|10000|6590|64|CR|||VI|18032026|171153|" +
-            "          COMPROBANTE DE VENTA                       PAGO EN CUOTAS                        TARJETA DE CREDITO" +
-            "                             Tbk                                     MATI                                  Santiago" +
-            "                               11111111-1                               SANTIAGO                          597029414303-M261M1" +
-            "           FECHA             HORA          TERMINAL18/03/26        17:11:53        IM750164" +
-            "                                        NUMERO DE TARJETA                   B-CR************6590" +
-            "                        VISA                                    TOTAL:                          $ 10.000NUMERO DE CUOTAS:" +
-            "                     03TIPO DE CUOTAS:       CUOTAS SIN INTERESMONTO CUOTA:                     $ 3.334TASA DE INTERES:" +
-            "                  00.00%NUMERO DE BOLETA:                 123456NUMERO DE OPERACION:              000064CODIGO DE AUTORIZACION:" +
-            "           194937                                                 GRACIAS POR SU COMPRA           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR |03|03|3334|CUOTAS SIN INTERES";
+            POSAutoservicioVoucherFixtures.MultiCodeSaleCreditVoucher +
+            "|03|03|3334|CUOTAS SIN INTERES";
         private const string LastSaleDebitWithVoucherResponsePayload =
             "0260|00|597029414303|IM750164|123456|912108|1000|3331|68|DB|00-00-00|331|P |19032026|102438|" +
-            "          COMPROBANTE DE VENTA          " +
-            "           TARJETA DE DEBITO            " +
-            "                  Tbk                   " +
-            "                  MATI                  " +
-            "                Santiago                " +
-            "               11111111-1               " +
-            "                SANTIAGO                " +
-            "           *** DUPLICADO ***            " +
-            "          597029414303-M261M1           " +
-            "FECHA             HORA          TERMINAL" +
-            "19/03/26        10:24:38        IM750164" +
-            "FECHA CONTABLE                  00-00-00" +
-            "NUMERO DE TARJETA   NUM DE CUENTA  MARCA" +
-            "************3331      ********331   B-DB" +
-            "OTRA                                    " +
-            "TOTAL:                           $ 1.000" +
-            "NUMERO DE BOLETA:                 123456" +
-            "NUMERO DE OPERACION:              000068" +
-            "CODIGO DE AUTORIZACION:           912108" +
-            "                                        " +
-            "                                        " +
-            "         GRACIAS POR SU COMPRA          " +
-            " ACEPTO PAGAR SEGUN CONTRATO CON EMISOR ";
+            POSAutoservicioVoucherFixtures.LastSaleDebitVoucher;
         private const string LastSaleCreditWithVoucherResponsePayload =
             "0260|00|597029414300|IM750164|123456|575354|10000|6590|34|CR|||VI|17032026|115006|" +
-            "          COMPROBANTE DE VENTA                       PAGO EN CUOTAS                        TARJETA DE CREDITO" +
-            "                             Tbk                                     MATI                                  Santiago" +
-            "                               11111111-1                               SANTIAGO                           *** DUPLICADO ***" +
-            "                      597029414300-M261L1           FECHA             HORA          TERMINAL17/03/26        11:50:06" +
-            "        IM750164                                        NUMERO DE TARJETA                   B-CR************6590" +
-            "                        VISA                                    TOTAL:                          $ 10.000NUMERO DE CUOTAS:" +
-            "                     03TIPO DE CUOTAS:       CUOTAS SIN INTERESMONTO CUOTA:                     $ 3.334TASA DE INTERES:" +
-            "                  00.00%NUMERO DE BOLETA:                 123456NUMERO DE OPERACION:              000034CODIGO DE AUTORIZACION:" +
-            "           575354                                                 GRACIAS POR SU COMPRA           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR |03|03|3334|CUOTAS SIN INTERES";
+            POSAutoservicioVoucherFixtures.LastSaleCreditVoucher +
+            "|03|03|3334|CUOTAS SIN INTERES";
         private const string CloseWithDataVoucherResponsePayload =
             "0510|00|597029414300|IM750164|" +
-            "    REPORTE DEL CIERRE DEL TERMINAL                       Tbk                                     MATI                                  Santiago                " +
-            "               11111111-1                               SANTIAGO                          597029414300-M261L1           FECHA             HORA          TERMINAL" +
-            "17/03/26        12:06:39        IM750164                                                       NUMERO              TOTAL" +
-            "VISA             002             $20.000----------------------------------------TOTAL CAPTURAS   002             $20.000";
+            POSAutoservicioVoucherFixtures.CloseWithDataVoucher;
         private const string CloseWithoutDataVoucherResponsePayload =
             "0510|00|597029414300|IM750164|" +
-            "    REPORTE DEL CIERRE DEL TERMINAL                       Tbk                                     MATI                                  Santiago                " +
-            "               11111111-1                               SANTIAGO                          597029414300-M261L1           FECHA             HORA          TERMINAL" +
-            "17/03/26        12:08:10        IM750164                                                       NUMERO              TOTAL" +
-            "----------------------------------------TOTAL CAPTURAS   000                  $0";
+            POSAutoservicioVoucherFixtures.CloseWithoutDataVoucher;
 
         public POSAutoservicioE2ETests()
         {
