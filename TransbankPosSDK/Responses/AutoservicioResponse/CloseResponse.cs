@@ -16,31 +16,36 @@ namespace Transbank.Responses.AutoservicioResponse
             {
                 List<string> printingField = new List<string>();
 
+                string rawVoucher = RawVoucher;
+                if (string.IsNullOrWhiteSpace(rawVoucher) || rawVoucher.Length % 40 != 0)
+                {
+                    return printingField;
+                }
+
+                for (int i = 0; i < rawVoucher.Length; i += 40)
+                    printingField.Add(rawVoucher.Substring(i, 40));
+                 
+                return printingField;
+            }
+        }
+
+        public string RawVoucher
+        {
+            get
+            {
                 try
                 {
                     string[] arrayResponse = Response.Split('|');
-                    if (Response.Split('|').Length < 5)
+                    if (arrayResponse.Length <= ParameterMap["PrintingField"])
                     {
-                        printingField.Add("");
-                        return printingField;
+                        return string.Empty;
                     }
 
-                    string response = arrayResponse[ParameterMap["PrintingField"]];
-
-                    if (response.Length % 40 != 0)
-                    {
-                        printingField.Add(response);
-                        return printingField;
-                    }
-
-                    for (int i = 0; i < response.Length; i += 40)
-                        printingField.Add(response.Substring(i, 40));
-                 
-                    return printingField;
+                    return arrayResponse[ParameterMap["PrintingField"]];
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    return printingField;
+                    return string.Empty;
                 }
             }
         }
@@ -49,8 +54,11 @@ namespace Transbank.Responses.AutoservicioResponse
 
         public override string ToString()
         {
+            string printingFieldText = PrintingField.Count == 0
+                ? ""
+                : string.Join("\n", PrintingField);
             return base.ToString() + "\n" +
-                   "Printing Field: " + ((PrintingField.Count > 1) ? "\n" + string.Join("\n", PrintingField) : PrintingField[0]);
+                   "Printing Field: " + printingFieldText;
         }
     }
 }

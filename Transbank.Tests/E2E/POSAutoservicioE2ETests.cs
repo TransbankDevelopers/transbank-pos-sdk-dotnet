@@ -721,6 +721,7 @@ namespace Transbank.Tests.E2E
             string closeResponseText = response.ToString();
 
             AssertBasicResponse(response, "0510", 0, success: true, 597029414300, "IM750164");
+            Assert.False(string.IsNullOrWhiteSpace(response.RawVoucher));
             Assert.Contains("REPORTE DEL CIERRE DEL TERMINAL", voucher);
             Assert.Contains("NUMERO              TOTAL", voucher);
             Assert.Contains("VISA", voucher);
@@ -739,21 +740,16 @@ namespace Transbank.Tests.E2E
 
             var task = _pos.Close(sendVoucher: false);
 
-            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
-
-            _mockHandler.SimulateIncoming(ACK.ToString());
-            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
 
             CloseResponse response = await task;
             string closeResponseText = response.ToString();
 
-            Assert.Equal("0510", response.FunctionCode);
-            Assert.Equal(0, response.ResponseCode);
-            Assert.True(response.Success);
-            Assert.Equal(597029414300, response.CommerceCode);
-            Assert.Equal("IM750164", response.TerminalId);
-            Assert.Single(response.PrintingField);
-            Assert.Equal(string.Empty, response.PrintingField[0]);
+            AssertBasicResponse(response, "0510", 0, success: true, 597029414300, "IM750164");
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
+            AssertEmptyPrintingField(response.PrintingField);
             AssertBaseResponseText(closeResponseText, "0510", 0);
             AssertFinalAckWritten(2);
         }
@@ -773,6 +769,7 @@ namespace Transbank.Tests.E2E
             string closeResponseText = response.ToString();
 
             AssertBasicResponse(response, "0510", 0, success: true, 597029414300, "IM750164");
+            Assert.False(string.IsNullOrWhiteSpace(response.RawVoucher));
             Assert.Contains("REPORTE DEL CIERRE DEL TERMINAL", voucher);
             Assert.Contains("NUMERO              TOTAL", voucher);
             Assert.DoesNotContain("VISA", voucher);
@@ -791,21 +788,86 @@ namespace Transbank.Tests.E2E
 
             var task = _pos.Close(sendVoucher: false);
 
-            Assert.Equal(BuildCommandFrame(expectedCommandPayload), _mockHandler.WrittenData.Single());
-
-            _mockHandler.SimulateIncoming(ACK.ToString());
-            _mockHandler.SimulateIncoming(BuildResponseFrame(responsePayload));
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
 
             CloseResponse response = await task;
             string closeResponseText = response.ToString();
 
-            Assert.Equal("0510", response.FunctionCode);
-            Assert.Equal(0, response.ResponseCode);
-            Assert.True(response.Success);
-            Assert.Equal(597029414300, response.CommerceCode);
-            Assert.Equal("IM750164", response.TerminalId);
-            Assert.Single(response.PrintingField);
-            Assert.Equal(string.Empty, response.PrintingField[0]);
+            AssertBasicResponse(response, "0510", 0, success: true, 597029414300, "IM750164");
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
+            AssertEmptyPrintingField(response.PrintingField);
+            AssertBaseResponseText(closeResponseText, "0510", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task Close_ShouldReturnEmptyPrintingFieldAndEmptyRawVoucher_WhenVoucherIsMissing()
+        {
+            const string expectedCommandPayload = "0500|0";
+            const string responsePayload = "0510|00|597029414300|IM750164|";
+
+            var task = _pos.Close(sendVoucher: false);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
+
+            CloseResponse response = await task;
+            string closeResponseText = response.ToString();
+
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
+            AssertEmptyPrintingField(response.PrintingField);
+            AssertBaseResponseText(closeResponseText, "0510", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task Close_ShouldReturnEmptyPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsInvalid()
+        {
+            const string expectedCommandPayload = "0500|1";
+            const string invalidRawVoucher = "CIERRE_INVALIDO";
+            string responsePayload = $"0510|00|597029414300|IM750164|{invalidRawVoucher}";
+
+            var task = _pos.Close(sendVoucher: true);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
+
+            CloseResponse response = await task;
+            string closeResponseText = response.ToString();
+
+            Assert.Equal(invalidRawVoucher, response.RawVoucher);
+            AssertEmptyPrintingField(response.PrintingField);
+            AssertBaseResponseText(closeResponseText, "0510", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task Close_ShouldSegmentPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsMultipleOf40()
+        {
+            const string expectedCommandPayload = "0500|1";
+            string voucherLineOne = new string('C', 40);
+            string voucherLineTwo = new string('D', 40);
+            string validRawVoucher = voucherLineOne + voucherLineTwo;
+            string responsePayload = $"0510|00|597029414300|IM750164|{validRawVoucher}";
+
+            var task = _pos.Close(sendVoucher: true);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
+
+            CloseResponse response = await task;
+            string closeResponseText = response.ToString();
+
+            Assert.Equal(validRawVoucher, response.RawVoucher);
+            Assert.Equal(2, response.PrintingField.Count);
+            Assert.Equal(voucherLineOne, response.PrintingField[0]);
+            Assert.Equal(voucherLineTwo, response.PrintingField[1]);
+            AssertVoucherLinesHaveFixedWidth(response.PrintingField);
             AssertBaseResponseText(closeResponseText, "0510", 0);
             AssertFinalAckWritten(2);
         }
