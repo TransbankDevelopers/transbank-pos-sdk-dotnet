@@ -220,6 +220,7 @@ namespace Transbank.Tests.E2E
             AssertBasicResponse(response, "0210", 0, success: true, 597029414300, "IM750164");
             AssertSaleFields(response, "123456", "547545", 1000, 3331, 55, "DB", "331", "P", new DateTime(2026, 3, 18, 12, 32, 30));
             Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.False(string.IsNullOrWhiteSpace(response.RawVoucher));
             Assert.Contains("COMPROBANTE DE VENTA", voucher);
             Assert.Contains("TARJETA DE DEBITO", voucher);
             Assert.Contains("TOTAL:", voucher);
@@ -249,6 +250,7 @@ namespace Transbank.Tests.E2E
             AssertBasicResponse(response, "0210", 0, success: true, 597029414300, "IM750164");
             AssertSaleFields(response, "123456", "700527", 1000, 3331, 56, "DB", "331", "P", new DateTime(2026, 3, 18, 12, 33, 7));
             Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
             AssertEmptyPrintingField(response.PrintingField);
             AssertInstallments(response, -1, -1, -1, string.Empty);
             AssertBaseResponseText(saleResponseText, "0210", 0);
@@ -272,6 +274,7 @@ namespace Transbank.Tests.E2E
             AssertBasicResponse(response, "0210", 0, success: true, 597029414300, "IM750164");
             AssertSaleFields(response, "123456", "316557", 10000, 6590, 57, "CR", string.Empty, "VI", new DateTime(2026, 3, 18, 12, 34, 29));
             Assert.Null(response.AccountingDate);
+            Assert.False(string.IsNullOrWhiteSpace(response.RawVoucher));
             Assert.Contains("COMPROBANTE DE VENTA", voucher);
             Assert.Contains("PAGO EN CUOTAS", voucher);
             Assert.Contains("TARJETA DE CREDITO", voucher);
@@ -302,8 +305,79 @@ namespace Transbank.Tests.E2E
             AssertBasicResponse(response, "0210", 0, success: true, 597029414300, "IM750164");
             AssertSaleFields(response, "123456", "776549", 10000, 6590, 58, "CR", string.Empty, "VI", new DateTime(2026, 3, 18, 12, 35, 6));
             Assert.Null(response.AccountingDate);
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
             AssertEmptyPrintingField(response.PrintingField);
             AssertInstallments(response, 3, 3, 3334, "CUOTAS SIN INTERES");
+            AssertBaseResponseText(saleResponseText, "0210", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task Sale_ShouldReturnEmptyPrintingFieldAndEmptyRawVoucher_WhenVoucherIsMissing()
+        {
+            const string expectedCommandPayload = "0200|1000|123456|0|0";
+            const string responsePayload = "0210|00|597029414300|IM750164|123456|700527|1000|3331|56|DB|00-00-00|331|P |18032026|123307";
+
+            var task = _pos.Sale(1000, "123456");
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
+
+            SaleResponse response = await task;
+            string saleResponseText = response.ToString();
+
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
+            AssertEmptyPrintingField(response.PrintingField);
+            AssertBaseResponseText(saleResponseText, "0210", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task Sale_ShouldReturnEmptyPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsInvalid()
+        {
+            const string expectedCommandPayload = "0200|1000|123456|1|0";
+            const string invalidRawVoucher = "VOUCHER_INVALIDO";
+            string responsePayload = $"0210|00|597029414300|IM750164|123456|547545|1000|3331|55|DB|00-00-00|331|P |18032026|123230|{invalidRawVoucher}";
+
+            var task = _pos.Sale(1000, "123456", sendVoucher: true);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
+
+            SaleResponse response = await task;
+            string saleResponseText = response.ToString();
+
+            Assert.Equal(invalidRawVoucher, response.RawVoucher);
+            AssertEmptyPrintingField(response.PrintingField);
+            AssertBaseResponseText(saleResponseText, "0210", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
+        public async Task Sale_ShouldSegmentPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsMultipleOf40()
+        {
+            const string expectedCommandPayload = "0200|1000|123456|1|0";
+            string voucherLineOne = new string('A', 40);
+            string voucherLineTwo = new string('B', 40);
+            string validRawVoucher = voucherLineOne + voucherLineTwo;
+            string responsePayload = $"0210|00|597029414300|IM750164|123456|547545|1000|3331|55|DB|00-00-00|331|P |18032026|123230|{validRawVoucher}";
+
+            var task = _pos.Sale(1000, "123456", sendVoucher: true);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(responsePayload);
+
+            SaleResponse response = await task;
+            string saleResponseText = response.ToString();
+
+            Assert.Equal(validRawVoucher, response.RawVoucher);
+            Assert.Equal(2, response.PrintingField.Count);
+            Assert.Equal(voucherLineOne, response.PrintingField[0]);
+            Assert.Equal(voucherLineTwo, response.PrintingField[1]);
+            AssertVoucherLinesHaveFixedWidth(response.PrintingField);
             AssertBaseResponseText(saleResponseText, "0210", 0);
             AssertFinalAckWritten(2);
         }
@@ -446,8 +520,8 @@ namespace Transbank.Tests.E2E
             Assert.Equal("331", response.AccountNumber);
             Assert.Equal("P", response.CardBrand);
             Assert.Equal(new DateTime(2026, 3, 12, 17, 11, 42), response.RealDate);
-            Assert.Single(response.PrintingField);
-            Assert.Equal(string.Empty, response.PrintingField[0]);
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
+            AssertEmptyPrintingField(response.PrintingField);
             Assert.Equal(-1, response.SharesType);
             Assert.Equal(-1, response.SharesNumber);
             Assert.Equal(-1, response.SharesAmount);
@@ -523,6 +597,7 @@ namespace Transbank.Tests.E2E
             AssertBasicResponse(response, "0260", 0, success: true, 597029414300, "IM750164");
             AssertSaleFields(response, "123456", "574062", 1000, 3331, 56, "DB", "331", "P", new DateTime(2026, 3, 12, 17, 11, 42));
             Assert.Equal(new DateTime(2026, 3, 10), response.AccountingDate);
+            Assert.False(string.IsNullOrWhiteSpace(response.RawVoucher));
             Assert.Contains("COMPROBANTE DE VENTA", voucher);
             Assert.Contains("TARJETA DE DEBITO", voucher);
             Assert.Contains("TOTAL:", voucher);
@@ -551,6 +626,7 @@ namespace Transbank.Tests.E2E
             AssertBasicResponse(response, "0260", 0, success: true, 597029414300, "IM750164");
             AssertSaleFields(response, "123456", "575354", 10000, 6590, 34, "CR", string.Empty, "VI", new DateTime(2026, 3, 17, 11, 50, 6));
             Assert.Null(response.AccountingDate);
+            Assert.False(string.IsNullOrWhiteSpace(response.RawVoucher));
             Assert.Contains("COMPROBANTE DE VENTA", voucher);
             Assert.Contains("PAGO EN CUOTAS", voucher);
             Assert.Contains("TARJETA DE CREDITO", voucher);
@@ -582,6 +658,7 @@ namespace Transbank.Tests.E2E
             AssertBasicResponse(response, "0260", 0, success: true, 597029414300, "IM750164");
             AssertSaleFields(response, "123456", "575354", 10000, 6590, 34, "CR", string.Empty, "VI", new DateTime(2026, 3, 17, 11, 50, 6));
             Assert.Null(response.AccountingDate);
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
             AssertEmptyPrintingField(response.PrintingField);
             AssertInstallments(response, 3, 3, 3334, "CUOTAS SIN INTERES");
             AssertBaseResponseText(lastSaleResponseText, "0260", 0);
@@ -619,8 +696,8 @@ namespace Transbank.Tests.E2E
             Assert.Equal(string.Empty, response.CardBrand);
             Assert.Null(response.AccountingDate);
             Assert.Null(response.RealDate);
-            Assert.Single(response.PrintingField);
-            Assert.Equal(string.Empty, response.PrintingField[0]);
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
+            AssertEmptyPrintingField(response.PrintingField);
             Assert.Equal(-1, response.SharesType);
             Assert.Equal(-1, response.SharesNumber);
             Assert.Equal(-1, response.SharesAmount);
@@ -838,8 +915,7 @@ namespace Transbank.Tests.E2E
 
         private static void AssertEmptyPrintingField(System.Collections.Generic.IReadOnlyList<string> printingField)
         {
-            Assert.Single(printingField);
-            Assert.Equal(string.Empty, printingField[0]);
+            Assert.Empty(printingField);
         }
 
         private static void AssertVoucherLinesHaveFixedWidth(System.Collections.Generic.IReadOnlyList<string> printingField)
