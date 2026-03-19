@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Collections.Generic;
+using Transbank.Utils;
 
 namespace Transbank.Responses.AutoservicioResponse
 {
@@ -35,38 +36,14 @@ namespace Transbank.Responses.AutoservicioResponse
         {
             get
             {
-                List<string> printingField = new List<string>();
-                string rawVoucher = RawVoucher;
-
-                if (string.IsNullOrWhiteSpace(rawVoucher) || rawVoucher.Length % 40 != 0)
-                {
-                    return printingField;
-                }
-
-                for (int i = 0; i < rawVoucher.Length; i += 40)
-                    printingField.Add(rawVoucher.Substring(i, 40));
-
-                return printingField;
+                return VoucherParser.ParsePrintingField(RawVoucher);
             }
         }
         public new string RawVoucher
         {
             get
             {
-                try
-                {
-                    string[] arrayResponse = Response.Split('|');
-                    if (arrayResponse.Length <= ParameterMap["PrintingField"])
-                    {
-                        return string.Empty;
-                    }
-
-                    return arrayResponse[ParameterMap["PrintingField"]];
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return string.Empty;
-                }
+                return VoucherParser.ExtractRawVoucher(Response, ParameterMap["PrintingField"]);
             }
         }
         public new int SharesType
@@ -135,9 +112,7 @@ namespace Transbank.Responses.AutoservicioResponse
         {
             string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
-            string printingFieldText = PrintingField.Count == 0
-                ? ""
-                : string.Join("\r\n", PrintingField);
+            string printingFieldText = VoucherParser.FormatPrintingField(PrintingField);
             return "Function: " + FunctionCode + "\n" +
                    "Response code:" + ResponseCode + "\n" +
                    "Response: " + ResponseMessage + "\n" +

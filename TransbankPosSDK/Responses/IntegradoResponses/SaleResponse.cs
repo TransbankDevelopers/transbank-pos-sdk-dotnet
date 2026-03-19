@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.Collections.Generic;
+using Transbank.Utils;
 
 namespace Transbank.Responses.IntegradoResponses
 {
     public class SaleResponse : CommonResponses.LoadKeysResponse
     {
-        protected const int VOUCHER_LINE_LENGTH = 40;
         protected Dictionary<string, int> ParameterMap = new Dictionary<string, int>
         {
             { "Ticket", 4},
@@ -200,27 +200,15 @@ namespace Transbank.Responses.IntegradoResponses
         {
             get
             {
-                List<string> printingField = new List<string>();
+                return VoucherParser.ParsePrintingField(RawVoucher);
+            }
+        }
 
-                try
-                {
-                    string response = Response.Split('|')[ParameterMap["Voucher"]];
-
-                    if (response.Length % VOUCHER_LINE_LENGTH != 0 || response.Length == 0)
-                    {
-                        printingField.Add(response);
-                        return printingField;
-                    }
-
-                    for (int i = 0; i < response.Length; i += VOUCHER_LINE_LENGTH)
-                        printingField.Add(response.Substring(i, VOUCHER_LINE_LENGTH));
-
-                    return printingField;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return printingField;
-                }
+        public string RawVoucher
+        {
+            get
+            {
+                return VoucherParser.ExtractRawVoucher(Response, ParameterMap["Voucher"]);
             }
         }
 
@@ -231,6 +219,7 @@ namespace Transbank.Responses.IntegradoResponses
         {
             string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string printingFieldText = VoucherParser.FormatPrintingField(PrintingField);
             return base.ToString() + "\n" +
                    "Ticket: " + Ticket + "\n" +
                    "AuthorizationCode Code: " + AuthorizationCode + "\n" +
@@ -246,7 +235,7 @@ namespace Transbank.Responses.IntegradoResponses
                    "Real Date: " + formatedRealDate + "\n" +
                    "Employee Id: " + EmployeeId + "\n" +
                    "Tip: " + Tip + "\n" +
-                   "Printing Field: " + ((PrintingField.Count > 1) ? "\r\n" + string.Join("\r\n", PrintingField) : PrintingField[0]);
+                   "Printing Field: " + "\n" + printingFieldText;
         }
     }
 }
