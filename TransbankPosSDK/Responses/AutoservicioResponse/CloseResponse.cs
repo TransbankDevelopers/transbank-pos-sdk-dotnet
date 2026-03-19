@@ -56,9 +56,9 @@ namespace Transbank.Responses.AutoservicioResponse
         {
             string printingFieldText = PrintingField.Count == 0
                 ? ""
-                : string.Join("\n", PrintingField);
+                : string.Join("\r\n", PrintingField);
             return base.ToString() + "\n" +
-                   "Printing Field: " + printingFieldText;
+                   "Printing Field: " + "\n" + printingFieldText;
         }
     }
 }

@@ -72,7 +72,7 @@ namespace Transbank.Responses.AutoservicioResponse
         public int Last4Digits
         {
             get
-            {            
+            {
                 try
                 {
                     int.TryParse(Response.Split('|')[ParameterMap["Last4Digits"]].Trim(), out int last4Digits);
@@ -304,7 +304,7 @@ namespace Transbank.Responses.AutoservicioResponse
                    "Account Number: " + AccountNumber + "\n" +
                    "Card Brand: " + CardBrand + "\n" +
                    "Real Date: " + formatedRealDate + "\n" +
-                   "Printing Field: " + printingFieldText + "\n" +
+                   "Printing Field: " + "\n" + printingFieldText + "\n" +
                    "Shares Type: " + SharesType + "\n" +
                    "Shares Number: " + SharesNumber + "\n" +
                    "Shares Amount: " + SharesAmount + "\n" +
