@@ -41,10 +41,10 @@ namespace Transbank.Responses.AutoservicioResponse
 
         public override string ToString()
         {
-            string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string formattedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
             return base.ToString() + "\n" +
                    "Success?: " + Success + "\n" +
-                   "Real Date: " + formatedRealDate;
+                   "Real Date: " + formattedRealDate;
         }
     }
 }
