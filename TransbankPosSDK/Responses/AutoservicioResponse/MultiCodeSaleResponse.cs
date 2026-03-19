@@ -154,7 +154,7 @@ namespace Transbank.Responses.AutoservicioResponse
                    "Card Brand: " + CardBrand + "\n" +
                    "Real Date: " + formatedRealDate + "\n" +
                    "CommerceProviderCode: " + CommerceProviderCode + "\n" +
-                   "Printing Field: " + printingFieldText + "\n" +
+                   "Printing Field: " + "\n" + printingFieldText + "\n" +
                    "Shares Type: " + SharesType + "\n" +
                    "Shares Number: " + SharesNumber + "\n" +
                    "Shares Amount: " + SharesAmount + "\n" +
