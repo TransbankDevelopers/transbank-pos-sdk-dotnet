@@ -61,16 +61,30 @@ namespace Transbank.Tests.E2E
             "                  00.00%NUMERO DE BOLETA:                 123456NUMERO DE OPERACION:              000064CODIGO DE AUTORIZACION:" +
             "           194937                                                 GRACIAS POR SU COMPRA           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR |03|03|3334|CUOTAS SIN INTERES";
         private const string LastSaleDebitWithVoucherResponsePayload =
-            "0260|00|597029414300|IM750164|123456|574062|1000|3331|56|DB|10032026|331|P |12032026|171142|" +
-            "          COMPROBANTE DE VENTA                     TARJETA DE DEBITO                              Tbk" +
-            "                                     MATI                                  Santiago                " +
-            "               11111111-1                               SANTIAGO                           *** DUPLIC" +
-            "ADO ***                      597029414300-M261L1           FECHA             HORA          TERMINAL" +
-            "12/03/26        17:11:42        IM750164FECHA CONTABLE                  10032026NUMERO DE TARJETA " +
-            "  NUM DE CUENTA  MARCA************3331      ********331   B-DBOTRA                                    " +
-            "TOTAL:                           $ 1.000NUMERO DE BOLETA:                 123456NUMERO DE OPERACION" +
-            ":              000056CODIGO DE AUTORIZACION:           574062                              " +
-            "                                           GRACIAS POR SU COMPRA           ACEPTO PAGAR SEGUN CONTRATO CON EMISOR ";
+            "0260|00|597029414303|IM750164|123456|912108|1000|3331|68|DB|00-00-00|331|P |19032026|102438|" +
+            "          COMPROBANTE DE VENTA          " +
+            "           TARJETA DE DEBITO            " +
+            "                  Tbk                   " +
+            "                  MATI                  " +
+            "                Santiago                " +
+            "               11111111-1               " +
+            "                SANTIAGO                " +
+            "           *** DUPLICADO ***            " +
+            "          597029414303-M261M1           " +
+            "FECHA             HORA          TERMINAL" +
+            "19/03/26        10:24:38        IM750164" +
+            "FECHA CONTABLE                  00-00-00" +
+            "NUMERO DE TARJETA   NUM DE CUENTA  MARCA" +
+            "************3331      ********331   B-DB" +
+            "OTRA                                    " +
+            "TOTAL:                           $ 1.000" +
+            "NUMERO DE BOLETA:                 123456" +
+            "NUMERO DE OPERACION:              000068" +
+            "CODIGO DE AUTORIZACION:           912108" +
+            "                                        " +
+            "                                        " +
+            "         GRACIAS POR SU COMPRA          " +
+            " ACEPTO PAGAR SEGUN CONTRATO CON EMISOR ";
         private const string LastSaleCreditWithVoucherResponsePayload =
             "0260|00|597029414300|IM750164|123456|575354|10000|6590|34|CR|||VI|17032026|115006|" +
             "          COMPROBANTE DE VENTA                       PAGO EN CUOTAS                        TARJETA DE CREDITO" +
@@ -668,9 +682,9 @@ namespace Transbank.Tests.E2E
             string voucher = string.Concat(response.PrintingField);
             string lastSaleResponseText = response.ToString();
 
-            AssertBasicResponse(response, "0260", 0, success: true, 597029414300, "IM750164");
-            AssertSaleFields(response, "123456", "574062", 1000, 3331, 56, "DB", "331", "P", new DateTime(2026, 3, 12, 17, 11, 42));
-            Assert.Equal(new DateTime(2026, 3, 10), response.AccountingDate);
+            AssertBasicResponse(response, "0260", 0, success: true, 597029414303, "IM750164");
+            AssertSaleFields(response, "123456", "912108", 1000, 3331, 68, "DB", "331", "P", new DateTime(2026, 3, 19, 10, 24, 38));
+            Assert.Equal(DateTime.MinValue, response.AccountingDate);
             Assert.False(string.IsNullOrWhiteSpace(response.RawVoucher));
             Assert.Contains("COMPROBANTE DE VENTA", voucher);
             Assert.Contains("TARJETA DE DEBITO", voucher);
