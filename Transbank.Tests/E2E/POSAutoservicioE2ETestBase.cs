@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Transbank.Responses.AutoservicioResponse;
@@ -162,12 +163,12 @@ namespace Transbank.Tests.E2E
             Assert.Equal(installmentsTypeDescription, response.InstallmentsTypeDescription);
         }
 
-        protected static void AssertEmptyPrintingField(System.Collections.Generic.IReadOnlyList<string> printingField)
+        protected static void AssertEmptyPrintingField(IReadOnlyList<string> printingField)
         {
             Assert.Empty(printingField);
         }
 
-        protected static void AssertVoucherLinesHaveFixedWidth(System.Collections.Generic.IReadOnlyList<string> printingField)
+        protected static void AssertVoucherLinesHaveFixedWidth(IReadOnlyList<string> printingField)
         {
             Assert.NotEmpty(printingField);
             if (printingField.Count > 1)

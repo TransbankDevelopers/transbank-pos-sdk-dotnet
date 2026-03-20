@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Transbank.Responses.AutoservicioResponse;
 using Xunit;
 
@@ -8,7 +9,7 @@ namespace Transbank.Tests.E2E
     public class POSAutoservicioCloseE2ETests : POSAutoservicioE2ETestBase
     {
         [Fact]
-        public async System.Threading.Tasks.Task Close_ShouldParseApprovedResponseWithVoucher_WhenThereAreCapturedTransactions()
+        public async Task Close_ShouldParseApprovedResponseWithVoucher_WhenThereAreCapturedTransactions()
         {
             const string expectedCommandPayload = "0500|1";
             var task = _pos.Close(sendVoucher: true);
@@ -34,7 +35,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Close_ShouldParseApprovedResponseWithoutVoucher_WhenThereAreCapturedTransactions()
+        public async Task Close_ShouldParseApprovedResponseWithoutVoucher_WhenThereAreCapturedTransactions()
         {
             const string expectedCommandPayload = "0500|0";
             const string responsePayload = "0510|00|597029414300|IM750164|";
@@ -56,7 +57,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Close_ShouldParseApprovedResponseWithVoucher_WhenThereAreNoCapturedTransactions()
+        public async Task Close_ShouldParseApprovedResponseWithVoucher_WhenThereAreNoCapturedTransactions()
         {
             const string expectedCommandPayload = "0500|1";
             var task = _pos.Close(sendVoucher: true);
@@ -82,7 +83,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Close_ShouldParseApprovedResponseWithoutVoucher_WhenThereAreNoCapturedTransactions()
+        public async Task Close_ShouldParseApprovedResponseWithoutVoucher_WhenThereAreNoCapturedTransactions()
         {
             const string expectedCommandPayload = "0500|0";
             const string responsePayload = "0510|00|597029414300|IM750164|";
@@ -104,7 +105,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Close_ShouldReturnEmptyPrintingFieldAndEmptyRawVoucher_WhenVoucherIsMissing()
+        public async Task Close_ShouldReturnEmptyPrintingFieldAndEmptyRawVoucher_WhenVoucherIsMissing()
         {
             const string expectedCommandPayload = "0500|0";
             const string responsePayload = "0510|00|597029414300|IM750164|";
@@ -125,7 +126,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Close_ShouldReturnEmptyPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsInvalid()
+        public async Task Close_ShouldReturnEmptyPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsInvalid()
         {
             const string expectedCommandPayload = "0500|1";
             const string invalidRawVoucher = "CIERRE_INVALIDO";
@@ -147,7 +148,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Close_ShouldSegmentPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsMultipleOf40()
+        public async Task Close_ShouldSegmentPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsMultipleOf40()
         {
             const string expectedCommandPayload = "0500|1";
             string voucherLineOne = new string('C', 40);

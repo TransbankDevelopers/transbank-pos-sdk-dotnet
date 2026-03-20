@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Transbank.Responses.AutoservicioResponse;
 using Xunit;
 
@@ -7,7 +8,7 @@ namespace Transbank.Tests.E2E
     public class POSAutoservicioMultiCodeSaleE2ETests : POSAutoservicioE2ETestBase
     {
         [Fact]
-        public async System.Threading.Tasks.Task MultiCodeSale_ShouldParseApprovedDebitResponseWithVoucher()
+        public async Task MultiCodeSale_ShouldParseApprovedDebitResponseWithVoucher()
         {
             const string expectedCommandPayload = "0270|1000|123456|1|0|597029414303";
 
@@ -38,7 +39,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task MultiCodeSale_ShouldParseApprovedDebitResponseWithoutVoucher()
+        public async Task MultiCodeSale_ShouldParseApprovedDebitResponseWithoutVoucher()
         {
             const string expectedCommandPayload = "0270|1000|123456|0|0|597029414303";
             const string responsePayload = "0271|00|597029414303|IM750164|123456|673501|1000|3331|63|DB|00-00-00|331|P |18032026|171113|597012345678";
@@ -64,7 +65,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task MultiCodeSale_ShouldParseApprovedCreditResponseWithVoucher_WhenAccountingDateIsEmpty()
+        public async Task MultiCodeSale_ShouldParseApprovedCreditResponseWithVoucher_WhenAccountingDateIsEmpty()
         {
             const string expectedCommandPayload = "0270|10000|123456|1|0|597029414303";
 
@@ -96,7 +97,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task MultiCodeSale_ShouldParseApprovedCreditResponseWithoutVoucher_WhenAccountingDateIsEmpty()
+        public async Task MultiCodeSale_ShouldParseApprovedCreditResponseWithoutVoucher_WhenAccountingDateIsEmpty()
         {
             const string expectedCommandPayload = "0270|10000|123456|0|0|597029414303";
             const string responsePayload = "0271|00|597029414303|IM750164|123456|785992|10000|6590|65|CR|||VI|18032026|171232|597012345678||03|03|3334|CUOTAS SIN INTERES";
@@ -122,7 +123,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task MultiCodeSale_ShouldReturnEmptyPrintingFieldAndEmptyRawVoucher_WhenVoucherIsMissing()
+        public async Task MultiCodeSale_ShouldReturnEmptyPrintingFieldAndEmptyRawVoucher_WhenVoucherIsMissing()
         {
             const string expectedCommandPayload = "0270|1000|123456|0|0|597029414303";
             const string responsePayload = "0271|00|597029414303|IM750164|123456|673501|1000|3331|63|DB|00-00-00|331|P |18032026|171113|597012345678";
@@ -144,7 +145,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task MultiCodeSale_ShouldReturnEmptyPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsInvalid()
+        public async Task MultiCodeSale_ShouldReturnEmptyPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsInvalid()
         {
             const string expectedCommandPayload = "0270|1000|123456|1|0|597029414303";
             const string invalidRawVoucher = "MULTICODIGO_INVALIDO";
@@ -167,7 +168,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task MultiCodeSale_ShouldSegmentPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsMultipleOf40()
+        public async Task MultiCodeSale_ShouldSegmentPrintingFieldAndPreserveRawVoucher_WhenVoucherLengthIsMultipleOf40()
         {
             const string expectedCommandPayload = "0270|1000|123456|1|0|597029414303";
             string voucherLineOne = new string('M', 40);

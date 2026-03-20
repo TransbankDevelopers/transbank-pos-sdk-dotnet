@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Transbank.Responses.AutoservicioResponse;
 using Xunit;
 
@@ -8,7 +9,7 @@ namespace Transbank.Tests.E2E
     public class POSAutoservicioLastSaleE2ETests : POSAutoservicioE2ETestBase
     {
         [Fact]
-        public async System.Threading.Tasks.Task LastSale_ShouldParseApprovedDebitResponseWithoutVoucher_WhenThereIsALastSale()
+        public async Task LastSale_ShouldParseApprovedDebitResponseWithoutVoucher_WhenThereIsALastSale()
         {
             const string expectedCommandPayload = "0250|0";
             const string responsePayload = "0260|00|597029414300|IM750164|123456|574062|1000|3331|56|DB|10032026|331|P |12032026|171142";
@@ -54,7 +55,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task LastSale_ShouldParseAccountingDate_WhenDateIsValid()
+        public async Task LastSale_ShouldParseAccountingDate_WhenDateIsValid()
         {
             const string responsePayload = "0260|00|597029414300|IM750164|123456|574062|1000|3331|56|DB|10032026|331|P |12032026|171142";
 
@@ -69,7 +70,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task LastSale_ShouldReturnMinValueAccountingDate_WhenDateIsInvalid()
+        public async Task LastSale_ShouldReturnMinValueAccountingDate_WhenDateIsInvalid()
         {
             const string responsePayload = "0260|00|597029414300|IM750164|123456|574062|1000|3331|56|DB|abc|331|P |12032026|171142";
 
@@ -84,7 +85,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task LastSale_ShouldReturnNullAccountingDate_WhenDateIsMissing()
+        public async Task LastSale_ShouldReturnNullAccountingDate_WhenDateIsMissing()
         {
             const string responsePayload = "0260|00|597029414300|IM750164|123456|575354|10000|6590|34|CR|||VI|17032026|115006||03|03|3334|CUOTAS SIN INTERES";
 
@@ -99,7 +100,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task LastSale_ShouldParseApprovedDebitResponseWithVoucher_WhenVoucherIsRequested()
+        public async Task LastSale_ShouldParseApprovedDebitResponseWithVoucher_WhenVoucherIsRequested()
         {
             const string expectedCommandPayload = "0250|1";
             var task = _pos.LastSale(sendVoucher: true);
@@ -128,7 +129,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task LastSale_ShouldParseApprovedCreditResponseWithVoucher_WhenAccountingDateIsEmpty()
+        public async Task LastSale_ShouldParseApprovedCreditResponseWithVoucher_WhenAccountingDateIsEmpty()
         {
             const string expectedCommandPayload = "0250|1";
             var task = _pos.LastSale(sendVoucher: true);
@@ -158,7 +159,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task LastSale_ShouldParseApprovedCreditResponseWithoutVoucher_WhenAccountingDateIsEmpty()
+        public async Task LastSale_ShouldParseApprovedCreditResponseWithoutVoucher_WhenAccountingDateIsEmpty()
         {
             const string expectedCommandPayload = "0250|0";
             const string responsePayload = "0260|00|597029414300|IM750164|123456|575354|10000|6590|34|CR|||VI|17032026|115006||03|03|3334|CUOTAS SIN INTERES";
@@ -184,7 +185,7 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task LastSale_ShouldParseNoSaleResponse_WhenThereIsNoLastSale()
+        public async Task LastSale_ShouldParseNoSaleResponse_WhenThereIsNoLastSale()
         {
             const string expectedCommandPayload = "0250|0";
             const string responsePayload = "0260|11|597029414300|IM750164";
