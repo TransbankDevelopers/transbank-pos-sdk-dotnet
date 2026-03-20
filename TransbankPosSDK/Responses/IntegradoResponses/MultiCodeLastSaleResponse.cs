@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Transbank.Utils;
 
 namespace Transbank.Responses.IntegradoResponses
 {
@@ -16,14 +17,7 @@ namespace Transbank.Responses.IntegradoResponses
         {
             get
             {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["Voucher"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
+                return VoucherParser.ExtractRawVoucher(Response, ParameterMap["Voucher"]).Trim();
             }
         }
         public int Change
@@ -38,8 +32,8 @@ namespace Transbank.Responses.IntegradoResponses
         {
             get
             {
-                long.TryParse(Response.Split('|')[ParameterMap["CommerceProviderCode"]].Trim(), out long SharesNumber);
-                return SharesNumber;
+                long.TryParse(Response.Split('|')[ParameterMap["CommerceProviderCode"]].Trim(), out long commerceProviderCode);
+                return commerceProviderCode;
             }
         }
 
