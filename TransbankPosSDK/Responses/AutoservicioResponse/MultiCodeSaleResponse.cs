@@ -11,10 +11,10 @@ namespace Transbank.Responses.AutoservicioResponse
         {
             { "CommerceProviderCode", 15},
             { "PrintingField", 16},
-            { "SharesType", 17},
-            { "SharesNumber", 18},
-            { "SharesAmount", 19},
-            { "SharesTypeGloss", 20}
+            { "InstallmentsType", 17},
+            { "InstallmentsNumber", 18},
+            { "InstallmentsAmount", 19},
+            { "InstallmentsTypeDescription", 20}
         };
 
         public long CommerceProviderCode
@@ -46,14 +46,14 @@ namespace Transbank.Responses.AutoservicioResponse
                 return VoucherParser.ExtractRawVoucher(Response, ParameterMap["PrintingField"]);
             }
         }
-        public new int SharesType
+        public new int InstallmentsType
         {
             get
             {
                 try
                 {
-                    int.TryParse(Response.Split('|')[ParameterMap["SharesType"]].Trim(), out int sharesType);
-                    return sharesType;
+                    int.TryParse(Response.Split('|')[ParameterMap["InstallmentsType"]].Trim(), out int installmentsType);
+                    return installmentsType;
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -61,14 +61,14 @@ namespace Transbank.Responses.AutoservicioResponse
                 }
             }
         }
-        public new int SharesNumber
+        public new int InstallmentsNumber
         {
             get
             {
                 try
                 {
-                    int.TryParse(Response.Split('|')[ParameterMap["SharesNumber"]].Trim(), out int SharesNumber);
-                    return SharesNumber;
+                    int.TryParse(Response.Split('|')[ParameterMap["InstallmentsNumber"]].Trim(), out int installmentsNumber);
+                    return installmentsNumber;
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -76,14 +76,14 @@ namespace Transbank.Responses.AutoservicioResponse
                 }
             }
         }
-        public new int SharesAmount
+        public new int InstallmentsAmount
         {
             get
             {
                 try
                 {
-                    int.TryParse(Response.Split('|')[ParameterMap["SharesAmount"]].Trim(), out int sharesAmount);
-                    return sharesAmount;
+                    int.TryParse(Response.Split('|')[ParameterMap["InstallmentsAmount"]].Trim(), out int installmentsAmount);
+                    return installmentsAmount;
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -91,13 +91,13 @@ namespace Transbank.Responses.AutoservicioResponse
                 }
             }
         }
-        public new string SharesTypeGloss
+        public new string InstallmentsTypeDescription
         {
             get
             {
                 try
                 {
-                    return Response.Split('|')[ParameterMap["SharesTypeGloss"]].Trim();
+                    return Response.Split('|')[ParameterMap["InstallmentsTypeDescription"]].Trim();
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -130,10 +130,10 @@ namespace Transbank.Responses.AutoservicioResponse
                    "Real Date: " + formattedRealDate + "\n" +
                    "CommerceProviderCode: " + CommerceProviderCode + "\n" +
                    "Printing Field: " + "\n" + printingFieldText + "\n" +
-                   "Shares Type: " + SharesType + "\n" +
-                   "Shares Number: " + SharesNumber + "\n" +
-                   "Shares Amount: " + SharesAmount + "\n" +
-                   "Shares Type Gloss: " + SharesTypeGloss;
+                   "Installments Type: " + InstallmentsType + "\n" +
+                   "Installments Number: " + InstallmentsNumber + "\n" +
+                   "Installments Amount: " + InstallmentsAmount + "\n" +
+                   "Installments Type Description: " + InstallmentsTypeDescription;
         }
     }
 }

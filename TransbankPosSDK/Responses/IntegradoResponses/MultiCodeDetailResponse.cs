@@ -22,8 +22,8 @@ namespace Transbank.Responses.IntegradoResponses
         {
             get
             {
-                long.TryParse(Response.Split('|')[ParameterMap["CommerceProviderCode"]].Trim(), out long SharesNumber);
-                return SharesNumber;
+                long.TryParse(Response.Split('|')[ParameterMap["CommerceProviderCode"]].Trim(), out long commerceProviderCode);
+                return commerceProviderCode;
             }
         }
 
