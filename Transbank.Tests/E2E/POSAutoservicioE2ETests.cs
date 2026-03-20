@@ -552,15 +552,15 @@ namespace Transbank.Tests.E2E
             Assert.Equal(new DateTime(2026, 3, 12, 17, 11, 42), response.RealDate);
             Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
             AssertEmptyPrintingField(response.PrintingField);
-            Assert.Equal(-1, response.SharesType);
-            Assert.Equal(-1, response.SharesNumber);
-            Assert.Equal(-1, response.SharesAmount);
-            Assert.Equal(string.Empty, response.SharesTypeGloss);
+            Assert.Equal(-1, response.InstallmentsType);
+            Assert.Equal(-1, response.InstallmentsNumber);
+            Assert.Equal(-1, response.InstallmentsAmount);
+            Assert.Equal(string.Empty, response.InstallmentsTypeDescription);
             Assert.Contains("Function: 0260", lastSaleResponseText);
             Assert.Contains("Response code:0", lastSaleResponseText);
             Assert.Contains("Card Type: DB", lastSaleResponseText);
             Assert.Contains("Card Brand: P", lastSaleResponseText);
-            Assert.Contains("Shares Type: -1", lastSaleResponseText);
+            Assert.Contains("Installments Type: -1", lastSaleResponseText);
             Assert.Equal(2, _mockHandler.WrittenData.Count);
             Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
         }
@@ -728,10 +728,10 @@ namespace Transbank.Tests.E2E
             Assert.Null(response.RealDate);
             Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
             AssertEmptyPrintingField(response.PrintingField);
-            Assert.Equal(-1, response.SharesType);
-            Assert.Equal(-1, response.SharesNumber);
-            Assert.Equal(-1, response.SharesAmount);
-            Assert.Equal(string.Empty, response.SharesTypeGloss);
+            Assert.Equal(-1, response.InstallmentsType);
+            Assert.Equal(-1, response.InstallmentsNumber);
+            Assert.Equal(-1, response.InstallmentsAmount);
+            Assert.Equal(string.Empty, response.InstallmentsTypeDescription);
             AssertBaseResponseText(lastSaleResponseText, "0260", 11);
             AssertFinalAckWritten(2);
         }
@@ -997,20 +997,20 @@ namespace Transbank.Tests.E2E
             Assert.Equal(realDate, response.RealDate);
         }
 
-        private static void AssertInstallments(SaleResponse response, int sharesType, int sharesNumber, int sharesAmount, string sharesTypeGloss)
+        private static void AssertInstallments(SaleResponse response, int installmentsType, int installmentsNumber, int installmentsAmount, string installmentsTypeDescription)
         {
-            Assert.Equal(sharesType, response.SharesType);
-            Assert.Equal(sharesNumber, response.SharesNumber);
-            Assert.Equal(sharesAmount, response.SharesAmount);
-            Assert.Equal(sharesTypeGloss, response.SharesTypeGloss);
+            Assert.Equal(installmentsType, response.InstallmentsType);
+            Assert.Equal(installmentsNumber, response.InstallmentsNumber);
+            Assert.Equal(installmentsAmount, response.InstallmentsAmount);
+            Assert.Equal(installmentsTypeDescription, response.InstallmentsTypeDescription);
         }
 
-        private static void AssertInstallments(MultiCodeSaleResponse response, int sharesType, int sharesNumber, int sharesAmount, string sharesTypeGloss)
+        private static void AssertInstallments(MultiCodeSaleResponse response, int installmentsType, int installmentsNumber, int installmentsAmount, string installmentsTypeDescription)
         {
-            Assert.Equal(sharesType, response.SharesType);
-            Assert.Equal(sharesNumber, response.SharesNumber);
-            Assert.Equal(sharesAmount, response.SharesAmount);
-            Assert.Equal(sharesTypeGloss, response.SharesTypeGloss);
+            Assert.Equal(installmentsType, response.InstallmentsType);
+            Assert.Equal(installmentsNumber, response.InstallmentsNumber);
+            Assert.Equal(installmentsAmount, response.InstallmentsAmount);
+            Assert.Equal(installmentsTypeDescription, response.InstallmentsTypeDescription);
         }
 
         private static void AssertEmptyPrintingField(System.Collections.Generic.IReadOnlyList<string> printingField)

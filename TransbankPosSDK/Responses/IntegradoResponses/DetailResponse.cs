@@ -18,8 +18,8 @@ namespace Transbank.Responses.IntegradoResponses
             { "RealTime", 14 },
             { "EmployeeId", 15 },
             { "Tip", 16 },
-            { "SharesAmount", 17 },
-            { "SharesNumber", 18 }
+            { "InstallmentsAmount", 17 },
+            { "InstallmentsNumber", 18 }
         };
 
         public DetailResponse(string detail) : base(detail) { }
@@ -139,20 +139,20 @@ namespace Transbank.Responses.IntegradoResponses
                 return tip;
             }
         }
-        public new int SharesAmount
+        public new int InstallmentsAmount
         {
             get
             {
-                int.TryParse(Response.Split('|')[ParameterMap["SharesAmount"]].Trim(), out int sharesAmount);
-                return sharesAmount;
+                int.TryParse(Response.Split('|')[ParameterMap["InstallmentsAmount"]].Trim(), out int installmentsAmount);
+                return installmentsAmount;
             }
         }
-        public new int SharesNumber
+        public new int InstallmentsNumber
         {
             get
             {
-                int.TryParse(Response.Split('|')[ParameterMap["SharesNumber"]].Trim(), out int SharesNumber);
-                return SharesNumber;
+                int.TryParse(Response.Split('|')[ParameterMap["InstallmentsNumber"]].Trim(), out int installmentsNumber);
+                return installmentsNumber;
             }
         }
 
@@ -167,8 +167,8 @@ namespace Transbank.Responses.IntegradoResponses
                    "Ticket: " + Ticket + "\n" +
                    "AuthorizationCode Code: " + AuthorizationCode + "\n" +
                    "Amount: " + Amount + "\n" +
-                   "Shares Number: " + SharesNumber + "\n" +
-                   "Shares Amount: " + SharesAmount + "\n" +
+                   "Installments Number: " + InstallmentsNumber + "\n" +
+                   "Installments Amount: " + InstallmentsAmount + "\n" +
                    "Last 4 Digits: " + Last4Digits + "\n" +
                    "Operation Number: " + OperationNumber + "\n" +
                    "Card Type: " + CardType + "\n" +

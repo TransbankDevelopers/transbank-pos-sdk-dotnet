@@ -12,8 +12,8 @@ namespace Transbank.Responses.IntegradoResponses
             { "Ticket", 4},
             { "AuthorizationCode", 5},
             { "Amount", 6},
-            { "SharesNumber", 7},
-            { "SharesAmount", 8},
+            { "InstallmentsNumber", 7},
+            { "InstallmentsAmount", 8},
             { "Last4Digits", 9},
             { "OperationNumber", 10},
             { "CardType", 11},
@@ -64,20 +64,20 @@ namespace Transbank.Responses.IntegradoResponses
                 return amount;
             }
         }
-        public int SharesNumber
+        public int InstallmentsNumber
         {
             get
             {
-                int.TryParse(Response.Split('|')[ParameterMap["SharesNumber"]].Trim(), out int SharesNumber);
-                return SharesNumber;
+                int.TryParse(Response.Split('|')[ParameterMap["InstallmentsNumber"]].Trim(), out int installmentsNumber);
+                return installmentsNumber;
             }
         }
-        public int SharesAmount
+        public int InstallmentsAmount
         {
             get
             {
-                int.TryParse(Response.Split('|')[ParameterMap["SharesAmount"]].Trim(), out int sharesAmount);
-                return sharesAmount;
+                int.TryParse(Response.Split('|')[ParameterMap["InstallmentsAmount"]].Trim(), out int installmentsAmount);
+                return installmentsAmount;
             }
         }
         public int Last4Digits
@@ -224,8 +224,8 @@ namespace Transbank.Responses.IntegradoResponses
                    "Ticket: " + Ticket + "\n" +
                    "AuthorizationCode Code: " + AuthorizationCode + "\n" +
                    "Amount: " + Amount + "\n" +
-                   "Shares Number: " + SharesNumber + "\n" +
-                   "Shares Amount: " + SharesAmount + "\n" +
+                   "Installments Number: " + InstallmentsNumber + "\n" +
+                   "Installments Amount: " + InstallmentsAmount + "\n" +
                    "Last 4 Digits: " + Last4Digits + "\n" +
                    "Operation Number: " + OperationNumber + "\n" +
                    "Card Type: " + CardType + "\n" +
