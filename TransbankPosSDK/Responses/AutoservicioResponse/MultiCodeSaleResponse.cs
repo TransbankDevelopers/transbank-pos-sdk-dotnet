@@ -17,13 +17,13 @@ namespace Transbank.Responses.AutoservicioResponse
             { "SharesTypeGloss", 20}
         };
 
-        public int CommerceProviderCode
+        public long CommerceProviderCode
         {
             get
             {
                 try
                 {
-                    int.TryParse(Response.Split('|')[ParameterMap["CommerceProviderCode"]].Trim(), out int commerceProviderCode);
+                    long.TryParse(Response.Split('|')[ParameterMap["CommerceProviderCode"]].Trim(), out long commerceProviderCode);
                     return commerceProviderCode;
                 }
                 catch (IndexOutOfRangeException)
