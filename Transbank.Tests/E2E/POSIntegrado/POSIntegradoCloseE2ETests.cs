@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Transbank.Responses.IntegradoResponses;
 using Xunit;
 
@@ -6,7 +7,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
     public class POSIntegradoCloseE2ETests : POSIntegradoE2ETestBase
     {
         [Fact]
-        public async System.Threading.Tasks.Task Close_ShouldParseApprovedResponse()
+        public async Task Close_ShouldParseApprovedResponse()
         {
             const string expectedCommandPayload = "0500||";
 

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Transbank.Responses.IntegradoResponses;
 using Xunit;
 
@@ -6,7 +7,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
     public class POSIntegradoTotalsE2ETests : POSIntegradoE2ETestBase
     {
         [Fact]
-        public async System.Threading.Tasks.Task Totals_ShouldParseApprovedResponseWithSales()
+        public async Task Totals_ShouldParseApprovedResponseWithSales()
         {
             const string expectedCommandPayload = "0700|";
 
@@ -30,7 +31,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Totals_ShouldParseApprovedResponseWithoutSales()
+        public async Task Totals_ShouldParseApprovedResponseWithoutSales()
         {
             const string expectedCommandPayload = "0700|";
 
