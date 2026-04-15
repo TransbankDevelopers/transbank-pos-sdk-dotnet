@@ -151,7 +151,7 @@ namespace Transbank.Services
                 _buffer.Clear();
                 if (IsDetailsListCompleted(responseList))
                 {
-                    tcs.TrySetResult(responseList);
+                    tcs.TrySetResult(NormalizeDetailsResponses(responseList));
                 }
             }
         }
@@ -171,6 +171,45 @@ namespace Transbank.Services
             }
 
             return emptyCount >= 2;
+        }
+
+        private bool IsEmptyDetailsResponse(string payload)
+        {
+            var parts = payload.Split('|');
+            var responseCode = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+            var auth = parts.Length > 5 ? parts[5].Trim() : string.Empty;
+
+            return responseCode == "11" && string.IsNullOrEmpty(auth);
+        }
+
+        private List<string> NormalizeDetailsResponses(List<string> responses)
+        {
+            if (responses.All(IsEmptyDetailsResponse))
+            {
+                return new List<string>();
+            }
+
+            return TrimTrailingEmptyDetailsResponses(responses);
+        }
+
+        private List<string> TrimTrailingEmptyDetailsResponses(List<string> responses)
+        {
+            int lastIndex = responses.Count - 1;
+
+            while (lastIndex >= 0 && IsTrailingEmptyDetailsResponse(responses[lastIndex]))
+            {
+                lastIndex--;
+            }
+
+            return responses.Take(lastIndex + 1).ToList();
+        }
+
+        private bool IsTrailingEmptyDetailsResponse(string payload)
+        {
+            var parts = payload.Split('|');
+            var auth = parts.Length > 5 ? parts[5].Trim() : string.Empty;
+
+            return string.IsNullOrEmpty(auth);
         }
 
         public List<string> getPorts()
