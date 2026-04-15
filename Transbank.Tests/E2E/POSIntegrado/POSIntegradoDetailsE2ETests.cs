@@ -4,7 +4,7 @@ using System.Linq;
 using Transbank.Responses.IntegradoResponses;
 using Xunit;
 
-namespace Transbank.Tests.E2E
+namespace Transbank.Tests.E2E.POSIntegrado
 {
     public class POSIntegradoDetailsE2ETests : POSIntegradoE2ETestBase
     {

@@ -1,4 +1,4 @@
-namespace Transbank.Tests.E2E
+namespace Transbank.Tests.E2E.POSAutoservicio
 {
     internal static class POSAutoservicioVoucherFixtures
     {

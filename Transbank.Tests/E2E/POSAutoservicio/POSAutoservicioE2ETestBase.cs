@@ -8,12 +8,12 @@ using Transbank.Services;
 using Transbank.Tests.Mocks;
 using Xunit;
 
-namespace Transbank.Tests.E2E
+namespace Transbank.Tests.E2E.POSAutoservicio
 {
     public abstract class POSAutoservicioE2ETestBase
     {
         protected readonly MockSerialHandler _mockHandler;
-        protected readonly POSAutoservicio.POSAutoservicio _pos;
+        protected readonly global::Transbank.POSAutoservicio.POSAutoservicio _pos;
         protected const char STX = (char)0x02;
         protected const char ETX = (char)0x03;
         protected const char ACK = (char)0x06;
@@ -49,7 +49,7 @@ namespace Transbank.Tests.E2E
         {
             _mockHandler = new MockSerialHandler();
             var service = new PosService(_mockHandler, PosService.Model.AUTOSERVICIO);
-            _pos = new POSAutoservicio.POSAutoservicio(_mockHandler, service);
+            _pos = new global::Transbank.POSAutoservicio.POSAutoservicio(_mockHandler, service);
         }
 
         protected static string BuildCommandFrame(string payload)

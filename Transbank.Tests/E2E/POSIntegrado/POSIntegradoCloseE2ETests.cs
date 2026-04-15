@@ -1,7 +1,7 @@
 using Transbank.Responses.IntegradoResponses;
 using Xunit;
 
-namespace Transbank.Tests.E2E
+namespace Transbank.Tests.E2E.POSIntegrado
 {
     public class POSIntegradoCloseE2ETests : POSIntegradoE2ETestBase
     {
