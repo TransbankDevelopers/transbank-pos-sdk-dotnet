@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Transbank.Responses.CommonResponses;
 using Xunit;
 
@@ -6,7 +7,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
     public class POSIntegradoRefundE2ETests : POSIntegradoE2ETestBase
     {
         [Fact]
-        public async System.Threading.Tasks.Task Refund_ShouldParseDeniedDebitResponse()
+        public async Task Refund_ShouldParseDeniedDebitResponse()
         {
             const string expectedCommandPayload = "1200|143|";
 
@@ -32,7 +33,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Refund_ShouldParseApprovedCreditResponse()
+        public async Task Refund_ShouldParseApprovedCreditResponse()
         {
             const string expectedCommandPayload = "1200|142|";
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Transbank.Responses.IntegradoResponses;
 using Xunit;
 
@@ -9,7 +10,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
     public class POSIntegradoDetailsE2ETests : POSIntegradoE2ETestBase
     {
         [Fact]
-        public async System.Threading.Tasks.Task Details_ShouldParseSales_WhenPrintOnPOSIsDisabled()
+        public async Task Details_ShouldParseSales_WhenPrintOnPOSIsDisabled()
         {
             const string expectedCommandPayload = "0260|1|";
 
@@ -60,7 +61,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Details_ShouldReturnEmptyList_WhenPrintOnPOSIsEnabledAndAckIsReceived()
+        public async Task Details_ShouldReturnEmptyList_WhenPrintOnPOSIsEnabledAndAckIsReceived()
         {
             const string expectedCommandPayload = "0260|0|";
 
@@ -76,7 +77,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Details_ShouldReturnEmptyList_WhenThereAreNoSalesAndPrintOnPOSIsDisabled()
+        public async Task Details_ShouldReturnEmptyList_WhenThereAreNoSalesAndPrintOnPOSIsDisabled()
         {
             const string expectedCommandPayload = "0260|1|";
 
