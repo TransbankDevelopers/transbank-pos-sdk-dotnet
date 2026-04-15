@@ -57,6 +57,47 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
+        public async Task MultiCodeSale_ShouldParseApprovedDebitResponseWithoutVoucher()
+        {
+            const string expectedCommandPayload = "0270|7000|ABC123||0|0|597029414303|";
+
+            var task = _pos.MultiCodeSale(7000, "ABC123", 597029414303);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(MultiCodeSaleDebitWithoutVoucherResponsePayload);
+
+            MultiCodeSaleResponse response = await task;
+            string multiCodeSaleResponseText = response.ToString();
+
+            Assert.Equal("0271", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IT750050", response.TerminalId);
+            Assert.Equal("ABC123", response.Ticket);
+            Assert.Equal("388892", response.AuthorizationCode);
+            Assert.Equal(7000, response.Amount);
+            Assert.Equal(0, response.InstallmentsNumber);
+            Assert.Equal(0, response.InstallmentsAmount);
+            Assert.Equal(3331, response.Last4Digits);
+            Assert.Equal(144, response.OperationNumber);
+            Assert.Equal("DB", response.CardType);
+            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.Equal("********331", response.AccountNumber);
+            Assert.Equal("DB", response.CardBrand);
+            Assert.Equal(new DateTime(2026, 4, 7, 8, 56, 28), response.RealDate);
+            Assert.Equal(0, response.EmployeeId);
+            Assert.Equal(0, response.Tip);
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
+            Assert.Empty(response.PrintingField);
+            Assert.Equal(0, response.Change);
+            Assert.Equal(597029414303, response.CommerceProviderCode);
+            AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
         public async Task MultiCodeSale_ShouldParseApprovedCreditResponseWithVoucher()
         {
             const string expectedCommandPayload = "0270|12000|ABC123||1|0|597029414303|";
