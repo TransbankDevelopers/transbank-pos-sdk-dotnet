@@ -1,5 +1,10 @@
+using System.Collections.Generic;
+using System.Linq;
+using Transbank.Responses.CommonResponses;
 using Transbank.Services;
+using Transbank.Tests.Helpers;
 using Transbank.Tests.Mocks;
+using Xunit;
 
 namespace Transbank.Tests.E2E
 {
@@ -9,6 +14,10 @@ namespace Transbank.Tests.E2E
         protected readonly PosService _service;
         protected readonly POSIntegrado.POSIntegrado _pos;
         protected const char ACK = (char)0x06;
+        protected static readonly string MultiCodeSaleCreditWithVoucherResponsePayload =
+            "0271|00|597029414300|IT750050|ABC123|794160|12000|03|4000|6590|000141|CR|003000|3000000000000000000|VI|06042026|234109|||" +
+            POSIntegradoVoucherFixtures.MultiCodeSaleCreditVoucher +
+            "|0|597029414303";
 
         protected POSIntegradoE2ETestBase()
         {
@@ -17,9 +26,37 @@ namespace Transbank.Tests.E2E
             _pos = new POSIntegrado.POSIntegrado(_mockHandler, _service);
         }
 
+        protected void AssertSentCommand(string payload)
+        {
+            Assert.Equal(TestFrameBuilder.BuildCommandFrame(payload), _mockHandler.WrittenData.Single());
+        }
+
         protected void SendAck()
         {
             _mockHandler.SimulateIncoming(ACK.ToString());
+        }
+
+        protected void SendResponse(string payload)
+        {
+            _mockHandler.SimulateIncoming(TestFrameBuilder.BuildCommandFrame(payload));
+        }
+
+        protected void AssertFinalAckWritten(int expectedWriteCount)
+        {
+            Assert.Equal(expectedWriteCount, _mockHandler.WrittenData.Count);
+            Assert.Equal(ACK.ToString(), _mockHandler.WrittenData.Last());
+        }
+
+        protected static void AssertBaseResponseText(string responseText, string functionCode, int responseCode)
+        {
+            Assert.Contains($"Function: {functionCode}", responseText);
+            Assert.Contains($"Response code:{responseCode}", responseText);
+        }
+
+        protected static void AssertVoucherLinesHaveFixedWidth(IReadOnlyList<string> printingField)
+        {
+            Assert.NotEmpty(printingField);
+            Assert.All(printingField, line => Assert.Equal(40, line.Length));
         }
     }
 }
