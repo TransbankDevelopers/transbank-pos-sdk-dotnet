@@ -98,6 +98,48 @@ namespace Transbank.Tests.E2E
         }
 
         [Fact]
+        public async Task MultiCodeSale_ShouldParseCancelledResponse()
+        {
+            const string expectedCommandPayload = "0270|90000|ABC123||1|0|597029414303|";
+
+            var task = _pos.MultiCodeSale(90000, "ABC123", 597029414303, sendVoucher: true);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(MultiCodeSaleCancelledResponsePayload);
+
+            MultiCodeSaleResponse response = await task;
+            string multiCodeSaleResponseText = response.ToString();
+
+            Assert.Equal("0271", response.FunctionCode);
+            Assert.Equal(7, response.ResponseCode);
+            Assert.Equal("Transacción cancelada desde el POS", response.ResponseMessage);
+            Assert.False(response.Success);
+            Assert.Equal(0, response.CommerceCode);
+            Assert.Equal(string.Empty, response.TerminalId);
+            Assert.Equal("ABC123", response.Ticket);
+            Assert.Equal(string.Empty, response.AuthorizationCode);
+            Assert.Equal(90000, response.Amount);
+            Assert.Equal(0, response.InstallmentsNumber);
+            Assert.Equal(0, response.InstallmentsAmount);
+            Assert.Equal(0, response.Last4Digits);
+            Assert.Equal(0, response.OperationNumber);
+            Assert.Equal(string.Empty, response.CardType);
+            Assert.Null(response.AccountingDate);
+            Assert.Equal(string.Empty, response.AccountNumber);
+            Assert.Equal(string.Empty, response.CardBrand);
+            Assert.Null(response.RealDate);
+            Assert.Equal(0, response.EmployeeId);
+            Assert.Equal(0, response.Tip);
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
+            Assert.Empty(response.PrintingField);
+            Assert.Equal(0, response.Change);
+            Assert.Equal(597029414303, response.CommerceProviderCode);
+            AssertBaseResponseText(multiCodeSaleResponseText, "0271", 7);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
         public async Task MultiCodeSale_ShouldParseApprovedCreditResponseWithVoucher()
         {
             const string expectedCommandPayload = "0270|12000|ABC123||1|0|597029414303|";
