@@ -54,5 +54,45 @@ namespace Transbank.Tests.E2E
             AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
             AssertFinalAckWritten(2);
         }
+
+        [Fact]
+        public async Task MultiCodeSale_ShouldParseApprovedCreditResponseWithoutVoucher()
+        {
+            const string expectedCommandPayload = "0270|9000|ABC123||0|0|597029414303|";
+
+            var task = _pos.MultiCodeSale(9000, "ABC123", 597029414303);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendResponse(MultiCodeSaleCreditWithoutVoucherResponsePayload);
+
+            MultiCodeSaleResponse response = await task;
+            string multiCodeSaleResponseText = response.ToString();
+
+            Assert.Equal("0271", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IT750050", response.TerminalId);
+            Assert.Equal("ABC123", response.Ticket);
+            Assert.Equal("162529", response.AuthorizationCode);
+            Assert.Equal(9000, response.Amount);
+            Assert.Equal(3, response.InstallmentsNumber);
+            Assert.Equal(3000, response.InstallmentsAmount);
+            Assert.Equal(6590, response.Last4Digits);
+            Assert.Equal(142, response.OperationNumber);
+            Assert.Equal("CR", response.CardType);
+            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.Equal("3000000000000000000", response.AccountNumber);
+            Assert.Equal("VI", response.CardBrand);
+            Assert.Equal(new DateTime(2026, 4, 7, 8, 49, 18), response.RealDate);
+            Assert.Equal(0, response.EmployeeId);
+            Assert.Equal(0, response.Tip);
+            Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
+            Assert.Empty(response.PrintingField);
+            Assert.Equal(0, response.Change);
+            Assert.Equal(597029414303, response.CommerceProviderCode);
+            AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
+            AssertFinalAckWritten(2);
+        }
     }
 }
