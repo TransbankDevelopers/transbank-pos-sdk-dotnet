@@ -32,6 +32,12 @@ namespace Transbank.Tests.E2E
             "1210|21|597029414300|IT750050||143||";
         protected const string RefundCreditApprovedResponsePayload =
             "1210|00|597029414300|IT750050|162529|000142||";
+        protected const string DetailsDebitSaleOneResponsePayload =
+            "0261|00|597029414300|IT750050|ABC123|708410|8000|3331|000143|DB|000000|  ********331      |DB|07042026|085034||0|0|00|";
+        protected const string DetailsDebitSaleTwoResponsePayload =
+            "0261|00|597029414300|IT750050|ABC123|388892|7000|3331|000144|DB|000000|  ********331      |DB|07042026|085628||0|0|00|";
+        protected const string DetailsNoSalesResponsePayload =
+            "0261|11||||||||||||||||||";
 
         protected POSIntegradoE2ETestBase()
         {
