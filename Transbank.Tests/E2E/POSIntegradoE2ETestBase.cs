@@ -36,6 +36,8 @@ namespace Transbank.Tests.E2E
             "0710|00|002|15000||";
         protected const string TotalsWithoutSalesResponsePayload =
             "0710|00|000|||";
+        protected const string CloseResponsePayload =
+            "0510|00|597029414300|IT750050||";
         protected const string DetailsDebitSaleOneResponsePayload =
             "0261|00|597029414300|IT750050|ABC123|708410|8000|3331|000143|DB|000000|  ********331      |DB|07042026|085034||0|0|00|";
         protected const string DetailsDebitSaleTwoResponsePayload =
