@@ -8,6 +8,55 @@ namespace Transbank.Tests.E2E
     public class POSIntegradoMultiCodeSaleE2ETests : POSIntegradoE2ETestBase
     {
         [Fact]
+        public async Task MultiCodeSale_ShouldParseApprovedDebitResponseWithVoucher()
+        {
+            const string expectedCommandPayload = "0270|8000|ABC123||1|0|597029414303|";
+
+            var task = _pos.MultiCodeSale(8000, "ABC123", 597029414303, sendVoucher: true);
+
+            AssertSentCommand(expectedCommandPayload);
+            SendAck();
+            SendResponse(MultiCodeSaleDebitWithVoucherResponsePayload);
+
+            MultiCodeSaleResponse response = await task;
+            string multiCodeSaleResponseText = response.ToString();
+
+            Assert.Equal("0271", response.FunctionCode);
+            Assert.Equal(0, response.ResponseCode);
+            Assert.True(response.Success);
+            Assert.Equal(597029414300, response.CommerceCode);
+            Assert.Equal("IT750050", response.TerminalId);
+            Assert.Equal("ABC123", response.Ticket);
+            Assert.Equal("708410", response.AuthorizationCode);
+            Assert.Equal(8000, response.Amount);
+            Assert.Equal(0, response.InstallmentsNumber);
+            Assert.Equal(0, response.InstallmentsAmount);
+            Assert.Equal(3331, response.Last4Digits);
+            Assert.Equal(143, response.OperationNumber);
+            Assert.Equal("DB", response.CardType);
+            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.Equal("********331", response.AccountNumber);
+            Assert.Equal("DB", response.CardBrand);
+            Assert.Equal(new DateTime(2026, 4, 7, 8, 50, 34), response.RealDate);
+            Assert.Equal(0, response.EmployeeId);
+            Assert.Equal(0, response.Tip);
+            Assert.Equal(POSIntegradoVoucherFixtures.MultiCodeSaleDebitVoucher, response.RawVoucher);
+            Assert.Equal(42, response.PrintingField.Count);
+            Assert.Equal("               TRANSBANK                ", response.PrintingField[0]);
+            Assert.Equal("         VENTA - COPIA COMERCIO         ", response.PrintingField[1]);
+            Assert.Equal("OPERACION: 000143   AUTORIZACION: 708410", response.PrintingField[14]);
+            Assert.Equal("               TRANSBANK                ", response.PrintingField[21]);
+            Assert.Equal("         VENTA - COPIA CLIENTE          ", response.PrintingField[22]);
+            Assert.Equal("OPERACION: 000143   AUTORIZACION: 708410", response.PrintingField[35]);
+            Assert.Equal("                                        ", response.PrintingField[41]);
+            AssertVoucherLinesHaveFixedWidth(response.PrintingField);
+            Assert.Equal(0, response.Change);
+            Assert.Equal(597029414303, response.CommerceProviderCode);
+            AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
+            AssertFinalAckWritten(2);
+        }
+
+        [Fact]
         public async Task MultiCodeSale_ShouldParseApprovedCreditResponseWithVoucher()
         {
             const string expectedCommandPayload = "0270|12000|ABC123||1|0|597029414303|";
