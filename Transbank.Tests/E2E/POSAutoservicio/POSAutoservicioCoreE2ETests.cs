@@ -5,7 +5,7 @@ using Transbank.Responses.AutoservicioResponse;
 using Transbank.Responses.CommonResponses;
 using Xunit;
 
-namespace Transbank.Tests.E2E
+namespace Transbank.Tests.E2E.POSAutoservicio
 {
     public class POSAutoservicioCoreE2ETests : POSAutoservicioE2ETestBase
     {

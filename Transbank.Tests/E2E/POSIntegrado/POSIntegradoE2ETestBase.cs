@@ -6,13 +6,13 @@ using Transbank.Tests.Helpers;
 using Transbank.Tests.Mocks;
 using Xunit;
 
-namespace Transbank.Tests.E2E
+namespace Transbank.Tests.E2E.POSIntegrado
 {
     public abstract class POSIntegradoE2ETestBase
     {
         protected readonly MockSerialHandler _mockHandler;
         protected readonly PosService _service;
-        protected readonly POSIntegrado.POSIntegrado _pos;
+        protected readonly global::Transbank.POSIntegrado.POSIntegrado _pos;
         protected const char ACK = (char)0x06;
         protected static readonly string MultiCodeSaleCreditWithVoucherResponsePayload =
             "0271|00|597029414300|IT750050|ABC123|794160|12000|03|4000|6590|000141|CR|003000|3000000000000000000|VI|06042026|234109|||" +
@@ -49,7 +49,7 @@ namespace Transbank.Tests.E2E
         {
             _mockHandler = new MockSerialHandler();
             _service = new PosService(_mockHandler);
-            _pos = new POSIntegrado.POSIntegrado(_mockHandler, _service);
+            _pos = new global::Transbank.POSIntegrado.POSIntegrado(_mockHandler, _service);
         }
 
         protected void AssertSentCommand(string payload)

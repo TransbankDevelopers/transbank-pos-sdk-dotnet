@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Transbank.Tests.Helpers;
 using Xunit;
 
-namespace Transbank.Tests.E2E
+namespace Transbank.Tests.E2E.POSIntegrado
 {
     public class POSIntegradoModeE2ETests : POSIntegradoE2ETestBase
     {
