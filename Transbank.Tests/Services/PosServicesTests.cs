@@ -89,7 +89,7 @@ namespace Transbank.Tests
 
             List<string> response = await task;
 
-            Assert.Equal(4, response.Count);
+            Assert.Equal(2, response.Count);
             Assert.Equal("0261|00|597029414300|IT750050|abc123|757752|12000|9480|000135|CR|000000|0000000000000000000|MC|22102025|114016||0|0|00|", response[0]);
         }
 

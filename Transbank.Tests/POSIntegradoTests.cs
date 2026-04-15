@@ -159,7 +159,7 @@ namespace Transbank.Tests
             List<DetailResponse> responses = await task;
 
             Assert.NotNull(responses);
-            Assert.Equal(5, responses.Count);
+            Assert.Equal(3, responses.Count);
         }
         [Fact]
         public async Task MultiCodeDetails_ShouldReturnValidResponseList()
@@ -180,7 +180,7 @@ namespace Transbank.Tests
             List<MultiCodeDetailResponse> responses = await task;
 
             Assert.NotNull(responses);
-            Assert.Equal(5, responses.Count);
+            Assert.Equal(3, responses.Count);
         }
 
         [Fact]

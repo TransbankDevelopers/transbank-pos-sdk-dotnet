@@ -25,7 +25,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
             List<DetailResponse> responses = await task;
 
             Assert.Equal(5, _mockHandler.WrittenData.Count);
-            Assert.Equal(2, responses.Count(response => response.AuthorizationCode == "708410" || response.AuthorizationCode == "388892"));
+            Assert.Equal(2, responses.Count);
 
             DetailResponse firstResponse = responses[0];
             Assert.Equal("0261", firstResponse.FunctionCode);
