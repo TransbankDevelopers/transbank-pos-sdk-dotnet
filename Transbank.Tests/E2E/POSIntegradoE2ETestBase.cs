@@ -18,6 +18,8 @@ namespace Transbank.Tests.E2E
             "0271|00|597029414300|IT750050|ABC123|794160|12000|03|4000|6590|000141|CR|003000|3000000000000000000|VI|06042026|234109|||" +
             POSIntegradoVoucherFixtures.MultiCodeSaleCreditVoucher +
             "|0|597029414303";
+        protected const string MultiCodeSaleCreditWithoutVoucherResponsePayload =
+            "0271|00|597029414300|IT750050|ABC123|162529|9000|03|3000|6590|000142|CR|003000|3000000000000000000|VI|07042026|084918||||0|597029414303|";
 
         protected POSIntegradoE2ETestBase()
         {
