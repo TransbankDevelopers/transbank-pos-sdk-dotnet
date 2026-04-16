@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Transbank.Responses.AutoservicioResponse;
 using Xunit;
 
-namespace Transbank.Tests.E2E
+namespace Transbank.Tests.E2E.POSAutoservicio
 {
     public class POSAutoservicioSaleE2ETests : POSAutoservicioE2ETestBase
     {
