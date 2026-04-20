@@ -1,112 +1,27 @@
-﻿using System;
-using System.Globalization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Transbank.Utils;
 
 namespace Transbank.Responses.AutoservicioResponse
 {
     public class MultiCodeSaleResponse : SaleResponse
     {
-        protected new readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
-        {
-            { "CommerceProviderCode", 15},
-            { "PrintingField", 16},
-            { "InstallmentsType", 17},
-            { "InstallmentsNumber", 18},
-            { "InstallmentsAmount", 19},
-            { "InstallmentsTypeDescription", 20}
-        };
+        public long? CommerceProviderCode { get; }
+        public new string RawVoucher { get; }
+        public new List<string> PrintingField => VoucherParser.ParsePrintingField(RawVoucher);
+        public new int? InstallmentsType { get; }
+        public new int? InstallmentsNumber { get; }
+        public new int? InstallmentsAmount { get; }
+        public new string InstallmentsTypeDescription { get; }
 
-        public long CommerceProviderCode
+        public MultiCodeSaleResponse(string response) : base(response)
         {
-            get
-            {
-                try
-                {
-                    long.TryParse(Response.Split('|')[ParameterMap["CommerceProviderCode"]].Trim(), out long commerceProviderCode);
-                    return commerceProviderCode;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
+            CommerceProviderCode = GetOptionalLongSegment(15, "CommerceProviderCode");
+            RawVoucher = VoucherParser.ExtractRawVoucher(Response, 16);
+            InstallmentsType = GetOptionalIntSegment(17, "InstallmentsType");
+            InstallmentsNumber = GetOptionalIntSegment(18, "InstallmentsNumber");
+            InstallmentsAmount = GetOptionalIntSegment(19, "InstallmentsAmount");
+            InstallmentsTypeDescription = GetOptionalStringSegment(20);
         }
-        public new List<string> PrintingField
-        {
-            get
-            {
-                return VoucherParser.ParsePrintingField(RawVoucher);
-            }
-        }
-        public new string RawVoucher
-        {
-            get
-            {
-                return VoucherParser.ExtractRawVoucher(Response, ParameterMap["PrintingField"]);
-            }
-        }
-        public new int InstallmentsType
-        {
-            get
-            {
-                try
-                {
-                    int.TryParse(Response.Split('|')[ParameterMap["InstallmentsType"]].Trim(), out int installmentsType);
-                    return installmentsType;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
-        }
-        public new int InstallmentsNumber
-        {
-            get
-            {
-                try
-                {
-                    int.TryParse(Response.Split('|')[ParameterMap["InstallmentsNumber"]].Trim(), out int installmentsNumber);
-                    return installmentsNumber;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
-        }
-        public new int InstallmentsAmount
-        {
-            get
-            {
-                try
-                {
-                    int.TryParse(Response.Split('|')[ParameterMap["InstallmentsAmount"]].Trim(), out int installmentsAmount);
-                    return installmentsAmount;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
-        }
-        public new string InstallmentsTypeDescription
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["InstallmentsTypeDescription"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-
-        public MultiCodeSaleResponse(string response) : base(response) { }
 
         public override string ToString()
         {

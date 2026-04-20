@@ -1,39 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Transbank.Responses.CommonResponses
+﻿namespace Transbank.Responses.CommonResponses
 {
-    public class RefundResponse : CommonResponses.LoadKeysResponse
+    public class RefundResponse : LoadKeysResponse
     {
-        private readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
-        {
-            { "AuthorizationCode", 4},
-            { "OperationID", 5 }
-        };
+        public string AuthorizationCode { get; }
+        public int? OperationID { get; }
 
-        public string AuthorizationCode
+        public RefundResponse(string response) : base(response)
         {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
-                }
-                catch (IndexOutOfRangeException) {
-                    return "";
-                }
-            }
+            AuthorizationCode = GetOptionalStringSegment(4);
+            OperationID = GetOptionalIntSegment(5, "OperationID");
         }
-        public int OperationID
-        {
-            get
-            {
-                _ = int.TryParse(Response.Split('|')[ParameterMap["OperationID"]].Trim(), out int operationID);
-                return operationID;
-            }
-        }
-
-        public RefundResponse(string response) : base(response) { }
 
         public override string ToString()
         {
