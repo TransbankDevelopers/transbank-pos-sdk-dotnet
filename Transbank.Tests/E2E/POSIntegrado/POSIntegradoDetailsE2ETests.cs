@@ -40,11 +40,11 @@ namespace Transbank.Tests.E2E.POSIntegrado
             Assert.Equal(3331, firstResponse.Last4Digits);
             Assert.Equal(143, firstResponse.OperationNumber);
             Assert.Equal("DB", firstResponse.CardType);
-            Assert.Equal(DateTime.MinValue, firstResponse.AccountingDate);
+            Assert.Null(firstResponse.AccountingDate);
             Assert.Equal("********331", firstResponse.AccountNumber);
             Assert.Equal("DB", firstResponse.CardBrand);
             Assert.Equal(new DateTime(2026, 4, 7, 8, 50, 34), firstResponse.RealDate);
-            Assert.Equal(0, firstResponse.EmployeeId);
+            Assert.Null(firstResponse.EmployeeId);
             Assert.Equal(0, firstResponse.Tip);
             Assert.Equal(0, firstResponse.InstallmentsAmount);
             Assert.Equal(0, firstResponse.InstallmentsNumber);

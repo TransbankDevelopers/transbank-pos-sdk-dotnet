@@ -24,7 +24,7 @@ namespace Transbank.Tests.E2E.POSAutoservicio
 
             AssertBasicResponse(response, "0271", 0, success: true, 597029414303, "IM750164");
             AssertSaleFields(response, "123456", "475618", 1000, 3331, 62, "DB", "331", "P", new DateTime(2026, 3, 18, 17, 10, 40));
-            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.Null(response.AccountingDate);
             Assert.Equal(597012345678, response.CommerceProviderCode);
             Assert.False(string.IsNullOrWhiteSpace(response.RawVoucher));
             Assert.Contains("COMPROBANTE DE VENTA", voucher);
@@ -33,7 +33,7 @@ namespace Transbank.Tests.E2E.POSAutoservicio
             Assert.Contains("CODIGO DE AUTORIZACION:", voucher);
             Assert.Contains("GRACIAS POR SU COMPRA", voucher);
             AssertVoucherLinesHaveFixedWidth(response.PrintingField);
-            AssertInstallments(response, -1, -1, -1, string.Empty);
+            AssertInstallments(response, null, null, null, string.Empty);
             AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
             AssertFinalAckWritten(2);
         }
@@ -55,11 +55,11 @@ namespace Transbank.Tests.E2E.POSAutoservicio
 
             AssertBasicResponse(response, "0271", 0, success: true, 597029414303, "IM750164");
             AssertSaleFields(response, "123456", "673501", 1000, 3331, 63, "DB", "331", "P", new DateTime(2026, 3, 18, 17, 11, 13));
-            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.Null(response.AccountingDate);
             Assert.Equal(597012345678, response.CommerceProviderCode);
             Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
             AssertEmptyPrintingField(response.PrintingField);
-            AssertInstallments(response, -1, -1, -1, string.Empty);
+            AssertInstallments(response, null, null, null, string.Empty);
             AssertBaseResponseText(multiCodeSaleResponseText, "0271", 0);
             AssertFinalAckWritten(2);
         }

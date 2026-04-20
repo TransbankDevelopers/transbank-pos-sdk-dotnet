@@ -49,7 +49,7 @@ namespace Transbank.Tests.E2E.POSIntegrado
             Assert.Equal("Aprobado", response.ResponseMessage);
             Assert.True(response.Success);
             Assert.Equal(0, response.TxCount);
-            Assert.Equal(0, response.TxTotal);
+            Assert.Null(response.TxTotal);
             AssertBaseResponseText(totalsResponseText, "0710", 0);
             AssertFinalAckWritten(2);
         }

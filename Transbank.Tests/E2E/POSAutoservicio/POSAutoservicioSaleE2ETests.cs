@@ -23,7 +23,7 @@ namespace Transbank.Tests.E2E.POSAutoservicio
 
             AssertBasicResponse(response, "0210", 0, success: true, 597029414300, "IM750164");
             AssertSaleFields(response, "123456", "547545", 1000, 3331, 55, "DB", "331", "P", new DateTime(2026, 3, 18, 12, 32, 30));
-            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.Null(response.AccountingDate);
             Assert.False(string.IsNullOrWhiteSpace(response.RawVoucher));
             Assert.Contains("COMPROBANTE DE VENTA", voucher);
             Assert.Contains("TARJETA DE DEBITO", voucher);
@@ -31,7 +31,7 @@ namespace Transbank.Tests.E2E.POSAutoservicio
             Assert.Contains("CODIGO DE AUTORIZACION:", voucher);
             Assert.Contains("GRACIAS POR SU COMPRA", voucher);
             AssertVoucherLinesHaveFixedWidth(response.PrintingField);
-            AssertInstallments(response, -1, -1, -1, string.Empty);
+            AssertInstallments(response, null, null, null, string.Empty);
             AssertBaseResponseText(saleResponseText, "0210", 0);
             AssertFinalAckWritten(2);
         }
@@ -53,10 +53,10 @@ namespace Transbank.Tests.E2E.POSAutoservicio
 
             AssertBasicResponse(response, "0210", 0, success: true, 597029414300, "IM750164");
             AssertSaleFields(response, "123456", "700527", 1000, 3331, 56, "DB", "331", "P", new DateTime(2026, 3, 18, 12, 33, 7));
-            Assert.Equal(DateTime.MinValue, response.AccountingDate);
+            Assert.Null(response.AccountingDate);
             Assert.True(string.IsNullOrWhiteSpace(response.RawVoucher));
             AssertEmptyPrintingField(response.PrintingField);
-            AssertInstallments(response, -1, -1, -1, string.Empty);
+            AssertInstallments(response, null, null, null, string.Empty);
             AssertBaseResponseText(saleResponseText, "0210", 0);
             AssertFinalAckWritten(2);
         }
