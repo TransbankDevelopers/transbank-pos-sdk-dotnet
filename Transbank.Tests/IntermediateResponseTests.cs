@@ -33,6 +33,19 @@ namespace Transbank.Tests
             Assert.False(response.Success);
         }
 
+        [Fact]
+        public void LoadKeysResponse_ShouldBeInvalid_WhenRequiredFieldsAreMissing()
+        {
+            var response = new LoadKeysResponse("0810|00||");
+
+            Assert.False(response.HasValidParse);
+            Assert.Equal("0810|00||", response.RawResponse);
+            Assert.Null(response.CommerceCode);
+            Assert.Equal(string.Empty, response.TerminalId);
+            Assert.Contains("CommerceCode is missing or empty.", response.ParseErrors);
+            Assert.Contains("TerminalId is missing or empty.", response.ParseErrors);
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]
