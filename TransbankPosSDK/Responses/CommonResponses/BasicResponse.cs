@@ -47,6 +47,11 @@ namespace Transbank.Responses.CommonResponses
             return ResponseParsingHelper.GetOptionalString(_segments, index);
         }
 
+        protected string GetRequiredStringSegment(int index, string fieldName)
+        {
+            return ResponseParsingHelper.GetRequiredString(_segments, index, fieldName, _parseErrors);
+        }
+
         protected int? GetOptionalIntSegment(int index, string fieldName)
         {
             return ResponseParsingHelper.GetOptionalInt(_segments, index, fieldName, _parseErrors);
@@ -55,6 +60,11 @@ namespace Transbank.Responses.CommonResponses
         protected long? GetOptionalLongSegment(int index, string fieldName)
         {
             return ResponseParsingHelper.GetOptionalLong(_segments, index, fieldName, _parseErrors);
+        }
+
+        protected long? GetRequiredLongSegment(int index, string fieldName)
+        {
+            return ResponseParsingHelper.GetRequiredLong(_segments, index, fieldName, _parseErrors);
         }
 
         protected DateTime? GetOptionalDateSegment(int index, string format, string fieldName)

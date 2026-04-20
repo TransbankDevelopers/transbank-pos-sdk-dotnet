@@ -7,8 +7,8 @@
 
         public LoadKeysResponse(string response) : base(response)
         {
-            CommerceCode = GetOptionalLongSegment(2, "CommerceCode");
-            TerminalId = GetOptionalStringSegment(3);
+            CommerceCode = GetRequiredLongSegment(2, "CommerceCode");
+            TerminalId = GetRequiredStringSegment(3, "TerminalId");
         }
 
         public override string ToString()

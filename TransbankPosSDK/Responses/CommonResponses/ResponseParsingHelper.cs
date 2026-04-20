@@ -94,6 +94,23 @@ namespace Transbank.Responses.CommonResponses
             return null;
         }
 
+        internal static long? GetRequiredLong(string[] segments, int index, string fieldName, ICollection<string> parseErrors)
+        {
+            if (!TryGetTrimmedSegment(segments, index, out string segment) || string.IsNullOrWhiteSpace(segment))
+            {
+                parseErrors.Add($"{fieldName} is missing or empty.");
+                return null;
+            }
+
+            if (long.TryParse(segment, out long value))
+            {
+                return value;
+            }
+
+            parseErrors.Add($"{fieldName} is not a valid long.");
+            return null;
+        }
+
         internal static DateTime? GetOptionalDate(string[] segments, int index, string format, string fieldName, ICollection<string> parseErrors)
         {
             if (!TryGetTrimmedSegment(segments, index, out string segment) || string.IsNullOrWhiteSpace(segment))
