@@ -214,5 +214,36 @@ namespace Transbank.Tests
             Assert.Equal(1, _mockHandler.WrittenData.Count(data => data == ACK.ToString()));
             Assert.Equal(TestFrameBuilder.BuildCommandFrame("0200|1200|123asd|1|1"), _mockHandler.WrittenData[0]);
         }
+
+        [Fact]
+        public async Task Sale_ShouldKeepFlowAlive_WhenIntermediateResponsesContainParseErrors()
+        {
+            const string finalResponsePayload = "0210|00|597029414300|IM750015|123asd|925171|1200|3331|72|DB|10032026|331|P |16032026|120653";
+            string[] intermediatePayloads = { "0900|84", "0900", "|abc", "0900|82" };
+            List<IntermediateResponse> responses = new();
+
+            _pos.IntermediateResponseChange += (_, response) => responses.Add(response);
+
+            var task = _pos.Sale(1200, "123asd", sendVoucher: true, sendStatus: true);
+
+            foreach (string intermediatePayload in intermediatePayloads)
+            {
+                _mockHandler.SimulateIncoming(TestFrameBuilder.BuildResponseFrame(intermediatePayload));
+                Assert.False(task.IsCompleted);
+            }
+
+            _mockHandler.SimulateIncoming(TestFrameBuilder.BuildResponseFrame(finalResponsePayload));
+
+            SaleResponse saleResponse = await task;
+
+            Assert.Equal(4, responses.Count);
+            Assert.True(responses[0].Success);
+            Assert.False(responses[1].HasValidParse);
+            Assert.False(responses[1].Success);
+            Assert.False(responses[2].HasValidParse);
+            Assert.False(responses[2].Success);
+            Assert.True(responses[3].Success);
+            Assert.Equal(0, saleResponse.ResponseCode);
+        }
     }
 }
