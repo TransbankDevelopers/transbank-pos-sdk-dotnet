@@ -147,7 +147,7 @@ namespace Transbank.Tests.E2E.POSAutoservicio
             Assert.Equal(realDate, response.RealDate);
         }
 
-        protected static void AssertInstallments(SaleResponse response, int installmentsType, int installmentsNumber, int installmentsAmount, string installmentsTypeDescription)
+        protected static void AssertInstallments(SaleResponse response, int? installmentsType, int? installmentsNumber, int? installmentsAmount, string installmentsTypeDescription)
         {
             Assert.Equal(installmentsType, response.InstallmentsType);
             Assert.Equal(installmentsNumber, response.InstallmentsNumber);
@@ -155,7 +155,7 @@ namespace Transbank.Tests.E2E.POSAutoservicio
             Assert.Equal(installmentsTypeDescription, response.InstallmentsTypeDescription);
         }
 
-        protected static void AssertInstallments(MultiCodeSaleResponse response, int installmentsType, int installmentsNumber, int installmentsAmount, string installmentsTypeDescription)
+        protected static void AssertInstallments(MultiCodeSaleResponse response, int? installmentsType, int? installmentsNumber, int? installmentsAmount, string installmentsTypeDescription)
         {
             Assert.Equal(installmentsType, response.InstallmentsType);
             Assert.Equal(installmentsNumber, response.InstallmentsNumber);
