@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Collections.Generic;
 using Transbank.Utils;
 
@@ -7,259 +6,41 @@ namespace Transbank.Responses.AutoservicioResponse
 {
     public class SaleResponse : CommonResponses.LoadKeysResponse
     {
-        protected Dictionary<string, int> ParameterMap = new Dictionary<string, int>
-        {
-            { "Ticket", 4},
-            { "AuthorizationCode", 5},
-            { "Amount", 6},
-            { "Last4Digits", 7},
-            { "OperationNumber", 8},
-            { "CardType", 9},
-            { "AccountingDate", 10},
-            { "AccountNumber", 11},
-            { "CardBrand", 12},
-            { "RealDate", 13},
-            { "RealTime", 14},
-            { "PrintingField", 15},
-            { "InstallmentsType", 16},
-            { "InstallmentsNumber", 17},
-            { "InstallmentsAmount", 18},
-            { "InstallmentsTypeDescription", 19}
-        };
+        public string Ticket { get; }
+        public string AuthorizationCode { get; }
+        public int? Amount { get; }
+        public int? Last4Digits { get; }
+        public int? OperationNumber { get; }
+        public string CardType { get; }
+        public DateTime? AccountingDate { get; }
+        public string AccountNumber { get; }
+        public string CardBrand { get; }
+        public DateTime? RealDate { get; }
+        public string RawVoucher { get; }
+        public List<string> PrintingField => VoucherParser.ParsePrintingField(RawVoucher);
+        public int? InstallmentsType { get; }
+        public int? InstallmentsNumber { get; }
+        public int? InstallmentsAmount { get; }
+        public string InstallmentsTypeDescription { get; }
 
-        public string Ticket
+        public SaleResponse(string response) : base(response)
         {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["Ticket"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
+            Ticket = GetOptionalStringSegment(4);
+            AuthorizationCode = GetOptionalStringSegment(5);
+            Amount = GetOptionalIntSegment(6, "Amount");
+            Last4Digits = GetOptionalIntSegment(7, "Last4Digits");
+            OperationNumber = GetOptionalIntSegment(8, "OperationNumber");
+            CardType = GetOptionalStringSegment(9);
+            AccountingDate = GetOptionalDateSegment(10, "ddMMyyyy", "AccountingDate");
+            AccountNumber = GetOptionalStringSegment(11);
+            CardBrand = GetOptionalStringSegment(12);
+            RealDate = GetOptionalCombinedDateTimeSegment(13, 14, "ddMMyyyyHHmmss", "RealDate");
+            RawVoucher = VoucherParser.ExtractRawVoucher(Response, 15);
+            InstallmentsType = GetOptionalIntSegment(16, "InstallmentsType");
+            InstallmentsNumber = GetOptionalIntSegment(17, "InstallmentsNumber");
+            InstallmentsAmount = GetOptionalIntSegment(18, "InstallmentsAmount");
+            InstallmentsTypeDescription = GetOptionalStringSegment(19);
         }
-        public string AuthorizationCode
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public int Amount
-        {
-            get
-            {
-                try
-                {
-                    int.TryParse(Response.Split('|')[ParameterMap["Amount"]].Trim(), out int amount);
-                    return amount;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
-        }
-        public int Last4Digits
-        {
-            get
-            {
-                try
-                {
-                    int.TryParse(Response.Split('|')[ParameterMap["Last4Digits"]].Trim(), out int last4Digits);
-                    return last4Digits;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
-        }
-        public int OperationNumber
-        {
-            get
-            {
-                try
-                {
-                    int.TryParse(Response.Split('|')[ParameterMap["OperationNumber"]].Trim(), out int operationNumber);
-                    return operationNumber;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
-        }
-        public string CardType
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["CardType"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public DateTime? AccountingDate
-        {
-            get
-            {
-                string date = "";
-                try
-                {
-                    date = Response.Split('|')[ParameterMap["AccountingDate"]].Trim();
-                }
-                catch (IndexOutOfRangeException) { }
-                if (date != "")
-                {
-                    DateTime parsedDate = new DateTime();
-                    DateTime.TryParseExact(date, "ddMMyyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
-                    return parsedDate;
-                }
-                return null;
-            }
-        }
-        public string AccountNumber
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["AccountNumber"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public string CardBrand
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["CardBrand"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public DateTime? RealDate
-        {
-            get
-            {
-                string date = "";
-                string hour = "";
-                try
-                {
-                    date = Response.Split('|')[ParameterMap["RealDate"]].Trim();
-                    hour = Response.Split('|')[ParameterMap["RealTime"]].Trim();
-                }
-                catch (IndexOutOfRangeException) { }
-
-                if (date + hour != "")
-                {
-                    DateTime parsedDate = new DateTime();
-                    DateTime.TryParseExact(date + hour, "ddMMyyyyHHmmss", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
-                    return parsedDate;
-                }
-                return null;
-            }
-        }
-        public List<string> PrintingField
-        {
-            get
-            {
-                return VoucherParser.ParsePrintingField(RawVoucher);
-            }
-        }
-        public string RawVoucher
-        {
-            get
-            {
-                return VoucherParser.ExtractRawVoucher(Response, ParameterMap["PrintingField"]);
-            }
-        }
-        public int InstallmentsType
-        {
-            get
-            {
-                try
-                {
-                    int.TryParse(Response.Split('|')[ParameterMap["InstallmentsType"]].Trim(), out int installmentsType);
-                    return installmentsType;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
-        }
-        public int InstallmentsNumber
-        {
-            get
-            {
-                try
-                {
-                    int.TryParse(Response.Split('|')[ParameterMap["InstallmentsNumber"]].Trim(), out int installmentsNumber);
-                    return installmentsNumber;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
-        }
-        public int InstallmentsAmount
-        {
-            get
-            {
-                try
-                {
-                    int.TryParse(Response.Split('|')[ParameterMap["InstallmentsAmount"]].Trim(), out int installmentsAmount);
-                    return installmentsAmount;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return -1;
-                }
-            }
-        }
-        public string InstallmentsTypeDescription
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["InstallmentsTypeDescription"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-
-        public SaleResponse(string response) : base(response) { }
-
-
 
         public override string ToString()
         {
