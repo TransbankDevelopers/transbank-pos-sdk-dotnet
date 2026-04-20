@@ -268,7 +268,7 @@ namespace Transbank.Tests
         public async Task Sale_ShouldKeepFlowAlive_WhenIntermediateResponsesContainParseErrors()
         {
             string finalResponsePayload = "0210|00|597029414300|IT750050|ABC123|925171|1200|00|0|3331|000072|DB|000000|0000000000000000331|P|16032026|120653||||";
-            string[] intermediatePayloads = { "0900|84", "0900", "|abc", "0900|82" };
+            string[] intermediatePayloads = { "0900|84", "0900|", "0900|abc", "0900|82" };
             List<IntermediateResponse> responses = new();
 
             _pos.IntermediateResponseChange += (_, response) => responses.Add(response);
