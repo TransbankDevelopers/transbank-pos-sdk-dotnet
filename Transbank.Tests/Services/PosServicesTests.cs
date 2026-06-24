@@ -1,7 +1,9 @@
 using Transbank.Tests.Mocks;
 using Transbank.Services;
+using Transbank.Tests.Helpers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Transbank.Tests
@@ -26,7 +28,7 @@ namespace Transbank.Tests
             var ports = _service.getPorts();
 
             Assert.Single(ports);
-            Assert.Contains("FAKE_PORT", ports);
+            Assert.Equal("FAKE_PORT", ports[0]);
         }
 
         [Fact]
@@ -46,15 +48,14 @@ namespace Transbank.Tests
         public async Task SendNormalCommand_ShouldReturnResponse_WhenValidMessageReceived()
         {
             string payload = "0800";
-            string expected = $"{STX}{payload}{ETX}{(char)0x0B}";
+            string expected = TestFrameBuilder.BuildCommandFrame(payload);
 
             var task = _service.ProcessNormalCommand(payload);
             _mock.SimulateIncoming(expected);
 
             string response = await task;
 
-            Assert.Contains(payload, response);
-            Assert.Contains(((char)0x03).ToString(), response);
+            Assert.Equal(payload, response);
         }
 
         [Fact]
@@ -88,8 +89,40 @@ namespace Transbank.Tests
 
             List<string> response = await task;
 
-            Assert.Equal(4, response.Count);
-            Assert.Contains("0261", response[0]);
+            Assert.Equal(2, response.Count);
+            Assert.Equal("0261|00|597029414300|IT750050|abc123|757752|12000|9480|000135|CR|000000|0000000000000000000|MC|22102025|114016||0|0|00|", response[0]);
+        }
+
+        [Fact]
+        public async Task ProcessNormalCommand_ShouldPublishSanitizedIntermediatePayload_AndKeepWaitingForFinalResponse()
+        {
+            const string commandPayload = "0200|000001200|123asd||1|1|";
+            const string finalResponsePayload = "0210|00|597029414300|IT750050|123asd|925171|1200|00|0|3331|72|DB|000000|0000000000000000331|P|16032026|120653||||";
+            string[] intermediatePayloads = { "0900|84", "0900|83", "0900|81", "0900|82" };
+            List<string> receivedIntermediates = new();
+
+            _service.IntermediateResponseReceived += (_, response) => receivedIntermediates.Add(response);
+
+            var task = _service.ProcessNormalCommand(commandPayload);
+
+            foreach (string intermediatePayload in intermediatePayloads)
+            {
+                _mock.SimulateIncoming(TestFrameBuilder.BuildCommandFrame(intermediatePayload));
+                Assert.False(task.IsCompleted);
+            }
+
+            _mock.SimulateIncoming(TestFrameBuilder.BuildCommandFrame(finalResponsePayload));
+
+            string response = await task;
+
+            Assert.Equal(intermediatePayloads, receivedIntermediates);
+            Assert.All(receivedIntermediates, message =>
+            {
+                Assert.Equal(-1, message.IndexOf(STX));
+                Assert.Equal(-1, message.IndexOf(ETX));
+            });
+            Assert.Equal(finalResponsePayload, response);
+            Assert.Equal(1, _mock.WrittenData.Count(data => data == ACK.ToString()));
         }
     }
 }

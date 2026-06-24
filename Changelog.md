@@ -5,6 +5,24 @@ Todos los cambios notables a este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2026-06-24
+
+### Agrega
+
+- Se agrega a las respuestas con voucher el campo RawVoucher, el cual contiene el valor del campo sin formatear.
+- Se agrega la clase de excepción IntermediateResponseException para los mensajes intermedios.
+
+### Actualiza
+
+- Se actualiza el nombre del campo SharesType a InstallmentsType.
+- Se actualiza el nombre del campo SharesNumber a InstallmentsNumber.
+- Se actualiza el nombre del campo SharesAmount a InstallmentsAmount.
+- Se actualiza el nombre del campo SharesTypeGloss a InstallmentsTypeDescription.
+- Se refina el proceso de parseo del voucher para POS Integrado y Autoservicio.
+- Se refina el proceso de parseo del detalle de venta para POS Integrado.
+- Se actualiza el tipo para el campo CommerceProviderCode en la respuesta MultiCodeSaleResponse, pasando de `int` a `long`.
+- Los campos numéricos y de fechas ahora devuelven `null` cuando no están presentes o no son válidos.
+
 ## [4.1.0] - 2026-02-12
 
 ### Agrega
@@ -28,14 +46,17 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ## [4.0.0] - 2024-04-23
 
 ### Changed
+
 - Se cambia el tipo de dato del campo function code de int a string en las respuestas.
 
 ### Fix
+
 - Se arregla un problema que no permitía procesar de forma correcta algunas respuesta del POS.
 - Se arregla un problema que producía que no respondiera el SDK cuando se hacia una operación de Poll o cambio de modo y el POS no se encontrara conectado.
 - Se arregla un problema que provocaba que se cortara el primer caracter del código de función.
 
 ### Added
+
 - Se agrega la posibilidad de asignar el timeout de lectura al puerto.
 
 ## [3.0.2] - 2022-03-01

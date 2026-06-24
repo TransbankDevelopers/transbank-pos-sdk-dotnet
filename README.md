@@ -41,7 +41,7 @@ PM> Install-Package TransbankPosSDK
 #### Instalar con .Net CLI
 
 ```bash
-dotnet add package TransbankSDK -v 4.1.0
+dotnet add package TransbankSDK -v 5.0.0
 ```
 
 ### Desde Visual Studio
@@ -92,13 +92,13 @@ La documentación relevante para usar este SDK es:
 ### Construir el proyecto localmente
 
 1. Si estas usando VisualStudio: (**F6**) o :
-    - Click derecho sobre la solución en el explorador de soluciones.
-    - Compilar.
+   - Click derecho sobre la solución en el explorador de soluciones.
+   - Compilar.
 2. Si estas usando tu propio editor:
 
-    ```bash
-    dotnet build
-    ```
+   ```bash
+   dotnet build
+   ```
 
 ## Generar una nueva versión (con deploy automático a NuGet)
 
@@ -126,6 +126,7 @@ Agradecimientos especiales a quienes nos ayudan a mejorar esta librería.
 </table>
 
 ### Simbología
+
 <table>
   <tr>
     <td align="center">

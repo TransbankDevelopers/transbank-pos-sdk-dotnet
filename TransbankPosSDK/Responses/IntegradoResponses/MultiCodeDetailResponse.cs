@@ -1,33 +1,15 @@
-﻿using System.Collections.Generic;
-
-namespace Transbank.Responses.IntegradoResponses
+﻿namespace Transbank.Responses.IntegradoResponses
 {
     public class MultiCodeDetailResponse : SaleResponse
     {
-        protected new readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
-        {
-            { "Change", 19},
-            { "CommerceProviderCode", 20}
-        };
+        public int? Change { get; }
+        public long? CommerceProviderCode { get; }
 
-        public int Change
+        public MultiCodeDetailResponse(string detail) : base(detail)
         {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["Change"]].Trim(), out int amount);
-                return amount;
-            }
+            Change = GetOptionalIntSegment(19, "Change");
+            CommerceProviderCode = GetOptionalLongSegment(20, "CommerceProviderCode");
         }
-        public long CommerceProviderCode
-        {
-            get
-            {
-                long.TryParse(Response.Split('|')[ParameterMap["CommerceProviderCode"]].Trim(), out long SharesNumber);
-                return SharesNumber;
-            }
-        }
-
-        public MultiCodeDetailResponse(string detail) : base(detail) { }
 
         public override string ToString()
         {

@@ -1,252 +1,68 @@
 ﻿using System;
-using System.Globalization;
 using System.Collections.Generic;
+using Transbank.Utils;
 
 namespace Transbank.Responses.IntegradoResponses
 {
     public class SaleResponse : CommonResponses.LoadKeysResponse
     {
-        protected const int VOUCHER_LINE_LENGTH = 40;
-        protected Dictionary<string, int> ParameterMap = new Dictionary<string, int>
-        {
-            { "Ticket", 4},
-            { "AuthorizationCode", 5},
-            { "Amount", 6},
-            { "SharesNumber", 7},
-            { "SharesAmount", 8},
-            { "Last4Digits", 9},
-            { "OperationNumber", 10},
-            { "CardType", 11},
-            { "AccountingDate", 12},
-            { "AccountNumber", 13},
-            { "CardBrand", 14},
-            { "RealDate", 15},
-            { "RealTime", 16},
-            { "EmployeeId", 17},
-            { "Tip", 18 },
-            { "Voucher", 19 }
+        public string Ticket { get; }
+        public string AuthorizationCode { get; }
+        public int? Amount { get; }
+        public int? InstallmentsNumber { get; }
+        public int? InstallmentsAmount { get; }
+        public int? Last4Digits { get; }
+        public int? OperationNumber { get; }
+        public string CardType { get; }
+        public DateTime? AccountingDate { get; }
+        public string AccountNumber { get; }
+        public string CardBrand { get; }
+        public DateTime? RealDate { get; }
+        public int? EmployeeId { get; }
+        public int? Tip { get; }
+        public string RawVoucher { get; }
+        public List<string> PrintingField => VoucherParser.ParsePrintingField(RawVoucher);
 
-        };
-
-        public string Ticket
+        public SaleResponse(string response) : base(response)
         {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["Ticket"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
+            Ticket = GetOptionalStringSegment(4);
+            AuthorizationCode = GetOptionalStringSegment(5);
+            Amount = GetOptionalIntSegment(6, "Amount");
+            InstallmentsNumber = GetOptionalIntSegment(7, "InstallmentsNumber");
+            InstallmentsAmount = GetOptionalIntSegment(8, "InstallmentsAmount");
+            Last4Digits = GetOptionalIntSegment(9, "Last4Digits");
+            OperationNumber = GetOptionalIntSegment(10, "OperationNumber");
+            CardType = GetOptionalStringSegment(11);
+            AccountingDate = GetOptionalDateSegment(12, "ddMMyyyy", "AccountingDate");
+            AccountNumber = GetOptionalStringSegment(13);
+            CardBrand = GetOptionalStringSegment(14);
+            RealDate = GetOptionalCombinedDateTimeSegment(15, 16, "ddMMyyyyHHmmss", "RealDate");
+            EmployeeId = GetOptionalIntSegment(17, "EmployeeId");
+            Tip = GetOptionalIntSegment(18, "Tip");
+            RawVoucher = VoucherParser.ExtractRawVoucher(Response, 19);
         }
-        public string AuthorizationCode
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["AuthorizationCode"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public int Amount
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["Amount"]].Trim(), out int amount);
-                return amount;
-            }
-        }
-        public int SharesNumber
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["SharesNumber"]].Trim(), out int SharesNumber);
-                return SharesNumber;
-            }
-        }
-        public int SharesAmount
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["SharesAmount"]].Trim(), out int sharesAmount);
-                return sharesAmount;
-            }
-        }
-        public int Last4Digits
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["Last4Digits"]].Trim(), out int last4Digits);
-                return last4Digits;
-            }
-        }
-        public int OperationNumber
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["OperationNumber"]].Trim(), out int operationNumber);
-                return operationNumber;
-            }
-        }
-        public string CardType
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["CardType"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public DateTime? AccountingDate
-        {
-            get
-            {
-                string date = "";
-                try
-                {
-                    date = Response.Split('|')[ParameterMap["AccountingDate"]].Trim();
-                }
-                catch (IndexOutOfRangeException) { }
-                if (date != "")
-                {
-                    DateTime parsedDate = new DateTime();
-                    DateTime.TryParseExact(date, "ddMMyyyy", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
-                    return parsedDate;
-                }
-                return null;
-            }
-        }
-        public string AccountNumber
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["AccountNumber"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public string CardBrand
-        {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["CardBrand"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
-        }
-        public DateTime? RealDate
-        {
-            get
-            {
-                string date = "";
-                string hour = "";
-                try
-                {
-                    date = Response.Split('|')[ParameterMap["RealDate"]].Trim();
-                    hour = Response.Split('|')[ParameterMap["RealTime"]].Trim();
-                }
-                catch (IndexOutOfRangeException) { }
-
-                if (date + hour != "")
-                {
-                    DateTime parsedDate = new DateTime();
-                    DateTime.TryParseExact(date + hour, "ddMMyyyyHHmmss", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.NoCurrentDateDefault, out parsedDate);
-                    return parsedDate;
-                }
-                return null;
-            }
-        }
-        public int EmployeeId
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["EmployeeId"]].Trim(), out int employeeId);
-                return employeeId;
-            }
-        }
-        public int Tip
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["Tip"]].Trim(), out int tip);
-                return tip;
-            }
-        }
-
-        public List<string> PrintingField
-        {
-            get
-            {
-                List<string> printingField = new List<string>();
-
-                try
-                {
-                    string response = Response.Split('|')[ParameterMap["Voucher"]];
-
-                    if (response.Length % VOUCHER_LINE_LENGTH != 0 || response.Length == 0)
-                    {
-                        printingField.Add(response);
-                        return printingField;
-                    }
-
-                    for (int i = 0; i < response.Length; i += VOUCHER_LINE_LENGTH)
-                        printingField.Add(response.Substring(i, VOUCHER_LINE_LENGTH));
-
-                    return printingField;
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return printingField;
-                }
-            }
-        }
-
-
-        public SaleResponse(string response) : base(response) { }
 
         public override string ToString()
         {
-            string formatedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
-            string formatedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string formattedAccountingDate = AccountingDate.HasValue ? AccountingDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string formattedRealDate = RealDate.HasValue ? RealDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
+            string printingFieldText = VoucherParser.FormatPrintingField(PrintingField);
             return base.ToString() + "\n" +
                    "Ticket: " + Ticket + "\n" +
                    "AuthorizationCode Code: " + AuthorizationCode + "\n" +
                    "Amount: " + Amount + "\n" +
-                   "Shares Number: " + SharesNumber + "\n" +
-                   "Shares Amount: " + SharesAmount + "\n" +
+                   "Installments Number: " + InstallmentsNumber + "\n" +
+                   "Installments Amount: " + InstallmentsAmount + "\n" +
                    "Last 4 Digits: " + Last4Digits + "\n" +
                    "Operation Number: " + OperationNumber + "\n" +
                    "Card Type: " + CardType + "\n" +
-                   "Accounting Date: " + formatedAccountingDate + "\n" +
+                   "Accounting Date: " + formattedAccountingDate + "\n" +
                    "Account Number: " + AccountNumber + "\n" +
                    "Card Brand: " + CardBrand + "\n" +
-                   "Real Date: " + formatedRealDate + "\n" +
+                   "Real Date: " + formattedRealDate + "\n" +
                    "Employee Id: " + EmployeeId + "\n" +
                    "Tip: " + Tip + "\n" +
-                   "Printing Field: " + ((PrintingField.Count > 1) ? "\r\n" + string.Join("\r\n", PrintingField) : PrintingField[0]);
+                   "Printing Field: " + "\n" + printingFieldText;
         }
     }
 }

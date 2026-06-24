@@ -1,0 +1,18 @@
+name: Kiuwan
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+
+jobs:
+    scan:
+        uses: TransbankDevelopers/transbank-github-actions-templates/.github/workflows/kiuwan-pr-scan.yml@main
+        with:
+            project_name: td-pos-sdk-dotnet
+            source_path: .
+        secrets:
+            VPN_CONFIG_B64: ${{ secrets.VPN_CONFIG_B64 }}
+            VPN_USER: ${{ secrets.VPN_USER }}
+            VPN_PASS: ${{ secrets.VPN_PASS }}
+            KIUWAN_USER: ${{ secrets.KIUWAN_USER }}
+            KIUWAN_PASS: ${{ secrets.KIUWAN_PASS }}

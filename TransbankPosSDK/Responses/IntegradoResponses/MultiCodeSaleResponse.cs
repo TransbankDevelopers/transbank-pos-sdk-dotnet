@@ -1,50 +1,17 @@
-﻿using System;
-using System.Globalization;
-using System.Collections.Generic;
-
-namespace Transbank.Responses.IntegradoResponses
+﻿namespace Transbank.Responses.IntegradoResponses
 {
     public class MultiCodeSaleResponse : SaleResponse
     {
-        protected new readonly Dictionary<string, int> ParameterMap = new Dictionary<string, int>
-        {
-            { "Filler", 19},
-            { "Change", 20},
-            { "CommerceProviderCode", 21 }
-        };
+        public string Filler { get; }
+        public int? Change { get; }
+        public long? CommerceProviderCode { get; }
 
-        public string Filler
+        public MultiCodeSaleResponse(string response) : base(response)
         {
-            get
-            {
-                try
-                {
-                    return Response.Split('|')[ParameterMap["Filler"]].Trim();
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return "";
-                }
-            }
+            Filler = GetOptionalStringSegment(19);
+            Change = GetOptionalIntSegment(20, "Change");
+            CommerceProviderCode = GetOptionalLongSegment(21, "CommerceProviderCode");
         }
-        public int Change
-        {
-            get
-            {
-                int.TryParse(Response.Split('|')[ParameterMap["Change"]].Trim(), out int amount);
-                return amount;
-            }
-        }
-        public long CommerceProviderCode
-        {
-            get
-            {
-                long.TryParse(Response.Split('|')[ParameterMap["CommerceProviderCode"]].Trim(), out long SharesNumber);
-                return SharesNumber;
-            }
-        }
-
-        public MultiCodeSaleResponse(string response) : base(response) { }
 
         public override string ToString()
         {
